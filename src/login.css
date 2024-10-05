@@ -10,6 +10,8 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .login-form {
@@ -43,12 +45,13 @@ input {
 }
 .password-container {
     position: relative;
-    width: 95%;
+    width: 94%;
+   
 }
 
 .toggle-password {
     position: absolute;
-    right: 10px;
+    font-family: Arial, sans-serif;
     top: 70%;
     transform: translateY(-50%);
     background: none;
@@ -56,6 +59,7 @@ input {
     color: #007BFF;
     cursor: pointer;
     font-size: 1rem;
+    right:0px
 }
 
 .submit-button {

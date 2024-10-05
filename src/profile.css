@@ -4,10 +4,10 @@ body {
 }
 
 .profile-container {
-    display: flex;
-    height: 100vh; 
-    margin: 5px;
-    width: 95%;
+    display: flexbox;
+    padding-left: 10px;
+    padding-right: 10px;
+   
 }
 
 .sidebar {

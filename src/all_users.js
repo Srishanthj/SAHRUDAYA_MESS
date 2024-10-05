@@ -13,7 +13,7 @@ const AllUsers = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [showAdminConfirmation, setShowAdminConfirmation] = useState(false);
   const [adminActionUser, setAdminActionUser] = useState(null);
-  const sidebarRef = useRef(null);
+  const sidebarRef = useRef(null);  // Ref for the sidebar
 
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, "users"), (snapshot) => {
@@ -34,6 +34,20 @@ const AllUsers = () => {
   const toggleSidebar = () => {
     setIsSidebarOpen((prev) => !prev);
   };
+
+  // Add a click event listener to close the sidebar when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        setIsSidebarOpen(false); // Close sidebar
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside); // Cleanup event listener on unmount
+    };
+  }, []);
 
   const handleAddFine = async (userId, fineAmount) => {
     const month = new Date().toISOString().slice(0, 7);
@@ -75,7 +89,13 @@ const AllUsers = () => {
   return (
     <div>
       <Navbar title="All Users" onToggleSidebar={toggleSidebar} />
-      {isSidebarOpen && <Sidebar ref={sidebarRef} />}
+      
+      {/* Sidebar */}
+      {isSidebarOpen && (
+        <div ref={sidebarRef}>
+          <Sidebar />
+        </div>
+      )}
 
       <input
         type="text"
@@ -84,7 +104,7 @@ const AllUsers = () => {
         onChange={(e) => setSearchQuery(e.target.value)}
       />
 
-<input
+      <input
         type="text"
         placeholder="Search Users by Department"
         value={departmentQuery}

@@ -96,14 +96,15 @@ body {
   align-items: center; 
   margin: 5px 0; 
   padding: 10px; 
-  border-radius: 5px; 
+  border-radius: 20px; 
   background-color: #f9f9f9; 
   font-family: Arial, Helvetica, sans-serif;
 }
 
 .user-item:hover {
-  background-color: #f0f0f0; 
+  background-color: #adabab; 
 }
+
 
 .user-info {
   display: flex;
