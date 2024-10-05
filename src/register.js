@@ -8,8 +8,10 @@ import { db, auth } from './firebase_config';
 import { uploadDP } from './authFunctions';
 import { QRCodeCanvas } from 'qrcode.react';
 import { getStorage, ref, uploadString, getDownloadURL } from 'firebase/storage';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const RegisterPage = () => {
+  const navigate = useNavigate(); // Initialize useNavigate
   const { register, handleSubmit, formState: { errors }, getValues, reset } = useForm();
   const [selectedDp, setSelectedDp] = useState(null);
   const [selectedRole, setSelectedRole] = useState('Inmate');
@@ -21,7 +23,6 @@ const RegisterPage = () => {
   const storage = getStorage();
 
   useEffect(() => {
-    // Set the QR code value to a compact string representation
     if (newEmail) {
       const userInfo = {
         email: newEmail,
@@ -29,72 +30,97 @@ const RegisterPage = () => {
         role: selectedRole,
         name: getValues("name")
       };
-      setQrCodeValue(JSON.stringify(userInfo)); // JSON format for easier parsing
+      setQrCodeValue(JSON.stringify(userInfo));
     }
-  }, [newEmail, selectedRole]);
+  }, [newEmail, selectedRole, getValues]);
+
+  const showToast = (message, type) => {
+    type === 'success' ? toast.success(message) : toast.error(message);
+  };
 
   const onSubmit = async (data) => {
-    if (selectedDp) {
-      try {
-        const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
-        const user = userCredential.user;
+    if (!selectedDp) {
+      showToast('Please upload a profile picture', 'error');
+      return;
+    }
 
-        const dpUrl = await uploadDP(data.name, selectedDp);
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
+      const user = userCredential.user;
 
-        const qrCodeCanvas = qrCodeRef.current;
-        if (!qrCodeCanvas) {
-          throw new Error("QR code canvas not found");
-        }
-        
-        const qrCodeDataUrl = qrCodeCanvas.toDataURL();
-        const qrCodeStorageRef = ref(storage, `qrCodes/${user.uid}.png`);
-        await uploadString(qrCodeStorageRef, qrCodeDataUrl, 'data_url');
-        const downloadURL = await getDownloadURL(qrCodeStorageRef);
+      const dpUrl = await uploadDP(data.name, selectedDp);
+      const qrCodeDataUrl = qrCodeRef.current.toDataURL();
 
-        await setDoc(doc(db, 'users', user.uid), {
-          uid: user.uid,
-          name: data.name,
-          email: data.email,
-          phone: data.mobNo,
-          department: data.department,
-          messNo: data.messNo,
-          role: selectedRole,
-          dpUrl: dpUrl,
-          qrCode: downloadURL,
-        });
+      const qrCodeStorageRef = ref(storage, `qrCodes/${user.uid}.png`);
+      await uploadString(qrCodeStorageRef, qrCodeDataUrl, 'data_url');
+      const downloadURL = await getDownloadURL(qrCodeStorageRef);
 
-        // Fetch the user details to set QR code value
-        const userDocRef = doc(db, 'users', user.uid);
-        const userDoc = await getDoc(userDocRef);
-        
-        if (userDoc.exists()) {
-          const userDetails = userDoc.data();
-          setQrCodeValue(JSON.stringify(userDetails)); // Update QR code value with user details
-        }
+      await setDoc(doc(db, 'users', user.uid), {
+        uid: user.uid,
+        name: data.name,
+        email: data.email,
+        phone: data.mobNo,
+        department: data.department,
+        messNo: data.messNo,
+        role: selectedRole,
+        dpUrl: dpUrl,
+        qrCode: downloadURL,
+      });
 
-        // Display the relevant information in the success toast
-        toast.success(`Registration Successful! 
-          Name: ${data.name}, 
-          Mess No: ${data.messNo}, 
-          Department: ${data.department}, 
-          Role: ${selectedRole}`);
-
-        reset(); // Reset form fields
-      } catch (error) {
-        console.error('Error during registration:', error);
-        toast.error('Registration Failed: ' + (error.message || 'An unknown error occurred'));
+      // Fetch the user details to set QR code value
+      const userDoc = await getDoc(doc(db, 'users', user.uid));
+      if (userDoc.exists()) {
+        const userDetails = userDoc.data();
+        setQrCodeValue(JSON.stringify(userDetails));
       }
-    } else {
-      toast.error('Please upload a profile picture');
+
+      // Display success message
+      showToast(`Registration Successful! Name: ${data.name}, Mess No: ${data.messNo}, Department: ${data.department}, Role: ${selectedRole}`, 'success');
+      
+      reset(); // Reset form fields
+      
+      // Navigate to the profile page after successful registration
+      navigate('/profile'); // Change '/profile' to the actual path of your profile page
+
+    } catch (error) {
+      console.error('Error during registration:', error);
+      showToast(`Registration Failed: ${error.message || 'An unknown error occurred'}`, 'error');
     }
   };
 
-  const selectProfilePicture = async (event) => {
+  const selectProfilePicture = (event) => {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setSelectedDp(reader.result);
+        const img = new Image();
+        img.src = reader.result;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+
+          const MAX_WIDTH = 200; // Set maximum width for resizing
+          const MAX_HEIGHT = 200; // Set maximum height for resizing
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height *= MAX_WIDTH / width;
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width *= MAX_HEIGHT / height;
+              height = MAX_HEIGHT;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          ctx.drawImage(img, 0, 0, width, height);
+          setSelectedDp(canvas.toDataURL('image/jpeg')); // Store resized image
+        };
       };
       reader.readAsDataURL(file);
     }
@@ -189,14 +215,15 @@ const RegisterPage = () => {
 
         <select {...register("role")} value={selectedRole} onChange={(e) => setSelectedRole(e.target.value)} className="input-field">
           <option value="Inmate">Inmate</option>
-          <option value="Outmess">Outmess</option>
-          <option value="Guest">Guest</option>
+          <option value="Staff">Staff</option>
         </select>
-
-        <QRCodeCanvas ref={qrCodeRef} value={qrCodeValue} style={{ display: 'none' }} />
 
         <button type="submit" className="submit-button">Register</button>
       </form>
+
+      <div style={{ display: 'none' }}>
+        <QRCodeCanvas value={qrCodeValue} ref={qrCodeRef} />
+      </div>
     </div>
   );
 };
