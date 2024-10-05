@@ -1,0 +1,82 @@
+body{
+    overflow: hidden;
+}
+
+.profile-container {
+    display:flex; /* Use flexbox to arrange children side by side */
+    height: 100vh;
+    margin: 5px; 
+    /* Full height */
+}
+
+.sidebar {
+    width: 250px; /* Fixed width for the sidebar */
+    background-color: #2c3e50; /* Sidebar background color */
+    color: white; /* Sidebar text color */
+    padding: 10px; /* Padding inside the sidebar */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2); /* Sidebar shadow effect */
+    height: 100%; /* Full height */
+}
+
+.profile-content {
+    flex: 1; /* Take remaining space next to sidebar */
+    padding: 10px; /* Main content padding */
+    position: relative; /* For positioning the logout button */
+}
+
+.logout-container {
+    position: absolute; /* Position absolute for logout button */
+    top: 0px; /* Adjust as needed */
+    right: 20px; /* Adjust as needed */
+}
+
+.logout-button {
+    padding: 10px 15px;
+    background-color: #ff4d4d; /* Logout button color */
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.logout-button:hover {
+    background-color: #ff1a1a; /* Darker shade on hover */
+}
+
+.profile-details-container {
+    background-color: #f9f9f9; /* Light background color */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    padding: 20px; /* Padding inside the container */
+    margin-top: 0px; /* Space above the container */
+    width: 100%; /* Full width of the profile content */
+    max-width: 600px; /* Maximum width to limit size */
+    text-align: center; /* Center text inside */
+}
+
+.profile-photo {
+    width: 100px; /* Profile photo width */
+    height: 100px; /* Profile photo height */
+    border-radius: 50%; /* Circular photo */
+}
+
+.qr-code {
+    width: 150px; /* QR code width */
+    height: auto; /* Auto height to maintain aspect ratio */
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .profile-details-container {
+        width: 90%; /* Responsive width */
+    }
+
+    .logout-container {
+        top: 0px; /* Adjust for smaller screens */
+        right: 10px; /* Adjust for smaller screens */
+    }
+}
+
+.center-text {
+    text-align: center; /* Center align the text */
+}
