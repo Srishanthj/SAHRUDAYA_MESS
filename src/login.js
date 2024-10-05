@@ -60,7 +60,7 @@ const Login = () => {
         {errorMessage && <p className="error-message">{errorMessage}</p>}
         <div className="signup-prompt">
           <span>Don't have an account? </span>
-          <a href="/" className="signup-link">Sign Up</a>
+          <a href="/register" className="signup-link">Sign Up</a>
         </div>
       </form>
     </div>

@@ -139,6 +139,14 @@ const AllUsers = () => {
               >
                 Add Deduction
               </button>
+              <button
+                onClick={() => {
+                  const fineAmount = prompt("Enter Fine Amount:");
+                  if (fineAmount) handleAddFine(selectedUser.id, fineAmount);
+                }}
+              >
+                Mark as Paid
+              </button>
             </div>
             <button onClick={closePopup}>Close</button>
           </div>
