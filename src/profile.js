@@ -65,7 +65,7 @@ const Profile = () => {
   return (
     <div className="profile-container">
       <div className="sidebar-toggle" onClick={toggleSidebar}>
-        <AiOutlineMenu size={24} /> 
+        <AiOutlineMenu size={24} color="black"/>
       </div>
 
       {isSidebarOpen && (

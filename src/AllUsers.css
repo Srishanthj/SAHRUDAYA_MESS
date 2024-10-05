@@ -1,59 +1,87 @@
-.all-users {
-    padding: 20px;
-  }
-  
-  .loading {
-    text-align: center;
-    font-size: 24px;
-  }
-  
-  .user-list {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .user-container {
-    display: flex;
-    align-items: center;
-    border: 1px solid #ccc;
-    padding: 10px;
-    border-radius: 8px;
-    background-color: white;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  .avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    margin-right: 15px;
-  }
-  
-  .user-info {
-    flex: 1;
-  }
-  
-  .admin-icon {
-    margin-left: 10px;
-    color: gold;
-  }
-  
-  .buttons {
-    margin-top: 10px;
-  }
-  
-  .buttons button {
-    margin-right: 10px;
-    padding: 8px 12px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    background-color: #007bff;
-    color: white;
-  }
-  
-  .buttons button:hover {
-    background-color: #0056b3;
-  }
-  
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  z-index: 1000; /* Ensure the popup is above other content */
+}
+
+.popup {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column; /* Arrange elements in a column */
+  align-items: center; /* Center items horizontally */
+}
+
+.popup h2 {
+  margin: 10px 0; /* Add some space around the title */
+}
+
+.popup-actions {
+  display: flex;
+  flex-direction: column; /* Stack buttons in a column */
+  align-items: center; /* Center buttons horizontally */
+}
+
+.popup-actions button {
+  margin: 5px 0; /* Add space between buttons */
+  padding: 10px 20px; /* Add some padding for buttons */
+  border: none;
+  background-color: #007bff; /* Button color */
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.popup-actions button:hover {
+  background-color: #0056b3; /* Darker shade on hover */
+}
+
+
+.user-list-container {
+  max-height: 520px; /* Adjust this height as needed */
+  overflow-y: auto; /* Enable vertical scrolling */
+  border: 1px solid #ccc; /* Optional: border to define the container */
+  border-radius: 8px; /* Optional: rounded corners */
+  padding: 10px; /* Optional: padding inside the container */
+}
+
+.user-list {
+  display: flex;
+  flex-direction: column; /* Ensure user items stack vertically */
+}
+
+.user-item {
+  display: flex;
+  justify-content: space-between; /* Space between user info and button */
+  align-items: center; /* Center items vertically */
+  margin: 5px 0; /* Space between user items */
+  padding: 10px; /* Padding around each user item */
+  border-radius: 5px; /* Rounded corners for user items */
+  background-color: #f9f9f9; /* Background color for user items */
+}
+
+.user-item:hover {
+  background-color: #f0f0f0; /* Background color on hover */
+}
+
+.user-info {
+  display: flex;
+  align-items: center; /* Center profile picture and name vertically */
+}
+
+.user-dp {
+  width: 40px; /* Width of the profile picture */
+  height: 40px; /* Height of the profile picture */
+  border-radius: 50%; /* Make it circular */
+  margin-right: 10px; /* Space between the profile picture and name */
+}

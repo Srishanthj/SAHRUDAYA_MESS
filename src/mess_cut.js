@@ -471,7 +471,7 @@ const Messcut = () => {
             return;
         }
 
-        if (messCutCount + calculatedMessCut > 10) {
+        if (messCutCount + calculatedMessCut >= 10) {
             alert('Total mess cut days should not exceed 10.');
         } else {
             const newMessCuts = [];

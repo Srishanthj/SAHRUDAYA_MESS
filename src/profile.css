@@ -1,5 +1,6 @@
 body{
     overflow: hidden;
+    margin:10px;
 }
 
 .profile-container {
@@ -36,6 +37,10 @@ body{
     color: white;
     border-radius: 5px;
     cursor: pointer;
+}
+
+.sidebar-toggle{
+    color: black;
 }
 
 .logout-button:hover {
