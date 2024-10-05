@@ -1,188 +1,106 @@
+body {
+  font-family: 'Arial', sans-serif; /* Use a clean sans-serif font */
+  background-color: #eaeaea; /* Light gray background for the entire page */
+  margin: 0; /* Remove default margin */
+  padding: 0; /* Remove default padding */
+}
+
+/* Registration page container */
 .register-page {
-
-  max-width: 400px;
-  margin: auto;
-  padding: 40px;
-  background-color: #ffffff;
-  border-radius: 30px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
-  margin-top: 50px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  position: relative; /* Required for the pseudo-element */
-  overflow: scroll; /* Ensure pseudo-element doesn't overflow */
+  max-height: 90vh; /* Set maximum height to 90% of the viewport height */
+  overflow-y: auto; /* Enable vertical scrolling */
+  overflow-x: hidden; /* Hide horizontal overflow */
+  padding: 40px; /* Increased padding for spacious layout */
+  background: linear-gradient(135deg, #ffffff, #f0f4f8); /* Soft white to light gray gradient */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
+  margin: auto; /* Center the registration page */
+  width: 90%; /* Responsive width */
+  max-width: 500px; /* Maximum width */
 }
 
-/* Highlighted padding effect */
-.register-page::before {
-  content: '';
-  position: absolute;
-  top: -10px; /* Slightly above the container */
-  left: -10px; /* Slightly to the left of the container */
-  right: -10px; /* Slightly to the right of the container */
-  bottom: -10px; /* Slightly below the container */
-  background: linear-gradient(to bottom right, rgba(76, 175, 80, 0.2), rgba(76, 175, 80, 0.1)); /* Soft green gradient */
-  border-radius: 35px; /* Slightly larger than the container's border-radius */
-  z-index: -1; /* Position behind the main content */
+/* Header styling */
+.register-page h2 {
+  text-align: center; /* Center align the header */
+  color: #333; /* Dark gray text color for contrast */
+  margin-bottom: 20px; /* Space below the header */
 }
 
-.register-page:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
-}
-
-h2 {
-  text-align: center;
-  color: #3f51b5;
-  margin-bottom: 30px;
-  font-size: 28px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-}
-
+/* Avatar container */
 .avatar-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 20px;
+  display: flex; /* Use flexbox for alignment */
+  justify-content: center; /* Center the content horizontally */
+  align-items: center; /* Center the content vertically */
+  margin-bottom: 10px; /* Space below the avatar */
 }
 
+/* Avatar styles */
 .avatar {
-  width: 250px; /* Adjust size as needed */
-  height: 250px; /* Adjust size as needed */
-  border-radius: 50%;
-  object-fit: cover;
-  background-color: #ccc;
-  border: 4px solid #4caf50;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 100px; /* Set width */
+  height: 100px; /* Set height */
+  border-radius: 50%; /* Make it circular */
+  object-fit: cover; /* Cover the area while maintaining aspect ratio */
+  border: 2px solid #2193b0; /* Optional: add a border around the avatar */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Optional: add a shadow for depth */
 }
 
-.avatar:hover {
-  transform: scale(1.5);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+/* Upload button styles */
+.upload-button {
+  display: block; /* Make it a block element */
+  margin: 0 auto 20px; /* Center the button and add space below */
+  background-color: #2193b0; /* Button background color */
+  color: white; /* Button text color */
+  padding: 10px; /* Padding for the button */
+  border: none; /* No border */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s, transform 0.3s; /* Smooth transition for hover effect */
 }
 
-.file-input {
-  margin-top: 10px;
+.upload-button:hover {
+  background-color: #1b7f94; /* Darker shade on hover */
+  transform: translateY(-2px); /* Slight lift effect on hover */
 }
 
+/* Input field styles */
 .input-field {
-  width: 100%;
-  padding: 12px;
-  margin: 10px 0;
-  border: 2px solid #4caf50;
-  border-radius: 15px;
-  font-size: 16px;
-  transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s;
-  text-align: center;
-  background-color: rgba(255, 255, 255, 0.9);
+  margin: 10px 0; /* Space between input fields */
+  padding: 12px; /* Increased padding inside input fields */
+  border: 1px solid #ccc; /* Light border for input fields */
+  border-radius: 5px; /* Rounded corners */
+  width: 100%; /* Full width */
+  font-size: 16px; /* Larger font for better readability */
+  transition: border-color 0.3s, box-shadow 0.3s; /* Smooth transition */
 }
 
+/* Input field focus effect */
 .input-field:focus {
-  border-color: #388e3c;
-  box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
-  outline: none;
-  background: linear-gradient(to right, #ffffff, #f0f4f8);
+  border-color: #2193b0; /* Change border color on focus */
+  box-shadow: 0 0 5px rgba(33, 147, 176, 0.5); /* Light blue shadow on focus */
 }
 
-.password-container {
-  position: relative;
-}
-
-.toggle-password {
-  position: absolute;
-  right: 10px;
-  top: 12px;
-  background: none;
-  border: none;
-  color: #4caf50;
-  cursor: pointer;
-  font-size: 14px;
-  transition: color 0.3s;
-}
-
-.toggle-password:hover {
-  color: #388e3c;
-}
-
+/* Submit button styles */
 .submit-button {
-  width: 100%;
-  padding: 12px;
-  background: linear-gradient(135deg, #4caf50, #66bb6a);
-  color: white;
-  border: none;
-  border-radius: 15px;
-  cursor: pointer;
-  font-size: 18px;
-  transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  background-color: #4CAF50; /* Green background for the submit button */
+  color: white; /* White text */
+  padding: 12px; /* Increased padding */
+  border: none; /* No border */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s, transform 0.3s; /* Smooth transition for hover effect */
+  width: 100%; /* Full width */
+  font-size: 16px; /* Larger font for better readability */
 }
 
 .submit-button:hover {
-  background: linear-gradient(135deg, #388e3c, #4caf50);
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  background-color: #45a049; /* Darker green on hover */
+  transform: translateY(-2px); /* Slight lift effect on hover */
 }
 
-.error {
-  color: red;
-  font-size: 12px;
-  margin: -5px 0 10px;
-}
-
-h2 {
-  margin-bottom: 20px;
-}
-
-.submit-button:disabled {
-  background-color: #c0c0c0;
-  cursor: not-allowed;
-}
-
-@keyframes focusAnimation {
-  from {
-    box-shadow: 0 0 0 rgba(76, 175, 80, 0);
-  }
-  to {
-    box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
-  }
-}
-
-.input-field:focus {
-  animation: focusAnimation 0.3s forwards;
-}
-
-/* Responsive Design */
-@media (max-width: 480px) {
-  .register-page {
-    padding: 20px; /* Reduce padding on small screens */
-  }
-
-  h2 {
-    font-size: 24px; /* Adjust font size on small screens */
-  }
-
-  .avatar {
-    width: 100px; /* Adjust avatar size on small screens */
-    height: 100px; /* Adjust avatar size on small screens */
-  }
-
-  .input-field, .submit-button {
-    font-size: 14px; /* Adjust font size for smaller inputs/buttons */
-  }
-}
-
-/* Additional Visual Elements */
-.register-page:after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  bottom: -10px; /* Slightly below the container */
-  transform: translateX(-50%);
-  width: 70%;
-  height: 8px;
-  background: linear-gradient(to right, #4caf50, #66bb6a);
-  border-radius: 15px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+/* Optional: Add styles for error messages */
+.error-message {
+  color: red; /* Red color for error messages */
+  font-size: 14px; /* Smaller font size for error messages */
+  margin-top: -8px; /* Move error messages closer to input */
+  margin-bottom: 10px; /* Space below error messages */
 }
