@@ -1,7 +1,6 @@
-// Sidebar.js
 import React, { forwardRef } from 'react';
 import { Link } from 'react-router-dom';
-import './sidebar.css'; // Import the CSS for the sidebar styles
+import './sidebar.css';
 
 const Sidebar = forwardRef(({ uid, name }, ref) => {
     return (

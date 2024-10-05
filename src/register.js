@@ -67,7 +67,6 @@ const RegisterPage = () => {
         qrCode: downloadURL,
       });
 
-      // Fetch the user details to set QR code value
       const userDoc = await getDoc(doc(db, 'users', user.uid));
       if (userDoc.exists()) {
         const userDetails = userDoc.data();
