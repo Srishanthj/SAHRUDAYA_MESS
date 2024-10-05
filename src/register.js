@@ -131,7 +131,7 @@ const RegisterPage = () => {
         <div className="avatar-container">
           <img
             src={selectedDp || 'default-avatar.png'}
-            alt="Profile"
+            alt="👤"
             className="avatar"
           />
           <input type="file" accept="image/*" onChange={selectProfilePicture} className="file-input" />
