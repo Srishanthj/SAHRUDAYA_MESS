@@ -28,7 +28,7 @@ const Profile = () => {
           setLoading(false);
         }
       } else {
-        navigate("/login"); 
+        navigate("/"); 
         setLoading(false);
       }
     });
@@ -38,7 +38,7 @@ const Profile = () => {
 
   const handleLogout = async () => {
     await auth.signOut();
-    navigate("/login"); 
+    navigate("/"); 
   };
 
   const toggleSidebar = () => {

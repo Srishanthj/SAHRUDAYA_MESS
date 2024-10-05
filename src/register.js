@@ -74,13 +74,11 @@ const RegisterPage = () => {
         setQrCodeValue(JSON.stringify(userDetails));
       }
 
-      // Display success message
       showToast(`Registration Successful! Name: ${data.name}, Mess No: ${data.messNo}, Department: ${data.department}, Role: ${selectedRole}`, 'success');
       
-      reset(); // Reset form fields
+      reset();
       
-      // Navigate to the profile page after successful registration
-      navigate('/profile'); // Change '/profile' to the actual path of your profile page
+      navigate('/profile');
 
     } catch (error) {
       console.error('Error during registration:', error);
@@ -99,8 +97,8 @@ const RegisterPage = () => {
           const canvas = document.createElement('canvas');
           const ctx = canvas.getContext('2d');
 
-          const MAX_WIDTH = 200; // Set maximum width for resizing
-          const MAX_HEIGHT = 200; // Set maximum height for resizing
+          const MAX_WIDTH = 200;
+          const MAX_HEIGHT = 200;
           let width = img.width;
           let height = img.height;
 
