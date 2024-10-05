@@ -13,7 +13,6 @@ const Bill = () => {
   const [messCutCount, setMessCutCount] = useState(0);
   const navigate = useNavigate();
 
-  // Load date ranges and mess cuts
   const loadDateRanges = async (uid) => {
     const docRef = doc(db, "users", uid);
     const docSnap = await getDoc(docRef);
@@ -23,15 +22,13 @@ const Bill = () => {
       console.log("Fetched user data:", data);
       const loadedDateRanges = data.messCuts || [];
 
-      // Flattening the loaded date ranges and setting the state
       const allDates = loadedDateRanges.flatMap((range) => range.dates || []);
       setMessCuts(allDates);
-      setMessCutCount(allDates.length); // Set messCutCount to the length of allDates directly
+      setMessCutCount(allDates.length);
     } else {
-      // Create a new document with default values if it doesn't exist
       await updateDoc(docRef, { messCuts: [], messCut: 0 });
-      setMessCuts([]); // Initialize state as empty array
-      setMessCutCount(0); // Initialize mess cut count
+      setMessCuts([]);
+      setMessCutCount(0);
     }
   };
 
@@ -47,7 +44,6 @@ const Bill = () => {
 
         if (docSnap.exists()) {
           setUserData(docSnap.data());
-          // Load mess cuts after user data is fetched
           await loadDateRanges(uid);
         } else {
           throw new Error("User not found");
@@ -126,21 +122,18 @@ const Bill = () => {
   );
 };
 
-// Loading Screen Component
 const LoadingScreen = () => (
   <div className="loading-screen">
     <h2>Loading...</h2>
   </div>
 );
 
-// Error Screen Component
 const ErrorScreen = ({ message }) => (
   <div className="error-screen">
     <h2>{message}</h2>
   </div>
 );
 
-// Detail Card Component
 const DetailCard = ({ title, value }) => (
   <div className="detail-card">
     <span>{title}</span>
@@ -148,7 +141,6 @@ const DetailCard = ({ title, value }) => (
   </div>
 );
 
-// Total Card Component
 const TotalCard = ({ finalAmount }) => (
   <div className="total-card">
     <h2>Total Amount to be Paid</h2>
@@ -156,7 +148,6 @@ const TotalCard = ({ finalAmount }) => (
   </div>
 );
 
-// Pay Now Button Component
 const PayNowButton = () => {
   const navigate = useNavigate();
 
