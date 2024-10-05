@@ -17,6 +17,7 @@ body {
     padding: 10px; /* Padding inside the sidebar */
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2); /* Sidebar shadow effect */
     height: 100%; /* Full height */
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .sidebar-toggle {
@@ -32,6 +33,7 @@ body {
     flex-direction: column; /* Stack children vertically */
     align-items: center; /* Center horizontally */
     justify-content: center; /* Center vertically */
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .logout-container {
@@ -62,6 +64,7 @@ body {
     width: 100%; /* Full width of the profile content */
     max-width: 600px; /* Maximum width to limit size */
     text-align: center; /* Center text inside */
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .profile-photo {

@@ -39,6 +39,7 @@ input {
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 1rem;
+    font-family: Arial, Helvetica, sans-serif;
 }
 .password-container {
     position: relative;

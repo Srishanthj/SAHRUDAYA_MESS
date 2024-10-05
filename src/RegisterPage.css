@@ -17,6 +17,7 @@ body {
   margin: auto; /* Center the registration page */
   width: 90%; /* Responsive width */
   max-width: 500px; /* Maximum width */
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 /* Header styling */
@@ -39,7 +40,7 @@ body {
   width: 100px; /* Set width */
   height: 100px; /* Set height */
   border-radius: 50%; /* Make it circular */
-  object-fit: cover; /* Cover the area while maintaining aspect ratio */
+  object-fit: fill; /* Cover the area while maintaining aspect ratio */
   border: 2px solid #2193b0; /* Optional: add a border around the avatar */
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Optional: add a shadow for depth */
 }
@@ -54,7 +55,8 @@ body {
   border: none; /* No border */
   border-radius: 5px; /* Rounded corners */
   cursor: pointer; /* Pointer cursor on hover */
-  transition: background-color 0.3s, transform 0.3s; /* Smooth transition for hover effect */
+  transition: background-color 0.3s, transform 0.3s; 
+  font-family: Arial, Helvetica, sans-serif;/* Smooth transition for hover effect */
 }
 
 .upload-button:hover {
@@ -71,6 +73,7 @@ body {
   width: 100%; /* Full width */
   font-size: 16px; /* Larger font for better readability */
   transition: border-color 0.3s, box-shadow 0.3s; /* Smooth transition */
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 /* Input field focus effect */
@@ -90,6 +93,7 @@ body {
   transition: background-color 0.3s, transform 0.3s; /* Smooth transition for hover effect */
   width: 100%; /* Full width */
   font-size: 16px; /* Larger font for better readability */
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .submit-button:hover {

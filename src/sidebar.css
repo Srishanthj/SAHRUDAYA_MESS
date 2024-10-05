@@ -10,17 +10,20 @@
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2); /* Shadow effect */
   transition: width 0.3s ease; /* Smooth width transition */
   z-index: 1000; /* Ensure it stays on top of other content */
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .sidebar h2 {
   margin: 0; /* Remove margin */
   font-size: 24px; /* Font size for the heading */
   text-align: center; /* Center align the heading */
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .sidebar ul {
   list-style: none; /* Remove bullet points */
   padding: 0; /* Remove default padding */
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .sidebar ul li {
@@ -34,6 +37,7 @@
   display: block; /* Make links block elements */
   border-radius: 5px; /* Rounded corners */
   transition: background-color 0.3s ease; /* Smooth background transition */
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .sidebar ul li a:hover {

@@ -1,5 +1,5 @@
 body {
-  font-family: 'Brush Script MT', cursive; 
+  font-family: Arial, Helvetica, sans-serif;
   color: #4a4a4a; 
   font-size: small; 
 }
@@ -8,6 +8,7 @@ body {
 .navbar {
   background-color: #d3d3d3; 
   color: #4a4a4a; 
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 /* Popup styles */
@@ -22,6 +23,7 @@ body {
   justify-content: center; 
   align-items: center; 
   z-index: 1000; 
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .popup {
@@ -34,15 +36,18 @@ body {
   align-items: center;
   width: 250px; 
   max-width: 90%; 
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .popup h2 {
   color: #4a4a4a; 
   margin-bottom: 10px; 
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .popup p {
   margin: 5px 0; 
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .popup-actions {
@@ -50,6 +55,7 @@ body {
   flex-direction: column;
   align-items: center;
   margin-top: 15px; 
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .popup-actions button {
@@ -62,6 +68,7 @@ body {
   cursor: pointer;
   transition: background-color 0.3s; 
   width: 150px;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .popup-actions button:hover {
@@ -74,11 +81,13 @@ body {
   border: 1px solid #ccc; 
   border-radius: 8px; 
   padding: 10px; 
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .user-list {
   display: flex;
   flex-direction: column; 
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .user-item {
@@ -89,6 +98,7 @@ body {
   padding: 10px; 
   border-radius: 5px; 
   background-color: #f9f9f9; 
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .user-item:hover {
@@ -105,6 +115,7 @@ body {
   height: 40px; 
   border-radius: 50%; 
   margin-right: 5px; /* Reduced space between dp and name */
+
 }
 
 .popup-dp {
