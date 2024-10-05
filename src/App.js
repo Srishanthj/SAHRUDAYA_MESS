@@ -13,7 +13,7 @@ import Bill from './bill';
 const App = () => {
   return (
     <Routes>
-      <Route path="/" element={<Register />} />
+      
       <Route path="/login" element={<Login />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/scan" element={<ScannerComponent />} />
