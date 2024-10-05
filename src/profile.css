@@ -1,11 +1,13 @@
 body {
-    overflow: hidden; /* Prevent body overflow */
+    overflow: hidden;
+    margin: 0; /* Prevent body overflow */
 }
 
 .profile-container {
-    display: flex; /* Use flexbox to arrange children side by side */
-    height: 100vh; /* Full height of the viewport */
-    margin: 5px; /* Margin around the container */
+    display: flex;
+    height: 100vh; 
+    margin: 5px;
+    width: 95%;
 }
 
 .sidebar {
@@ -17,9 +19,15 @@ body {
     height: 100%; /* Full height */
 }
 
+.sidebar-toggle {
+    margin-top: 10px; /* Add margin to the top of the sidebar icon */
+    margin-left: 10px; /* Add margin to the left of the sidebar icon */
+    cursor: pointer; /* Ensure cursor changes to pointer */
+}
+
 .profile-content {
     flex: 1; /* Take remaining space next to sidebar */
-    padding: 10px; /* Main content padding */
+
     display: flex; /* Use flexbox for centering */
     flex-direction: column; /* Stack children vertically */
     align-items: center; /* Center horizontally */
@@ -74,11 +82,12 @@ body {
     }
 
     .logout-container {
-        top: 0px; /* Adjust for smaller screens */
+        top: 10px; /* Adjust for smaller screens */
         right: 10px; /* Adjust for smaller screens */
     }
 }
 
 .center-text {
-    text-align: center; /* Center align the text */
+    text-align: center;
+    font-size: 2.5rem;
 }

@@ -91,7 +91,6 @@ const Profile = () => {
               <h2>Department: {userData.department || "N/A"}</h2>
               <h2>Mess No: {userData.messNo || "N/A"}</h2>
               <h2>Role: {userData.role || "N/A"}</h2>
-              <h2>QR Code:</h2>
               {userData.qrCode ? (
                 <img
                   src={userData.qrCode}
