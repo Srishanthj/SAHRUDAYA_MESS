@@ -1,10 +1,11 @@
-import React from 'react';
+// Sidebar.js
+import React, { forwardRef } from 'react';
 import { Link } from 'react-router-dom';
 import './sidebar.css'; // Import the CSS for the sidebar styles
 
-const Sidebar = ({ uid, name }) => {
+const Sidebar = forwardRef(({ uid, name }, ref) => {
     return (
-        <div className="sidebar">
+        <div className="sidebar" ref={ref}>
             <h2>Welcome, {name}!</h2> {/* Display the user's name */}
             <ul>
                 <li>
@@ -19,6 +20,6 @@ const Sidebar = ({ uid, name }) => {
             </ul>
         </div>
     );
-};
+});
 
 export default Sidebar;

@@ -1,13 +1,17 @@
-import React, { useState, useEffect } from "react";
+// AllUsers.js
+import React, { useState, useEffect, useRef } from "react"; // Import useRef
+import { onSnapshot, collection, doc, updateDoc, arrayUnion } from "firebase/firestore"; // Combine imports from firestore
+import Navbar from "./navbar"; // Import Navbar
+import Sidebar from "./sidebar"; // Import Sidebar
 import { db, auth } from "./firebase_config";
-import { doc, updateDoc, arrayUnion, onSnapshot, collection } from "firebase/firestore"; // Add 'collection'
 
 const AllUsers = () => {
   const [users, setUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const sidebarRef = useRef(null); // Create a ref for the sidebar
 
   useEffect(() => {
-    // Use the 'collection' function to access Firestore collection
     const unsubscribe = onSnapshot(collection(db, "users"), (snapshot) => {
       const allUsers = snapshot.docs.map((doc) => ({
         id: doc.id,
@@ -18,10 +22,13 @@ const AllUsers = () => {
     return () => unsubscribe();
   }, []);
 
-  // Safeguard to check if userName is defined before trying to call toLowerCase
-  const filteredUsers = users.filter((user) => 
+  const filteredUsers = users.filter((user) =>
     user.name && user.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen((prev) => !prev); // Toggle sidebar
+  };
 
   const handleAddFine = async (userId, fineAmount) => {
     const month = new Date().toISOString().slice(0, 7);
@@ -51,9 +58,31 @@ const AllUsers = () => {
     });
   };
 
+  // Handle click outside the sidebar
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        setIsSidebarOpen(false); // Close sidebar on click outside
+      }
+    };
+
+    if (isSidebarOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isSidebarOpen]);
+
   return (
     <div>
-      <h1>All Users</h1>
+      <Navbar title="All Users" onToggleSidebar={toggleSidebar} />
+
+      {isSidebarOpen && <Sidebar ref={sidebarRef} />} {/* Attach ref to Sidebar */}
+
       <input
         type="text"
         placeholder="Search Users"

@@ -86,7 +86,7 @@ const Profile = () => {
           {userData ? (
             <div>
               <img
-                src={userData.dp || "default_image_url"}
+                src={userData.dpUrl || "default_image_url"}
                 alt="Profile"
                 className="profile-photo"
               />
