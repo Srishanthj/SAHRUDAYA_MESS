@@ -55,7 +55,7 @@ const Profile = () => {
 
   const handleLogout = async () => {
     await auth.signOut();
-    navigate("/login");
+    navigate("/");
   };
 
   if (loading) {
@@ -65,7 +65,7 @@ const Profile = () => {
   return (
     <div>
       {/* Use the new Navbar component */}
-      <Navbar title="Profile Page" onToggleSidebar={toggleSidebar} />
+      <Navbar title="Profile" onToggleSidebar={toggleSidebar} />
 
       {isSidebarOpen && (
         <div ref={sidebarRef}>
