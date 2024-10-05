@@ -1,15 +1,18 @@
-// src/index.js
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter as Router } from 'react-router-dom';
-import App from './App'; // Ensure this path is correct
-import { AuthProvider } from './authcontext'; // Ensure this path is correct
+import ReactDOM from 'react-dom/client'; // Correct import for React 18
+import { BrowserRouter as Router } from 'react-router-dom'; // Importing Router for routing
+import { AuthProvider } from './authcontext'; // Context for authentication (ensure correct casing)
+import App from './App'; // Main App component
 
-ReactDOM.render(
-  <AuthProvider>
-    <Router>
-      <App />
-    </Router>
-  </AuthProvider>,
-  document.getElementById('root')
+// Create a root for rendering
+const root = ReactDOM.createRoot(document.getElementById('root')); // Use createRoot for React 18
+
+root.render(
+  <React.StrictMode>
+    <AuthProvider>
+      <Router>
+        <App />
+      </Router>
+    </AuthProvider>
+  </React.StrictMode>
 );

@@ -1,7 +1,8 @@
+// firebase_config.js
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { getAuth } from "firebase/auth"; 
-import { getFirestore } from "firebase/firestore"; 
+import { getAuth } from "firebase/auth"; // Authentication import
+import { getFirestore } from "firebase/firestore"; // Firestore import
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage"; // Storage import
 
 const firebaseConfig = {
     apiKey: "AIzaSyCfIGkToeDbelzQKZ0-c2FYDd41OMu1rK0",
@@ -13,8 +14,20 @@ const firebaseConfig = {
     measurementId: "G-N3073MSDJK"
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const auth = getAuth(app);
+const auth = getAuth(app); // Initialize Auth
+const storage = getStorage(app); // Initialize Storage
 
-export { db, auth };
+// Function to upload a profile picture
+export const uploadProfilePicture = async (name, file) => {
+    const storageRef = ref(storage, `profilePictures/${name}`);
+    await uploadBytes(storageRef, file);
+    const url = await getDownloadURL(storageRef);
+    return url; // Returns the download URL of the uploaded file
+};
+
+// Export the required components
+export { auth, db, storage };
+

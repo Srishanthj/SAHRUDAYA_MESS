@@ -4,15 +4,15 @@ import { useNavigate } from "react-router-dom";
 import { getDoc, doc } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import Sidebar from './sidebar';
-import { AiOutlineMenu } from "react-icons/ai"; // Import an icon for the menu toggle
-import './profile.css'; // Import your CSS for styling
+import { AiOutlineMenu } from "react-icons/ai";
+import './profile.css';
 
 const Profile = () => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const navigate = useNavigate(); 
-  const sidebarRef = useRef(null); // Reference for the sidebar
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); 
+  const navigate = useNavigate();
+  const sidebarRef = useRef(null); 
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -29,12 +29,12 @@ const Profile = () => {
         }
       } else {
         navigate("/login"); 
-        setLoading(false); 
+        setLoading(false);
       }
     });
 
-    return () => unsubscribe(); 
-  }, [navigate]); 
+    return () => unsubscribe();
+  }, [navigate]);
 
   const handleLogout = async () => {
     await auth.signOut();
@@ -42,17 +42,16 @@ const Profile = () => {
   };
 
   const toggleSidebar = () => {
-    setIsSidebarOpen((prev) => !prev); // Toggle sidebar
+    setIsSidebarOpen((prev) => !prev); 
+    console.log("Sidebar is toggled:", !isSidebarOpen);  // Add log to check state
   };
 
-  // Close the sidebar if clicked outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
         setIsSidebarOpen(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -60,20 +59,18 @@ const Profile = () => {
   }, []);
 
   if (loading) {
-    return <p>Loading user data...</p>; 
+    return <p>Loading user data...</p>;
   }
 
   return (
     <div className="profile-container">
-      {/* Sidebar toggle button */}
       <div className="sidebar-toggle" onClick={toggleSidebar}>
-        <AiOutlineMenu size={24} /> {/* Icon to toggle the sidebar */}
+        <AiOutlineMenu size={24} /> 
       </div>
 
-      {/* Sidebar for the user */}
       {isSidebarOpen && (
-        <div className="sidebar" ref={sidebarRef}> {/* Use ref here */}
-          <Sidebar uid={userData ? userData.uid : null} name={userData ? userData.name : "User"} /> {/* Pass user name */}
+        <div className="sidebar" ref={sidebarRef}> 
+          <Sidebar uid={userData ? userData.uid : null} name={userData ? userData.name : "User"} />
         </div>
       )}
 
@@ -82,7 +79,7 @@ const Profile = () => {
           <button className="logout-button" onClick={handleLogout}>Logout</button>
         </div>
         <h1 className="center-text">Profile</h1>
-        <div className="profile-details-container"> {/* New container for profile details */}
+        <div className="profile-details-container">
           {userData ? (
             <div>
               <img
@@ -106,7 +103,7 @@ const Profile = () => {
               )}
             </div>
           ) : (
-            <p>No user data available.</p> 
+            <p>No user data available.</p>
           )}
         </div>
       </div>

@@ -6,7 +6,6 @@ body{
     display:flex; /* Use flexbox to arrange children side by side */
     height: 100vh;
     margin: 5px; 
-    /* Full height */
 }
 
 .sidebar {
