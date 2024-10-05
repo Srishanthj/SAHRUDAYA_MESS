@@ -87,10 +87,10 @@ const Profile = () => {
                 alt="👤"
                 className="profile-photo"
               />
-              <h2>Name: {userData.name || "N/A"}</h2>
-              <h2>Department: {userData.department || "N/A"}</h2>
+              <h2>{userData.name || "N/A"}</h2>
+              <h2>Dept: {userData.department || "N/A"}</h2>
               <h2>Mess No: {userData.messNo || "N/A"}</h2>
-              <h2>Role: {userData.role || "N/A"}</h2>
+              <h2>{userData.role || "N/A"}</h2>
               {userData.qrCode ? (
                 <img
                   src={userData.qrCode}
