@@ -5,6 +5,7 @@ body {
     padding: 0;
     font-family: Arial, sans-serif;
     background-color: #f0f0f0; /* Light background */
+
 }
 
 .login-container {
@@ -22,6 +23,7 @@ body {
     width: 100%;
     max-width: 400px; /* Limit max width */
     text-align: center; /* Center text */
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .logo {
@@ -41,6 +43,7 @@ input {
     border: 1px solid #ccc;
     border-radius: 5px; /* Rounded corners */
     font-size: 1rem;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .password-container {
