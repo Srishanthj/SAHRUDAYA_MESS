@@ -31,8 +31,7 @@ const Login = () => {
           setErrorMessage("Invalid email format.");
           break;
         default:
-          setErrorMessage("Login failed. Please try again.");
-      }
+          setErrorMessage("Login failed. Please try again.");}
     } finally {
       setIsLoading(false);
     }
@@ -42,8 +41,8 @@ const Login = () => {
     if (errorMessage) {
       const timer = setTimeout(() => {
         setErrorMessage("");
-      }, 3000);
-      return () => clearTimeout(timer);
+      }, 3000); 
+      return () => clearTimeout(timer); 
     }
   }, [errorMessage]);
 
@@ -82,7 +81,7 @@ const Login = () => {
           <div className="error-modal">
             <p>{errorMessage}</p>
           </div>
-        )}{" "}
+        )}
         <div className="signup-prompt">
           <span>Don't have an account? </span>
           <a href="/register" className="signup-link">
