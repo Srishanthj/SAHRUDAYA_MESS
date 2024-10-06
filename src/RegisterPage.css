@@ -2,7 +2,7 @@ body {
   font-family: 'Arial', sans-serif;
   margin:0;
   padding: 0;
-  background: linear-gradient(135deg, rgba(13, 250, 231, 0.5), rgba(239, 103, 6, 0.5));
+  background: linear-gradient( #134E5E, #71B280);
   justify-content: center;
   align-items: center;
   height: 100vh;
@@ -14,7 +14,7 @@ body {
   overflow-y: auto; /* Enable vertical scrolling */
   overflow-x: hidden; /* Hide horizontal overflow */
   padding: 40px; /* Increased padding for spacious layout */
-  background: linear-gradient(135deg, #ffffff, #f0f4f8); /* Soft white to light gray gradient */
+  background: linear-gradient( #757F9A, #D7DDE8); /* Soft white to light gray gradient */
   border-radius: 8px; /* Rounded corners */
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
   margin: auto; /* Center the registration page */
