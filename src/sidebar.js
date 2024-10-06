@@ -2,7 +2,7 @@ import React, { forwardRef } from "react";
 import { Link } from "react-router-dom";
 import { auth } from "./firebase_config";
 import { useNavigate } from "react-router-dom";
-import { FaUser, FaCut, FaFileInvoice } from "react-icons/fa"; // Importing icons
+import { FaUser, FaCut, FaFileInvoice } from "react-icons/fa";
 import "./sidebar.css";
 
 const Sidebar = forwardRef(({ uid, name, isAdmin }, ref) => {
