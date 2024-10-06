@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { auth } from "./firebase_config";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
@@ -20,11 +20,20 @@ const Login = () => {
       await signInWithEmailAndPassword(auth, email, password);
       navigate("/profile");
     } catch (error) {
-      setErrorMessage(error.message);
+      setErrorMessage("No such mail id found");
     } finally {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (errorMessage) {
+      const timer = setTimeout(() => {
+        setErrorMessage("");
+      }, 3000); 
+      return () => clearTimeout(timer); 
+    }
+  }, [errorMessage]);
 
   return (
     <div className="login-container">
@@ -57,8 +66,11 @@ const Login = () => {
         <button type="submit" className="submit-button">
           {isLoading ? "Logging in..." : "Log In"}
         </button>
-        {errorMessage && <p className="error-message">{errorMessage}</p>}
-        <div className="signup-prompt">
+        {errorMessage && (
+          <div className="error-modal">
+            <p>{errorMessage}</p>
+          </div>
+        )}        <div className="signup-prompt">
           <span>Don't have an account? </span>
           <a href="/register" className="signup-link">
             Sign Up
