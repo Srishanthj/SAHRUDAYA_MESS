@@ -3,7 +3,6 @@ import { auth, db } from "./firebase_config";
 import { useNavigate } from "react-router-dom";
 import { getDoc, doc } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
-import Navbar from './navbar';
 import Sidebar from './sidebar';
 import './profile.css';
 import ProfileNavbar from "./profile_nav";

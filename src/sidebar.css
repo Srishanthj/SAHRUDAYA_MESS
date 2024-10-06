@@ -4,12 +4,13 @@
   color: white; /* White text color */
   height: 100vh; /* Full height */
   padding: 20px; /* Padding around the content */
-  position: fixed; /* Fix the sidebar on the left */
-  top: 0; /* Align to the top */
-  left: 0; /* Align to the left */
+  position: absolute; /* Fix the sidebar on the left */
+  top: 0.1px; /* Align to the top */
+  left: 0.1px; /* Align to the left */
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2); /* Shadow effect */
   transition: width 0.3s ease; /* Smooth width transition */
   z-index: 1000; /* Ensure it stays on top of other content */
+
 }
 
 .sidebar h2 {
