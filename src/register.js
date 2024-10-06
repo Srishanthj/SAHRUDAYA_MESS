@@ -51,6 +51,9 @@ const RegisterPage = () => {
       const dpUrl = await uploadDP(data.name, selectedDp);
       const qrCodeDataUrl = qrCodeRef.current.toDataURL();
 
+      // Store only the uid in the QR code
+      setQrCodeValue(user.uid); // Store uid only
+
       const qrCodeStorageRef = ref(storage, `qrCodes/${user.uid}.png`);
       await uploadString(qrCodeStorageRef, qrCodeDataUrl, 'data_url');
       const downloadURL = await getDownloadURL(qrCodeStorageRef);
@@ -66,12 +69,6 @@ const RegisterPage = () => {
         dpUrl: dpUrl,
         qrCode: downloadURL,
       });
-
-      const userDoc = await getDoc(doc(db, 'users', user.uid));
-      if (userDoc.exists()) {
-        const userDetails = userDoc.data();
-        setQrCodeValue(JSON.stringify(userDetails));
-      }
 
       showToast(`Registration Successful! Name: ${data.name}, Mess No: ${data.messNo}, Department: ${data.department}, Role: ${selectedRole}`, 'success');
       
@@ -204,7 +201,8 @@ const RegisterPage = () => {
         {errors.mobNo && <span className="error">{errors.mobNo.message}</span>}
 
         <input
-          {...register("messNo", { required: "Please enter your mess number", pattern: /^[0-9]+$/ })}
+          {...register("messNo", { required: "Please enter your mess number", })}
+          type='text'
           placeholder="Mess No"
           className="input-field"
         />
