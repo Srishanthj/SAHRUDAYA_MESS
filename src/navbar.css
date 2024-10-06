@@ -2,12 +2,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient( #757F9A, #D7DDE8);
+    background: linear-gradient(135deg, #757F9A, #D7DDE8);
     position: relative;
     margin: 0;
     padding: 0px;
     height: 7.5vh;
-    
+
 }
 
 .sidebar-toggle {
@@ -15,7 +15,7 @@
     border: none;
     color: black;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 15px;
     margin-left: 10px;
 }
 

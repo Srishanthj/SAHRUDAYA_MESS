@@ -21,7 +21,7 @@ const ProfileNavbar = ({ title, onToggleSidebar, isSidebarOpen }) => {
           <FaBars />
         </button>
       )}
-      <h1>{title}</h1>
+      <h1 className="header-title">{title}</h1>
       <button className="logout-button" onClick={handleLogout}>
         Logout
       </button>
