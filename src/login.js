@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { auth } from './firebase_config';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
-import './login.css';
-import logo from './assets/images/mess_logo.jpg';
+import React, { useState } from "react";
+import { auth } from "./firebase_config";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import "./login.css";
+import logo from "./assets/images/mess_logo.jpg";
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [isObscured, setIsObscured] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ const Login = () => {
     setIsLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate('/profile');
+      navigate("/profile");
     } catch (error) {
       setErrorMessage(error.message);
     } finally {
@@ -31,14 +31,14 @@ const Login = () => {
       <form className="login-form" onSubmit={handleLogin}>
         <img src={logo} alt="Mess Logo" className="logo" />
         <h1>Welcome to Sanathana Mess</h1>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
         <div className="password-container">
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
           <input
             type={isObscured ? "password" : "text"}
             placeholder="Password"
@@ -51,16 +51,18 @@ const Login = () => {
             className="toggle-password"
             onClick={() => setIsObscured(!isObscured)}
           >
-            {isObscured ? 'Show' : 'Hide'}
+            {isObscured ? "Show" : "Hide"}
           </button>
         </div>
         <button type="submit" className="submit-button">
-          {isLoading ? 'Logging in...' : 'Log In'}
+          {isLoading ? "Logging in..." : "Log In"}
         </button>
         {errorMessage && <p className="error-message">{errorMessage}</p>}
         <div className="signup-prompt">
           <span>Don't have an account? </span>
-          <a href="/register" className="signup-link">Sign Up</a>
+          <a href="/register" className="signup-link">
+            Sign Up
+          </a>
         </div>
       </form>
     </div>

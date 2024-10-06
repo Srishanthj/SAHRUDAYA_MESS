@@ -9,6 +9,23 @@ import { uploadDP } from './authFunctions';
 import { QRCodeCanvas } from 'qrcode.react';
 import { getStorage, ref, uploadString, getDownloadURL } from 'firebase/storage';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { FaSleigh } from 'react-icons/fa';
+
+const PasswordInput = ({ register, errors, isVisible, setIsVisible, placeholder }) => (
+  <div className="password-container">
+    <input
+      {...register}
+      type={isVisible ? 'text' : 'password'}
+      placeholder={placeholder}
+      className="input-field"
+    />
+    <button type="button" className="toggle-password" onClick={() => setIsVisible(!isVisible)}>
+      {isVisible ? 'Hide' : 'Show'}
+    </button>
+    {errors && <span className="error">{errors.message}</span>}
+  </div>
+);
+
 
 const RegisterPage = () => {
   const navigate = useNavigate(); // Initialize useNavigate
@@ -43,18 +60,18 @@ const RegisterPage = () => {
       showToast('Please upload a profile picture', 'error');
       return;
     }
-
+  
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
       const user = userCredential.user;
-
+  
       const dpUrl = await uploadDP(data.name, selectedDp);
       const qrCodeDataUrl = qrCodeRef.current.toDataURL();
-
+  
       const qrCodeStorageRef = ref(storage, `qrCodes/${user.uid}.png`);
       await uploadString(qrCodeStorageRef, qrCodeDataUrl, 'data_url');
       const downloadURL = await getDownloadURL(qrCodeStorageRef);
-
+  
       await setDoc(doc(db, 'users', user.uid), {
         uid: user.uid,
         name: data.name,
@@ -65,26 +82,30 @@ const RegisterPage = () => {
         role: selectedRole,
         dpUrl: dpUrl,
         qrCode: downloadURL,
+        isAdmin:false
       });
-
-      // Fetch the user details to set QR code value
+  
       const userDoc = await getDoc(doc(db, 'users', user.uid));
       if (userDoc.exists()) {
         const userDetails = userDoc.data();
         setQrCodeValue(JSON.stringify(userDetails));
       }
-
+  
       showToast(`Registration Successful! Name: ${data.name}, Mess No: ${data.messNo}, Department: ${data.department}, Role: ${selectedRole}`, 'success');
       
       reset();
       
       navigate('/profile');
-
+  
     } catch (error) {
       console.error('Error during registration:', error);
-      showToast(`Registration Failed: ${error.message || 'An unknown error occurred'}`, 'error');
+      const errorMessage = error.code === 'auth/email-already-in-use' 
+        ? 'Email is already in use.' 
+        : error.message || 'An unknown error occurred';
+      showToast(`Registration Failed: ${errorMessage}`, 'error');
     }
   };
+  
 
   const selectProfilePicture = (event) => {
     const file = event.target.files[0];
@@ -130,10 +151,11 @@ const RegisterPage = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="avatar-container">
           <img
-            src={selectedDp || 'default-avatar.png'}
-            alt="Upload DP"
+            src={selectedDp || 'default-avatar.png'} // Use a default image when none is selected
+            // alt="Profile Avatar"
             className="avatar"
           />
+          {!selectedDp && <span className="avatar-indication">Upload your picture</span>}
           <input type="file" accept="image/*" onChange={selectProfilePicture} className="file-input" />
         </div>
 
@@ -159,31 +181,21 @@ const RegisterPage = () => {
         />
         {errors.email && <span className="error">{errors.email.message}</span>}
 
-        <div className="password-container">
-          <input
-            {...register("password", { required: "Please enter your password", minLength: { value: 8, message: "Password must be at least 8 characters" } })}
-            type={isPasswordVisible ? 'text' : 'password'}
-            placeholder="Password"
-            className="input-field"
-          />
-          <button type="button" className="toggle-password" onClick={() => setIsPasswordVisible(!isPasswordVisible)}>
-            {isPasswordVisible ? 'Hide' : 'Show'}
-          </button>
-        </div>
-        {errors.password && <span className="error">{errors.password.message}</span>}
+        <PasswordInput 
+          register={register("password", { required: "Please enter your password", minLength: { value: 8, message: "Password must be at least 8 characters" } })} 
+          errors={errors.password} 
+          isVisible={isPasswordVisible} 
+          setIsVisible={setIsPasswordVisible} 
+          placeholder="Password" 
+        />
 
-        <div className="password-container">
-          <input
-            {...register("rePassword", { validate: value => value === getValues("password") || "Passwords do not match" })}
-            type={isReEnterPasswordVisible ? 'text' : 'password'}
-            placeholder="Re-enter Password"
-            className="input-field"
-          />
-          <button type="button" className="toggle-password" onClick={() => setIsReEnterPasswordVisible(!isReEnterPasswordVisible)}>
-            {isReEnterPasswordVisible ? 'Hide' : 'Show'}
-          </button>
-        </div>
-        {errors.rePassword && <span className="error">{errors.rePassword.message}</span>}
+        <PasswordInput 
+          register={register("rePassword", { validate: value => value === getValues("password") || "Passwords do not match" })} 
+          errors={errors.rePassword} 
+          isVisible={isReEnterPasswordVisible} 
+          setIsVisible={setIsReEnterPasswordVisible} 
+          placeholder="Re-enter Password" 
+        />
 
         <input
           {...register("department", { required: "Please enter your department" })}
