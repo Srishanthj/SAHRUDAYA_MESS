@@ -6,6 +6,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import Navbar from './navbar';
 import Sidebar from './sidebar';
 import './profile.css';
+import ProfileNavbar from "./profile_nav";
 
 const Profile = () => {
   const [userData, setUserData] = useState(null);
@@ -58,24 +59,25 @@ const Profile = () => {
     navigate("/");
   };
 
+
   if (loading) {
-    return <p>Loading user data...</p>;
+    return <h2 className="loading-container">Loading user data...</h2>;
   }
 
   return (
     <div>
-      {/* Use the new Navbar component */}
-      <Navbar title="Profile" onToggleSidebar={toggleSidebar} />
-
+      <ProfileNavbar title="Profile" onToggleSidebar={toggleSidebar} />
+  
       {isSidebarOpen && (
         <div ref={sidebarRef}>
-          <Sidebar />
+          <Sidebar uid={userData.uid} name={userData.name} isAdmin={userData.isAdmin}/>
         </div>
       )}
-
+  
       <div className="profile-content">
-        <div className="logout-container">
-          <button className="logout-button" onClick={handleLogout}>Logout</button>
+        <div className="header-container">
+          <button className="sidebar-toggle" onClick={toggleSidebar}>
+          </button>
         </div>
         <div className="profile-details-container">
           {userData ? (
@@ -85,11 +87,11 @@ const Profile = () => {
                 alt="👤"
                 className="profile-photo"
               />
-              <h2> {userData.name || "N/A"}</h2>
+              <h2>{userData.name || "N/A"}</h2>
               <h2>Dept: {userData.department || "N/A"}</h2>
               <h2>Mess No: {userData.messNo || "N/A"}</h2>
-              <h2> {userData.role || "N/A"}</h2>
-
+              <h2>{userData.role || "N/A"}</h2>
+  
               {userData.qrCode ? (
                 <img
                   src={userData.qrCode}
@@ -107,6 +109,7 @@ const Profile = () => {
       </div>
     </div>
   );
+  
 };
 
 export default Profile;

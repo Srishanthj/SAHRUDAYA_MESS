@@ -74,8 +74,11 @@ const Bill = () => {
   const billKeys = Object.keys(billData);
 
   if (billKeys.length === 0) {
-    return <ErrorScreen message="No bills available." />;
-  }
+    return (
+        <div className="loading-container">
+            <ErrorScreen message="No bills available." />
+        </div>
+    );  }
 
   const firstMonthKey = billKeys[0];
   const firstMonthData = billData[firstMonthKey] || {};

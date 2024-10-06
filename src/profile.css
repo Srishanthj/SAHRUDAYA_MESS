@@ -4,10 +4,23 @@ body {
 }
 
 .profile-container {
+    margin: 5rem; /* Add margin to all sides */
+    display: flex;
+    padding-right: 10px; /* Adjust if needed */
+}
+
+.loading-container {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    height: 100vh; /* Full viewport height */
+    text-align: center; /* Center text */
+}
+
+
+.profile-details-container {
+    margin: 5rem;
     display: flexbox;
-    padding-left: 10px;
-    padding-right: 10px;
-   
 }
 
 .sidebar {
@@ -28,22 +41,25 @@ body {
 
 .profile-content {
     flex: 1; /* Take remaining space next to sidebar */
-
     display: flex; /* Use flexbox for centering */
     flex-direction: column; /* Stack children vertically */
     align-items: center; /* Center horizontally */
     justify-content: center; /* Center vertically */
     font-family: Arial, Helvetica, sans-serif;
+    margin: auto;
 }
 
 .logout-container {
     position: absolute; /* Position absolute for logout button */
-    top: 10px; /* Adjust as needed */
-    right: 20px; /* Adjust as needed */
+    top: -10px; /* Move upwards by an additional 10px */
+    right: 20px; /* Keep right position as is */
 }
 
+
 .logout-button {
-    padding: 10px 15px; /* Padding for the button */
+    margin-bottom: 10px;
+    font-size: 0.8rem;
+    padding: 5px 15px; /* Padding for the button */
     background-color: #ff4d4d; /* Logout button color */
     border: none; /* No border */
     color: white; /* Text color */

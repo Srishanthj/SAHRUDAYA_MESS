@@ -10,37 +10,36 @@
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2); /* Shadow effect */
   transition: width 0.3s ease; /* Smooth width transition */
   z-index: 1000; /* Ensure it stays on top of other content */
-  font-family: Arial, Helvetica, sans-serif;
 }
 
 .sidebar h2 {
-  margin: 0; /* Remove margin */
+  margin-top: 1rem; /* Remove margin */
   font-size: 24px; /* Font size for the heading */
   text-align: center; /* Center align the heading */
-  font-family: Arial, Helvetica, sans-serif;
 }
 
 .sidebar ul {
   list-style: none; /* Remove bullet points */
   padding: 0; /* Remove default padding */
-  font-family: Arial, Helvetica, sans-serif;
 }
 
 .sidebar ul li {
-  margin: 15spx 0; /* Margin between items */
+  margin: 15px 0; /* Margin between items */
 }
 
 .sidebar ul li a {
+  margin-top: 2rem;
+  font-size: 1rem;
   color: white; /* White link color */
   text-decoration: none; /* Remove underline from links */
-  padding: 10px 15px; /* Padding for links */
+  padding: 15px 15px; /* Padding for links */
   display: block; /* Make links block elements */
   border-radius: 5px; /* Rounded corners */
   transition: background-color 0.3s ease; /* Smooth background transition */
-  font-family: Arial, Helvetica, sans-serif;
 }
 
 .sidebar ul li a:hover {
+  height: 1.2rem;
   background-color: #34495e; /* Change background on hover */
   color: #ecf0f1; /* Light text color on hover */
 }
@@ -58,4 +57,22 @@
       height: auto; /* Adjust height for mobile devices */
       position: relative; /* Change position to relative */
   }
+}
+
+
+
+.logout-button {
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  padding: 15px 15px; /* Padding for the button */
+  background-color: #ff4d4d; /* Logout button color */
+  border: none; /* No border */
+  color: white; /* Text color */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+}
+
+.logout-button:hover {
+  font-size: 1rem;
+  background-color: #ff1a1a; /* Darker shade on hover */
 }

@@ -1,0 +1,45 @@
+/* navbar.css */
+.navbar {
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+    color: white;
+    padding: 0px 0px;
+    position:relative;
+    margin: 0;
+}
+
+.sidebar-toggle {
+    background: none;
+    border: none;
+    color: black;
+    cursor: pointer;
+    font-size: 18px;
+    margin-left: 10px;
+}
+
+.navbar h1 {
+    padding-top: 5px;
+    margin: auto;
+    align-items: center;
+    padding-left: 40px;
+}
+
+
+.logout-container {
+    position: absolute;
+    top: 0px;
+    right: 20px;
+}
+
+.logout-button {
+    margin-right: 10px;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+    padding: 8px 15px;
+    background-color: #ff4d4d; /* Logout button color */
+    border: none; /* No border */
+    color: white; /* Text color */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+}
