@@ -2,6 +2,7 @@ import React, { forwardRef } from "react";
 import { Link } from "react-router-dom";
 import { auth } from "./firebase_config";
 import { useNavigate } from "react-router-dom";
+import { FaUser, FaCut, FaFileInvoice } from "react-icons/fa"; // Importing icons
 import "./sidebar.css";
 
 const Sidebar = forwardRef(({ uid, name, isAdmin }, ref) => {
@@ -17,25 +18,26 @@ const Sidebar = forwardRef(({ uid, name, isAdmin }, ref) => {
       <h2>Welcome, {name}!</h2>
       <ul>
         <li>
-          <Link to="/profile">Profile</Link>
+          <Link to="/profile">
+            <FaUser /> Profile
+          </Link>
         </li>
         <li>
-          {/* <Link to={`/messcut/${uid}`}>Mess Cut</Link> */}
-          <Link>Mess Cut</Link>
+          <Link to={`/messcut/${uid}`}>
+            <FaCut /> Mess Cut
+          </Link>
         </li>
         {isAdmin == true && (
           <li>
-            <Link to="/allusers">All Users</Link>
+            <Link to="/allusers">
+              <FaUser /> All Users
+            </Link>
           </li>
         )}
         <li>
-          {/* <Link to={`/bill/${uid}`}>Bill</Link> */}
-          <Link>Bill</Link>
-        </li>
-        <li>
-          <button className="logout-button" onClick={handleLogout}>
-            Logout
-          </button>
+          <Link to={`/bill/${uid}`}>
+            <FaFileInvoice /> Bill
+          </Link>
         </li>
       </ul>
     </div>
