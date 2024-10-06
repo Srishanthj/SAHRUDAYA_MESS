@@ -1,4 +1,3 @@
-// Navbar.js
 import React from "react";
 import './navbar.css';
 import { FaBars } from "react-icons/fa";
@@ -6,8 +5,7 @@ import './profile_nav.css';
 import { useNavigate } from "react-router-dom";
 import { auth } from "./firebase_config";
 
-const ProfileNavbar = ({ title, onToggleSidebar, onLogout }) => {
-
+const ProfileNavbar = ({ title, onToggleSidebar, isSidebarOpen }) => {
   const navigate = useNavigate();
   
   const handleLogout = async () => {
@@ -17,9 +15,12 @@ const ProfileNavbar = ({ title, onToggleSidebar, onLogout }) => {
   
   return (
     <header className="navbar">
-      <button className="sidebar-toggle" onClick={onToggleSidebar}>
-        <FaBars />
-      </button>
+      {/* Show the sidebar toggle only when the sidebar is closed */}
+      {!isSidebarOpen && (
+        <button className="sidebar-toggle" onClick={onToggleSidebar}>
+          <FaBars />
+        </button>
+      )}
       <h1>{title}</h1>
       <button className="logout-button" onClick={handleLogout}>
         Logout
