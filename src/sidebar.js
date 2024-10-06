@@ -23,7 +23,10 @@ const Sidebar = forwardRef(({ uid, name, isAdmin }, ref) => {
           </Link>
         </li>
         <li>
-          <Link to={`/messcut/${uid}`}>
+          {/* <Link to={`/messcut/${uid}`}>
+            <FaCut /> Mess Cut
+          </Link> */}
+          <Link>
             <FaCut /> Mess Cut
           </Link>
         </li>
@@ -35,7 +38,10 @@ const Sidebar = forwardRef(({ uid, name, isAdmin }, ref) => {
           </li>
         )}
         <li>
-          <Link to={`/bill/${uid}`}>
+          {/* <Link to={`/bill/${uid}`}>
+            <FaFileInvoice /> Bill
+          </Link> */}
+           <Link>
             <FaFileInvoice /> Bill
           </Link>
         </li>
