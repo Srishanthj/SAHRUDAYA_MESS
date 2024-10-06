@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { auth } from "./firebase_config";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
@@ -20,11 +20,31 @@ const Login = () => {
       await signInWithEmailAndPassword(auth, email, password);
       navigate("/profile");
     } catch (error) {
-      setErrorMessage(error.message);
+      switch (error.code) {
+        case "auth/user-not-found":
+          setErrorMessage("No such mail id found.");
+          break;
+        case "auth/wrong-password":
+          setErrorMessage("Incorrect password.");
+          break;
+        case "auth/invalid-email":
+          setErrorMessage("Invalid email format.");
+          break;
+        default:
+          setErrorMessage("Login failed. Please try again.");}
     } finally {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (errorMessage) {
+      const timer = setTimeout(() => {
+        setErrorMessage("");
+      }, 3000); 
+      return () => clearTimeout(timer); 
+    }
+  }, [errorMessage]);
 
   return (
     <div className="login-container">
@@ -57,7 +77,11 @@ const Login = () => {
         <button type="submit" className="submit-button">
           {isLoading ? "Logging in..." : "Log In"}
         </button>
-        {errorMessage && <p className="error-message">{errorMessage}</p>}
+        {errorMessage && (
+          <div className="error-modal">
+            <p>{errorMessage}</p>
+          </div>
+        )}
         <div className="signup-prompt">
           <span>Don't have an account? </span>
           <a href="/register" className="signup-link">

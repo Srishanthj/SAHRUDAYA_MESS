@@ -1,84 +1,72 @@
 body {
   font-family: 'Arial', sans-serif;
-  background-color: #eaeaea;
-  margin: 0;
+  margin:0;
   padding: 0;
+  background: linear-gradient(135deg, rgba(13, 250, 231, 0.5), rgba(239, 103, 6, 0.5));
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
-/* Registration page container */
 .register-page {
-  max-height: 90vh;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 40px;
-  background: linear-gradient(135deg, #ffffff, #f0f4f8);
-  border-radius: 15px; /* More rounded corners */
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  margin: auto;
-  width: 90%;
-  max-width: 600px; /* Increased max-width */
+  padding-top: 1rem;
+  max-height: 90vh; /* Set maximum height to 90% of the viewport height */
+  overflow-y: auto; /* Enable vertical scrolling */
+  overflow-x: hidden; /* Hide horizontal overflow */
+  padding: 40px; /* Increased padding for spacious layout */
+  background: linear-gradient(135deg, #ffffff, #f0f4f8); /* Soft white to light gray gradient */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
+  margin: auto; /* Center the registration page */
+  width: 80%; /* Responsive width */
+  max-width: 500px; /* Maximum width */
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Header styling */
 .register-page h2 {
-  font-family: 'Georgia', serif; /* Elegant serif font */
-  text-align: center;
-  color: #333;
-  margin-bottom: 20px;
-  font-size: 28px; /* Larger font size */
+  text-align: center; /* Center align the header */
+  color: #333; /* Dark gray text color for contrast */
+  margin-bottom: 20px; /* Space below the header */
+  font-size: 22px; /* Font size */
 }
 
 /* Avatar container */
 .avatar-container {
-  position: relative; /* Positioning for edit icon */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 10px;
+  margin: auto;
+  text-align: center;
+  width: 50%;
+ padding: 10px;
+
 }
 
-/* Avatar styles */
+.file-input{
+  width: 110%;
+  margin: auto;
+  margin-left: -1.5rem;
+}
+
 .avatar {
-  width: 120px; /* Larger width */
-  height: 120px; /* Larger height */
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid #2193b0; /* Slightly thicker border */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  font-family: Arial, Helvetica, sans-serif;
+  padding-top: -10px;
+  width: 100px; /* Set width */
+  height: 100px; /* Set height */
+  border-radius: 50%; /* Make it circular */
+  object-fit: fill; /* Cover the area while maintaining aspect ratio */
+  border: 2px solid #2193b0; /* Optional: add a border around the avatar */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Optional: add a shadow for depth */
 }
 
-/* Edit icon styles */
-.edit-icon {
-  position: absolute; /* Position over avatar */
-  bottom: 0;
-  right: 0;
-  background-color: #fff; /* White background */
-  border: 1px solid #ccc;
-  border-radius: 50%;
-  padding: 5px;
-  cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  font-family: Arial, Helvetica, sans-serif;
-}
 
-.edit-icon:hover {
-  background-color: #f0f0f0; /* Slight change on hover */
-}
-
-/* Upload button styles */
 .upload-button {
-  display: block;
-  margin: 0 auto 20px;
-  background-color: #2193b0;
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.3s;
-  font-family: Arial, Helvetica, sans-serif;
+  display: block; /* Make it a block element */
+  margin: 0 auto 20px; /* Center the button and add space below */
+  background-color: #3a0a6a; /* Dark purple background */
+  color: white; /* Button text color */
+  padding: 10px; /* Padding for the button */
+  border: none; /* No border */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s, transform 0.3s; 
+  font-family: Arial, Helvetica, sans-serif;/* Smooth transition for hover effect */
 }
 
 .upload-button:hover {
@@ -86,33 +74,56 @@ body {
   transform: translateY(-2px);
 }
 
-/* Input field styles */
 .input-field {
   margin: 10px 0;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  width: 100%;
-  font-size: 16px;
-  transition: border-color 0.3s, box-shadow 0.3s;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  width: 100%; /* Ensure all input fields take the full width of their container */
+  box-sizing: border-box; /* Include padding and border in the element's total width */
 }
 
-.input-field:focus {
-  border-color: #2193b0;
-  box-shadow: 0 0 5px rgba(33, 147, 176, 0.5);
+select.input-field {
+  width: 100%; /* Ensure the select field also takes full width */
+  box-sizing: border-box; /* Include padding and border in the element's total width */
 }
+
+
+.input-field:focus {
+  border-color: #2193b0; /* Change border color on focus */
+  box-shadow: 0 0 5px rgba(33, 147, 176, 0.5); /* Light blue shadow on focus */
+}
+
+.loading-dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 18px;
+  z-index: 1000; /* Ensure it's on top of other content */
+}
+
+
 
 /* Submit button styles */
 .submit-button {
-  background-color: #4CAF50;
-  color: white;
-  padding: 12px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.3s;
-  width: 100%;
-  font-size: 16px;
+  margin-top: 1rem;
+  background-color: #4CAF50; /* Green background */
+  color: white; /* White text */
+  padding: 10px; /* Padding */
+  border: none; /* No border */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s, transform 0.3s; /* Smooth transition for hover effect */
+  width: 100%; /* Full width */
+  font-size: 16px; /* Larger font for better readability */
 }
 
 .submit-button:hover {
@@ -122,36 +133,58 @@ body {
 
 /* Error message styles */
 .error-message {
-  color: red;
+  color: red; /* Red color for error messages */
+  font-size: 14px; /* Smaller font size for error messages */
+  margin-top: -8px; /* Move error messages closer to input */
+  margin-bottom: 10px; /* Space below error messages */
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 480px) {
+  .register-page {
+      padding: 15px; /* Reduce padding for smaller screens */
+      width: 95%; /* Slightly wider for smaller screens */
+  }
+
+  .register-page h2 {
+      font-size: 20px; /* Smaller font size for mobile */
+  }
+
+  .input-field,
+  .upload-button,
+  .submit-button {
+      font-size: 12px; /* Smaller font size for buttons and inputs */
+  }
+}
+
+/* Make all buttons and inputs same height */
+.input-wrapper {
+  display: flex; /* Use flexbox for alignment */
+  align-items: stretch; /* Stretch items to the same height */
+  margin: 10px 0; /* Space between input fields */
+}
+
+.input-field3{
+  margin: 10px 0; /* Space between input fields */
+  padding: 10px; /* Padding inside input fields */
+  border: 1px solid #ddd; /* Light gray border */
+  border-radius: 5px; /* Rounded corners */
+  width: calc(100% - 15px); /* Full width, accounting for padding */
+  font-size: 14px; /* Font size */
+  transition: border-color 0.2s; /* Smooth transition */
+}
+
+
+.empty-avatar-container {
+  width: 50%;
+  height: 13vh;
+  margin-left: 2.5rem;
+  border: 2px solid #ddd;
+  border-radius: 50%;
+  display: flex;
+  
+  justify-content: center;
+  align-items: center;
   font-size: 14px;
-  margin-top: -8px;
-  margin-bottom: 10px;
-}
-
-/* Optional: Add animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.register-page {
-  animation: fadeIn 1s ease-in;
-}
-
-/* Optional: Add custom scrollbar */
-.register-page::-webkit-scrollbar {
-  width: 8px;
-}
-
-.register-page::-webkit-scrollbar-thumb {
-  background-color: #2193b0;
-  border-radius: 4px;
-}
-
-.register-page::-webkit-scrollbar-track {
-  background-color: #f0f4f8;
+  color: #666;
 }
