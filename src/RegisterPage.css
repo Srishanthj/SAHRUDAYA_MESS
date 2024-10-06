@@ -3,46 +3,27 @@ body {
   margin: 0;
   padding: 0;
   background: linear-gradient(135deg, rgba(13, 250, 231, 0.5), rgba(239, 103, 6, 0.5));
-  display: flex;
+  /* display: flex; */
   justify-content: center;
   align-items: center;
   height: 100vh;
 }
 
+
 .register-page {
-  position: relative;
-  max-height: 90vh;
-  overflow-y: auto;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  margin: auto;
-  width: 90%;
-  max-width: 400px;
-  background: white;
-  animation: fadeIn 0.5s ease;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  max-height: 85vh; /* Set maximum height to 90% of the viewport height */
+  overflow-y: auto; /* Enable vertical scrolling */
+  overflow-x: hidden; /* Hide horizontal overflow */
+  padding: 40px; /* Increased padding for spacious layout */
+  background: linear-gradient(135deg, #ffffff, #f0f4f8); /* Soft white to light gray gradient */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
+  margin: auto; /* Center the registration page */
+  width: 80%; /* Responsive width */
+  max-width: 500px; /* Maximum width */
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Add the rest of your styles here, incorporating the above adjustments */
-
-
-/* Fade-in animation */
-@keyframes fadeIn {
-  from {
-      opacity: 0;
-      transform: translateY(-10px);
-  }
-  to {
-      opacity: 1;
-      transform: translateY(0);
-  }
-}
-
-/* Header styling */
 .register-page h2 {
   text-align: center; /* Center align the header */
   color: #333; /* Dark gray text color for contrast */
@@ -59,22 +40,23 @@ body {
 
 }
 
-/* Avatar styles */
+.file-input{
+  width: 110%;
+  margin: auto;
+  margin-left: -1.5rem;
+}
+
 .avatar {
-  height: 100%; 
-  width: 50%;/* Set height */
-  border-radius: 100%; /* Make it circular */
-  object-fit: cover; /* Cover the area while maintaining aspect ratio */
-  border: 2px solid #3a0a6a; /* Subtle border */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
-  transition: transform 0.2s ease; /* Animation for avatar */
+  padding-top: -10px;
+  width: 100px; /* Set width */
+  height: 100px; /* Set height */
+  border-radius: 50%; /* Make it circular */
+  object-fit: fill; /* Cover the area while maintaining aspect ratio */
+  border: 2px solid #2193b0; /* Optional: add a border around the avatar */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Optional: add a shadow for depth */
 }
 
-.avatar:hover {
-  transform: scale(1.05); /* Scale effect on hover */
-}
 
-/* Upload button styles */
 .upload-button {
   display: block; /* Make it a block element */
   margin: 0 auto 20px; /* Center the button and add space below */
@@ -84,52 +66,36 @@ body {
   border: none; /* No border */
   border-radius: 5px; /* Rounded corners */
   cursor: pointer; /* Pointer cursor on hover */
-  font-size: 14px; /* Font size */
-  transition: background-color 0.2s; /* Smooth transition */
+  transition: background-color 0.3s, transform 0.3s; 
+  font-family: Arial, Helvetica, sans-serif;/* Smooth transition for hover effect */
 }
 
-/* Input field styles */
-.input-field {
-  margin: 10px 0; /* Space between input fields */
-  padding: 10px; /* Padding inside input fields */
-  border: 1px solid #ddd; /* Light gray border */
-  border-radius: 5px; /* Rounded corners */
-  width: calc(100% - 15px); /* Full width, accounting for padding */
-  font-size: 14px; /* Font size */
-  transition: border-color 0.2s; /* Smooth transition */
-}
-/* Show button styles inside input fields */
-.password-container {
-  display: flex; /* Use flexbox for alignment */
-  align-items: center; /* Center items vertically */
-  width: 100%; /* Ensure it takes full width */
+.upload-button:hover {
+  background-color: #1b7f94; /* Darker shade on hover */
+  transform: translateY(-2px); /* Slight lift effect on hover */
 }
 
 .input-field {
-  flex: 1; /* Allow input field to take available space */
-  padding: 10px; /* Padding for better appearance */
-  border: 1px solid #ddd; /* Light gray border */
-  border-radius: 5px; /* Rounded corners */
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 100%; /* Ensure all input fields take the full width of their container */
+  box-sizing: border-box; /* Include padding and border in the element's total width */
+}
+
+select.input-field {
+  width: 100%; /* Ensure the select field also takes full width */
+  box-sizing: border-box; /* Include padding and border in the element's total width */
 }
 
 
-
-.input-field {
-  flex: 10; /* Allow input field to take available space */
-  padding: 10px; /* Padding for better appearance */
-  border: 1px solid #ddd; /* Light gray border */
-  border-radius: 5px; /* Rounded corners */
+/* Input field focus effect */
+.input-field:focus {
+  border-color: #2193b0; /* Change border color on focus */
+  box-shadow: 0 0 5px rgba(33, 147, 176, 0.5); /* Light blue shadow on focus */
 }
 
-.toggle-password {
-  color: blue; /* Button text color */
-  border: none; /* No border */
-  border-radius: 5px; /* Rounded corners */
-  padding: 15px; /* Adjust padding for consistency */
-  cursor: pointer; /* Pointer cursor on hover */
-  margin-left: 20px; /* Space between input and button */
-  margin-top: -12px; /* Match the height of the input field */
-}
 
 /* Submit button styles */
 .submit-button {
@@ -139,30 +105,22 @@ body {
   border: none; /* No border */
   border-radius: 5px; /* Rounded corners */
   cursor: pointer; /* Pointer cursor on hover */
-  transition: background-color 0.2s; /* Smooth transition */
-  width: 100%; /* Make it full width */
+  transition: background-color 0.3s, transform 0.3s; /* Smooth transition for hover effect */
+  width: 100%; /* Full width */
+  font-size: 16px; /* Larger font for better readability */
 }
 
-/* Upload button styles */
-.upload-button {
-  display: block; /* Make it a block element */
-  margin: 0 auto 20px; /* Center the button and add space below */
-  background-color: #3a0a6a; /* Dark purple background */
-  color: white; /* Button text color */
-  padding: 10px; /* Padding for the button */
-  border: none; /* No border */
-  border-radius: 5px; /* Rounded corners */
-  cursor: pointer; /* Pointer cursor on hover */
-  font-size: 14px; /* Font size */
-  transition: background-color 0.2s; /* Smooth transition */
-  width: 100%; /* Make it full width */
+.submit-button:hover {
+  background-color: #45a049; /* Darker green on hover */
+  transform: translateY(-2px); /* Slight lift effect on hover */
 }
 
-/* Make all buttons and inputs same height */
-.input-wrapper {
-  display: flex; /* Use flexbox for alignment */
-  align-items: stretch; /* Stretch items to the same height */
-  margin: 10px 0; /* Space between input fields */
+/* Optional: Add styles for error messages */
+.error-message {
+  color: red; /* Red color for error messages */
+  font-size: 14px; /* Smaller font size for error messages */
+  margin-top: -8px; /* Move error messages closer to input */
+  margin-bottom: 10px; /* Space below error messages */
 }
 
 /* Media Queries for Responsiveness */
@@ -181,9 +139,36 @@ body {
   .submit-button {
       font-size: 12px; /* Smaller font size for buttons and inputs */
   }
+}
 
-  .avatar {
-      width: 70px; /* Smaller avatar for mobile */
-      height: 70px; /* Smaller avatar for mobile */
-  }
+/* Make all buttons and inputs same height */
+.input-wrapper {
+  display: flex; /* Use flexbox for alignment */
+  align-items: stretch; /* Stretch items to the same height */
+  margin: 10px 0; /* Space between input fields */
+}
+
+.input-field3{
+  margin: 10px 0; /* Space between input fields */
+  padding: 10px; /* Padding inside input fields */
+  border: 1px solid #ddd; /* Light gray border */
+  border-radius: 5px; /* Rounded corners */
+  width: calc(100% - 15px); /* Full width, accounting for padding */
+  font-size: 14px; /* Font size */
+  transition: border-color 0.2s; /* Smooth transition */
+}
+
+
+.empty-avatar-container {
+  width: 50%;
+  height: 13vh;
+  margin-left: 2.5rem;
+  border: 2px solid #ddd;
+  border-radius: 50%;
+  display: flex;
+  
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  color: #666;
 }

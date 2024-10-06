@@ -1,18 +1,19 @@
-import React, { useEffect, useState, useRef } from "react";
-import { auth, db } from "./firebase_config"; 
-import { useNavigate } from "react-router-dom"; 
+import React, { useState, useEffect, useRef } from "react";
+import { auth, db } from "./firebase_config";
+import { useNavigate } from "react-router-dom";
 import { getDoc, doc } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
+import Navbar from './navbar';
 import Sidebar from './sidebar';
-import { AiOutlineMenu } from "react-icons/ai";
 import './profile.css';
+import ProfileNavbar from "./profile_nav";
 
 const Profile = () => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); 
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const navigate = useNavigate();
-  const sidebarRef = useRef(null); 
+  const sidebarRef = useRef(null);  
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -28,7 +29,7 @@ const Profile = () => {
           setLoading(false);
         }
       } else {
-        navigate("/"); 
+        navigate("/login");
         setLoading(false);
       }
     });
@@ -36,49 +37,48 @@ const Profile = () => {
     return () => unsubscribe();
   }, [navigate]);
 
-  const handleLogout = async () => {
-    await auth.signOut();
-    navigate("/"); 
-  };
-
   const toggleSidebar = () => {
-    setIsSidebarOpen((prev) => !prev); 
-    console.log("Sidebar is toggled:", !isSidebarOpen);  // Add log to check state
+    setIsSidebarOpen((prev) => !prev);
   };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
-        setIsSidebarOpen(false);
+        setIsSidebarOpen(false); 
       }
     };
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside); 
     };
   }, []);
 
+  const handleLogout = async () => {
+    await auth.signOut();
+    navigate("/");
+  };
+
+
   if (loading) {
-    return <p>Loading user data...</p>;
+    return <h2 className="loading-container">Loading user data...</h2>;
   }
 
   return (
-    <div className="profile-container">
-      <div className="sidebar-toggle" onClick={toggleSidebar}>
-        <AiOutlineMenu size={24} color="black"/>
-      </div>
-
+    <div>
+      <ProfileNavbar title="Profile" onToggleSidebar={toggleSidebar} />
+  
       {isSidebarOpen && (
-        <div className="sidebar" ref={sidebarRef}> 
-          <Sidebar uid={userData ? userData.uid : null} name={userData ? userData.name : "User"} />
+        <div ref={sidebarRef}>
+          <Sidebar uid={userData.uid} name={userData.name} isAdmin={userData.isAdmin}/>
         </div>
       )}
-
-      <div className={`profile-content ${isSidebarOpen ? 'sidebar-open' : ''}`}>
-        <div className="logout-container">
-          <button className="logout-button" onClick={handleLogout}>Logout</button>
+  
+      <div className="profile-content">
+        <div className="header-container">
+          <button className="sidebar-toggle" onClick={toggleSidebar}>
+          </button>
         </div>
-        <h1 className="center-text">Profile</h1>
         <div className="profile-details-container">
           {userData ? (
             <div>
@@ -87,11 +87,11 @@ const Profile = () => {
                 alt="👤"
                 className="profile-photo"
               />
-              <h2>Name: {userData.name || "N/A"}</h2>
-              <h2>Department: {userData.department || "N/A"}</h2>
+              <h2>{userData.name || "N/A"}</h2>
+              <h2>Dept: {userData.department || "N/A"}</h2>
               <h2>Mess No: {userData.messNo || "N/A"}</h2>
-              <h2>Role: {userData.role || "N/A"}</h2>
-              <h2>QR Code:</h2>
+              <h2>{userData.role || "N/A"}</h2>
+  
               {userData.qrCode ? (
                 <img
                   src={userData.qrCode}
@@ -109,6 +109,7 @@ const Profile = () => {
       </div>
     </div>
   );
+  
 };
 
 export default Profile;

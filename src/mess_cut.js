@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState , useRef} from "react";
 import { useParams } from "react-router-dom"; // Import useParams
 import { auth, db } from "./firebase_config";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc, onSnapshot } from "firebase/firestore";
 import { format, addDays } from "date-fns";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Navbar from "./navbar";
+import Sidebar from "./sidebar";
 
 const Messcut = () => {
   const { uid } = useParams();
@@ -12,6 +14,13 @@ const Messcut = () => {
   const [messCutCount, setMessCutCount] = useState(0);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null); // State to store current user info
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const sidebarRef = useRef(null); // Sidebar state
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen((prev) => !prev);
+  };
 
   useEffect(() => {
     if (uid) {
@@ -20,6 +29,35 @@ const Messcut = () => {
       console.error("No UID provided.");
     }
   }, [uid]);
+
+  useEffect(() => {
+    const user = auth.currentUser; // Get the current user from Firebase auth
+    if (user) {
+      // Assuming you have a 'users' collection to fetch the user's details
+      const userDocRef = doc(db, "users", user.uid);
+      onSnapshot(userDocRef, (doc) => {
+        if (doc.exists()) {
+          setCurrentUser(doc.data()); // Set current user data
+        }
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        setIsSidebarOpen(false); // Close sidebar
+      }
+    };
+
+    if (isSidebarOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside); // Cleanup event listener on unmount
+    };
+  }, [isSidebarOpen]);
 
   const selectDateRange = async () => {
     if (!startDate || !endDate) {
@@ -82,7 +120,11 @@ const Messcut = () => {
   };
 
   const getDatesCount = () => {
-    if (messCuts.length > 0 && messCuts[0].dates && Array.isArray(messCuts[0].dates)) {
+    if (
+      messCuts.length > 0 &&
+      messCuts[0].dates &&
+      Array.isArray(messCuts[0].dates)
+    ) {
       return messCuts[0].dates.length; // Fetch length of dates array at index 0
     }
     return 0; // Return 0 if no dates exist
@@ -108,7 +150,6 @@ const Messcut = () => {
       setMessCutCount(0); // Initialize mess cut count
     }
   };
-  
 
   const saveDateRanges = async (newMessCuts) => {
     const groupedMessCuts = {};
@@ -158,13 +199,24 @@ const Messcut = () => {
       .map(([month, dates]) => {
         const startDate = format(new Date(dates[0]), "d");
         const endDate = format(new Date(dates[dates.length - 1]), "d");
-        return` ${month} ${startDate} - ${endDate}`; // Format the dates for display
+        return ` ${month} ${startDate} - ${endDate}`; // Format the dates for display
       })
       .join(", ");
   };
 
   return (
     <div>
+      <Navbar title="Mess Cut" onToggleSidebar={toggleSidebar} />
+
+      {isSidebarOpen && ( // Use isSidebarOpen state
+        <div ref={sidebarRef}>
+          <Sidebar
+            uid={currentUser?.id}
+            name={currentUser?.name}
+            isAdmin={currentUser?.isAdmin}
+          />
+        </div>
+      )}
       <h1>Mess Cut</h1>
       <div>
         <label>Select Start Date:</label>
