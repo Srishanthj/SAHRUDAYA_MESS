@@ -20,7 +20,19 @@ const Login = () => {
       await signInWithEmailAndPassword(auth, email, password);
       navigate("/profile");
     } catch (error) {
-      setErrorMessage("No such mail id found");
+      switch (error.code) {
+        case "auth/user-not-found":
+          setErrorMessage("No such mail id found.");
+          break;
+        case "auth/wrong-password":
+          setErrorMessage("Incorrect password.");
+          break;
+        case "auth/invalid-email":
+          setErrorMessage("Invalid email format.");
+          break;
+        default:
+          setErrorMessage("Login failed. Please try again.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -30,8 +42,8 @@ const Login = () => {
     if (errorMessage) {
       const timer = setTimeout(() => {
         setErrorMessage("");
-      }, 3000); 
-      return () => clearTimeout(timer); 
+      }, 3000);
+      return () => clearTimeout(timer);
     }
   }, [errorMessage]);
 
@@ -70,7 +82,8 @@ const Login = () => {
           <div className="error-modal">
             <p>{errorMessage}</p>
           </div>
-        )}        <div className="signup-prompt">
+        )}{" "}
+        <div className="signup-prompt">
           <span>Don't have an account? </span>
           <a href="/register" className="signup-link">
             Sign Up
