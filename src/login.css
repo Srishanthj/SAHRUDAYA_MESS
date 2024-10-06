@@ -79,12 +79,12 @@ input {
 .submit-button:hover {
     background-color: #45a049;
 }
-
 .error-message {
     color: red;
-    margin-top: 1rem;
-}
-
+    font-size: 0.9rem;
+    margin-top: 10px;
+    animation: slideDown 0.5s ease-out;
+  }
 .signup-prompt {
     margin-top: 20px;
 }
@@ -115,4 +115,45 @@ input {
     .login-form button {
         font-size: 0.9rem;
     }
+}
+
+.error-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #f8d7da;
+    padding: 20px 30px;
+    border: 2px solid #f5c6cb;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    animation: slideDownFadeIn 0.4s ease-in-out;
+    z-index: 999;
+    font-family: Arial, sans-serif;
+}
+
+.error-modal p {
+    color: #721c24;
+    font-size: 1rem;
+    margin: 0;
+}
+
+@keyframes slideDownFadeIn {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -60%);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+.error-modal::before {
+    content: "⚠️";
+    display: block;
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #721c24;
 }

@@ -1,39 +1,39 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
-import './RegisterPage.css';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { setDoc, doc } from 'firebase/firestore';
-import { db, auth } from './firebase_config';
-import { uploadDP } from './authFunctions';
-import { QRCodeCanvas } from 'qrcode.react';
-import { getStorage, ref, uploadString, getDownloadURL } from 'firebase/storage';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import React, { useState, useRef, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import "./RegisterPage.css";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { setDoc, doc } from "firebase/firestore";
+import { db, auth } from "./firebase_config";
+import { uploadDP } from "./authFunctions";
+import { QRCodeCanvas } from "qrcode.react";
+import {
+  getStorage,
+  ref,
+  uploadString,
+  getDownloadURL,
+} from "firebase/storage";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { FaSleigh } from "react-icons/fa";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
-const PasswordInput = ({ register, errors, isVisible, setIsVisible, placeholder }) => (
-  <div className="password-container">
-    <input
-      {...register} // spread the register function
-      type={isVisible ? 'text' : 'password'}
-      placeholder={placeholder}
-      className="input-field"
-    />
-    <button type="button" className="toggle-password" onClick={() => setIsVisible(!isVisible)}>
-      {isVisible ? 'Hide' : 'Show'}
-    </button>
-    {errors && <span className="error">{errors.message}</span>}
-  </div>
-);
 
 const RegisterPage = () => {
   const navigate = useNavigate(); // Initialize useNavigate
-  const { register, handleSubmit, formState: { errors }, getValues, reset } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    getValues,
+    reset,
+  } = useForm();
   const [selectedDp, setSelectedDp] = useState(null);
-  const [selectedRole, setSelectedRole] = useState('Inmate');
-  const [newEmail, setNewEmail] = useState('');
+  const [selectedRole, setSelectedRole] = useState("Inmate");
+  const [newEmail, setNewEmail] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [isReEnterPasswordVisible, setIsReEnterPasswordVisible] = useState(false);
-  const [qrCodeValue, setQrCodeValue] = useState('');
+  const [isReEnterPasswordVisible, setIsReEnterPasswordVisible] =
+    useState(false);
+  const [qrCodeValue, setQrCodeValue] = useState("");
   const qrCodeRef = useRef();
   const storage = getStorage();
   
@@ -48,11 +48,17 @@ const RegisterPage = () => {
       name: getValues("name")
     };
     setQrCodeValue(JSON.stringify(userInfo));
-  }, [newEmail, selectedRole, getValues]);
-
+  }, [newEmail, selectedRole, getValues("messNo"), getValues("name")]);
+  
   const showToast = (message, type) => {
-    type === 'success' ? toast.success(message) : toast.error(message);
+    type === "success" ? toast.success(message) : toast.error(message);
   };
+
+  const LoadingDialog = () => (
+    <div className="loading-dialog">
+      <p>Please wait while registering...</p>
+    </div>
+  );
 
   const onSubmit = async (data) => {
     if (!selectedDp) {
@@ -87,7 +93,7 @@ const RegisterPage = () => {
         isAdmin: false
       });
 
-      showToast(`Registration Successful! Name: ${data.name}, Mess No: ${data.messNo}, Department: ${data.department}, Role: ${selectedRole}`, 'success');
+      //showToast(Registration Successful! Name: ${data.name}, Mess No: ${data.messNo}, Department: ${data.department}, Role: ${selectedRole}, 'success');
 
       reset();
 
@@ -99,7 +105,7 @@ const RegisterPage = () => {
       const errorMessage = error.code === 'auth/email-already-in-use'
         ? 'Email is already in use.'
         : error.message || 'An unknown error occurred';
-      showToast(`Registration Failed: ${errorMessage}`, 'error');
+      //showToast(Registration Failed: ${errorMessage}, 'error');
     } finally {
       // Set loading state to false
       setIsLoading(false);
@@ -114,8 +120,8 @@ const RegisterPage = () => {
         const img = new Image();
         img.src = reader.result;
         img.onload = () => {
-          const canvas = document.createElement('canvas');
-          const ctx = canvas.getContext('2d');
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
 
           const MAX_WIDTH = 200;
           const MAX_HEIGHT = 200;
@@ -137,7 +143,7 @@ const RegisterPage = () => {
           canvas.width = width;
           canvas.height = height;
           ctx.drawImage(img, 0, 0, width, height);
-          setSelectedDp(canvas.toDataURL('image/jpeg')); // Store resized image
+          setSelectedDp(canvas.toDataURL("image/jpeg")); // Store resized image
         };
       };
       reader.readAsDataURL(file);
@@ -146,6 +152,7 @@ const RegisterPage = () => {
 
   return (
     <div className="register-page">
+      {isLoading && <LoadingDialog />}
       <h2>Register</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="avatar-container">
@@ -168,7 +175,10 @@ const RegisterPage = () => {
         </div>
 
         <input
-          {...register("name", { required: "Please enter your name", pattern: /^[a-zA-Z\s]+$/ })}
+          {...register("name", {
+            required: "Please enter your name",
+            pattern: /^[a-zA-Z\s]+$/,
+          })}
           placeholder="Name"
           className="input-field"
         />
@@ -179,8 +189,8 @@ const RegisterPage = () => {
             required: "Please enter your email",
             pattern: {
               value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-              message: "Invalid email address"
-            }
+              message: "Invalid email address",
+            },
           })}
           type="email"
           placeholder="Email"
@@ -189,35 +199,79 @@ const RegisterPage = () => {
         />
         {errors.email && <span className="error">{errors.email.message}</span>}
 
-        <PasswordInput
-          register={register("password", { required: "Please enter your password", minLength: { value: 8, message: "Password must be at least 8 characters" } })}
-          errors={errors.password}
-          isVisible={isPasswordVisible}
-          setIsVisible={setIsPasswordVisible}
-          placeholder="Password"
-        />
+        <div className="input-wrapper">
+          <input
+            {...register("password", {
+              required: "Please enter your password",
+              minLength: {
+                value: 8,
+                message: "Password must be at least 8 characters",
+              },
+            })}
+            type={isPasswordVisible ? "text" : "password"}
+            placeholder="Password"
+            className="input-field"
+          />
+          <button
+            type="button"
+            className="toggle-password"
+            onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+          >
+            
+          </button>
+          {errors.password && (
+            <span className="error">{errors.password.message}</span>
+          )}
+        </div>
 
-        <PasswordInput
-          register={register("rePassword", { validate: value => value === getValues("password") || "Passwords do not match" })}
-          errors={errors.rePassword}
-          isVisible={isReEnterPasswordVisible}
-          setIsVisible={setIsReEnterPasswordVisible}
-          placeholder="Re-enter Password"
-        />
+        <div className="input-wrapper">
+          <input
+            {...register("rePassword", {
+              validate: (value) =>
+                value === getValues("password") || "Passwords do not match",
+            })}
+            type={isReEnterPasswordVisible ? "text" : "password"}
+            placeholder="Re-enter Password"
+            className="input-field"
+          />
+          <button
+            type="button"
+            className="toggle-password"
+            onClick={() => setIsReEnterPasswordVisible(!isReEnterPasswordVisible)}
+          >
+           
+          </button>
+          {errors.rePassword && (
+            <span className="error">{errors.rePassword.message}</span>
+          )}
+        </div>
 
         <input
-          {...register("department", { required: "Please enter your department" })}
+          {...register("department", {
+            required: "Please enter your department",
+          })}
           placeholder="Department"
           className="input-field"
         />
-        {errors.department && <span className="error">{errors.department.message}</span>}
+        {errors.department && (
+          <span className="error">{errors.department.message}</span>
+        )}
 
         <input
           {...register("mobNo", {
             required: "Please enter your mobile number",
-            minLength: { value: 10, message: "Mobile number must be 10 digits" },
-            maxLength: { value: 10, message: "Mobile number must be 10 digits" },
-            pattern: { value: /^[0-9]+$/, message: "Mobile number must be numeric" }
+            minLength: {
+              value: 10,
+              message: "Mobile number must be 10 digits",
+            },
+            maxLength: {
+              value: 10,
+              message: "Mobile number must be 10 digits",
+            },
+            pattern: {
+              value: /^[0-9]+$/,
+              message: "Mobile number must be numeric",
+            },
           })}
           placeholder="Mob No"
           className="input-field"
@@ -225,26 +279,36 @@ const RegisterPage = () => {
         {errors.mobNo && <span className="error">{errors.mobNo.message}</span>}
 
         <input
-          {...register("messNo", { required: "Please enter your mess number" })}
+          {...register("messNo", {
+            required: "Please enter your mess no",
+          })}
           type="text"
-          placeholder="Mess No"
+          placeholder="Mess no"
           className="input-field"
         />
-        {errors.messNo && <span className="error">{errors.messNo.message}</span>}
+        {errors.messNo && (
+          <span className="error">{errors.messNo.message}</span>
+        )}
 
-        <select {...register("role")} value={selectedRole} onChange={(e) => setSelectedRole(e.target.value)} className="input-field">
+        <select
+          {...register("role")}
+          value={selectedRole}
+          onChange={(e) => setSelectedRole(e.target.value)}
+          className="input-field"
+        >
           <option value="Inmate">Inmate</option>
           <option value="Outmess">Outmess</option>
-          <option value="Admin">Admin</option>
+          <option value="Guest">Guest</option>
         </select>
 
-        <button type="submit" className="submit-button">Register</button>
-
-        {/* Loading Message */}
-        {isLoading && <p className="loading-message">Loading... Please wait.</p>}
-
-        <QRCodeCanvas value={qrCodeValue} ref={qrCodeRef} style={{ display: 'none' }} />
+        <button type="submit" className="submit-button">
+          Register
+        </button>
       </form>
+
+      <div style={{ display: "none" }}>
+        <QRCodeCanvas value={qrCodeValue} ref={qrCodeRef} />
+      </div>
     </div>
   );
 };

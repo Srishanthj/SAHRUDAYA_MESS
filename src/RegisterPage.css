@@ -14,7 +14,7 @@ body {
   max-height: 85vh; /* Set maximum height to 90% of the viewport height */
   overflow-y: auto; /* Enable vertical scrolling */
   overflow-x: hidden; /* Hide horizontal overflow */
-  padding: 40px; /* Increased padding for spacious layout */
+  padding: 20px; /* Increased padding for spacious layout */
   background: linear-gradient(135deg, #ffffff, #f0f4f8); /* Soft white to light gray gradient */
   border-radius: 8px; /* Rounded corners */
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
@@ -80,6 +80,7 @@ body {
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 4px;
+  font-size: 1rem;
   width: 100%; /* Ensure all input fields take the full width of their container */
   box-sizing: border-box; /* Include padding and border in the element's total width */
 }
@@ -96,9 +97,26 @@ select.input-field {
   box-shadow: 0 0 5px rgba(33, 147, 176, 0.5); /* Light blue shadow on focus */
 }
 
+.loading-dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 18px;
+  z-index: 1000; /* Ensure it's on top of other content */
+}
+
+
 
 /* Submit button styles */
 .submit-button {
+  margin-top: 1rem;
   background-color: #4CAF50; /* Green background */
   color: white; /* White text */
   padding: 10px; /* Padding */
