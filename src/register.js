@@ -28,7 +28,7 @@ const RegisterPage = () => {
     reset,
   } = useForm();
   const [selectedDp, setSelectedDp] = useState(null);
-  const [selectedRole, setSelectedRole] = useState("Inmate");
+  const [selectedRole, setSelectedRole] = useState("");
   const [newEmail, setNewEmail] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isReEnterPasswordVisible, setIsReEnterPasswordVisible] =
@@ -43,10 +43,10 @@ const RegisterPage = () => {
       email: newEmail,
       messNo: getValues("messNo"),
       role: selectedRole,
-      name: getValues("name"),
+      name: getValues("name")
     };
     setQrCodeValue(JSON.stringify(userInfo));
-  }, [newEmail, selectedRole, getValues]);
+  }, [newEmail, selectedRole, getValues("messNo"), getValues("name")]);
 
   const showToast = (message, type) => {
     type === "success" ? toast.success(message) : toast.error(message);
@@ -141,7 +141,7 @@ const RegisterPage = () => {
           canvas.width = width;
           canvas.height = height;
           ctx.drawImage(img, 0, 0, width, height);
-          setSelectedDp(canvas.toDataURL("image/jpeg")); // Store resized image
+          setSelectedDp(canvas.toDataURL("image/jpeg"));
         };
       };
       reader.readAsDataURL(file);
@@ -293,6 +293,7 @@ const RegisterPage = () => {
           onChange={(e) => setSelectedRole(e.target.value)}
           className="input-field"
         >
+          <option value="" disabled>Select option</option>
           <option value="Inmate">Inmate</option>
           <option value="Outmess">Outmess</option>
           <option value="Guest">Guest</option>
