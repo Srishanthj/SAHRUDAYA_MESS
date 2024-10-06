@@ -9,7 +9,8 @@
   left: 0.1px; /* Align to the left */
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2); /* Shadow effect */
   transition: width 0.3s ease; /* Smooth width transition */
-  z-index: 1000; /* Ensure it stays on top of other content */
+  z-index: 1000; 
+  height: fit-content;
 
 }
 
