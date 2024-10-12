@@ -3,27 +3,27 @@ body {
     margin: 0;
     font-family: 'Arial', sans-serif;
     background-color: #f4f4f4;
-  }
-  
-  /* App bar styles */
-  .app-bar {
+}
+
+/* App bar styles */
+.app-bar {
     width: 100%;
     background-color: #007bff;
     color: white;
-    padding: 10px 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 15px 20px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-  
-  .app-bar-title {
-    font-size: 20px;
+}
+
+.app-bar-title {
+    font-size: 24px;
     font-weight: bold;
-  }
-  
-  /* Container styles */
-  .meal-attendance-container {
+}
+
+/* Container styles */
+.meal-attendance-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -35,31 +35,34 @@ body {
     max-width: 90%;
     width: 100%;
     box-sizing: border-box;
-  }
-  
-  h1 {
-    font-size: 24px;
+}
+
+/* Header styles */
+h1 {
+    font-size: 28px; /* Increased font size for prominence */
     margin-bottom: 20px;
     color: #333;
     text-align: center;
-  }
-  
-  input[type="text"] {
+}
+
+/* Input styles */
+input[type="text"] {
     width: 100%;
-    padding: 12px;
+    padding: 14px;
     font-size: 16px;
     margin-bottom: 20px;
     border: 1px solid #ddd;
     border-radius: 8px;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: border-color 0.3s;
-  }
-  
-  input[type="text"]:focus {
+}
+
+input[type="text"]:focus {
     border-color: #007bff;
-  }
-  
-  button {
+}
+
+/* Button styles */
+button {
     padding: 12px 20px;
     font-size: 16px;
     margin: 10px 0;
@@ -70,20 +73,21 @@ body {
     cursor: pointer;
     transition: background-color 0.3s, transform 0.2s;
     width: 100%;
-    max-width: 200px;
-  }
-  
-  button:hover {
+    max-width: 220px; /* Adjusted width */
+}
+
+button:hover {
     background-color: #0056b3;
     transform: translateY(-2px);
-  }
-  
-  button:disabled {
+}
+
+button:disabled {
     background-color: #ccc;
     cursor: not-allowed;
-  }
-  
-  .back-button {
+}
+
+/* Back button styles */
+.back-button {
     position: absolute;
     top: 20px;
     left: 20px;
@@ -91,92 +95,132 @@ body {
     border: none;
     cursor: pointer;
     padding: 0;
-  }
-  
-  .back-icon {
+}
+
+.back-icon {
     width: 24px;
     height: 24px;
     fill: #007bff;
     transition: transform 0.2s;
-  }
-  
-  .back-icon:hover {
+}
+
+.back-icon:hover {
     transform: scale(1.1);
-  }
-  
-  .user-info {
+}
+
+/* User info styles */
+.user-info {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
-  }
-  
-  .profile {
+}
+
+.profile {
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
     margin-bottom: 20px;
-  }
-  
-  .profile img {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-top: 10px;
-  }
-  
-  .attendance {
+    background-color: #f0f8ff; /* Light background for profile */
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex: 1; /* Make it flexible to fill space */
+    min-height: 300px; /* Set minimum height for equal size */
+}
+
+/* Attendance styles */
+.attendance {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start; /* Align to the left */
     width: 100%;
-  }
-  
-  .attendance label {
-    font-size: 18px;
-    margin-bottom: 10px;
-    color: #555;
-  }
-  
-  .error-message {
+    padding: 20px; /* Added padding */
+    background-color: #f9f9f9; /* Slightly different background */
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex: 1; /* Make it flexible to fill space */
+    min-height: 300px; /* Set minimum height for equal size */
+}
+
+/* Error message styles */
+.error-message {
     color: red;
     font-size: 16px;
     margin-top: 10px;
     text-align: center;
-  }
-  
-  /* Responsive styles */
-  @media (min-width: 768px) {
+}
+
+/* Responsive styles */
+@media (min-width: 768px) {
     .meal-attendance-container {
-      flex-direction: row;
-      justify-content: space-between;
-      padding: 40px;
+        flex-direction: row; /* Changed to row for side-by-side layout */
+        justify-content: space-between;
+        padding: 40px;
     }
-  
+
     .user-info {
-      flex-direction: row;
-      align-items: flex-start;
+        flex-direction: row; /* Changed to row for side-by-side layout */
+        align-items: flex-start;
     }
-  
+
     .profile,
     .attendance {
-      width: 45%;
+        width: 45%; /* Adjusted width to fit side by side */
+        margin: 10px; /* Added margin for spacing */
     }
-  }
-  
-  @media (min-width: 1024px) {
+
+    .options {
+        margin-left: 20px; /* Added margin to create space between profile and options */
+    }
+}
+
+@media (min-width: 1024px) {
     .meal-attendance-container {
-      max-width: 80%;
+        max-width: 80%;
     }
-  
+
     .profile img {
-      max-width: 200px;
+        max-width: 200px;
     }
-  
+
     h1 {
-      font-size: 32px;
+        font-size: 32px;
     }
-  }
-  
+}
+
+/* Add hover effects for labels */
+.attendance label:hover {
+    color: #007bff; /* Change text color on hover */
+}
+
+/* Button styles for export and reset */
+.export-button,
+.reset-button {
+    margin-top: 20px;
+    padding: 12px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    width: 100%;
+}
+
+.export-button {
+    background-color: #28a745; /* Green color for export */
+}
+
+.reset-button {
+    background-color: #dc3545; /* Red color for reset */
+}
+
+/* Hover effects for export and reset buttons */
+.export-button:hover,
+.reset-button:hover {
+    opacity: 0.9; /* Slight opacity change on hover */
+    transform: translateY(-2px); /* Small upward movement */
+}

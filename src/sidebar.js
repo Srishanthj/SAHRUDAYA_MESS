@@ -1,8 +1,8 @@
-// Sidebar.js
 import React, { forwardRef } from "react";
 import { Link } from "react-router-dom";
 import { auth } from "./firebase_config";
 import { useNavigate } from "react-router-dom";
+import { FaUser, FaCut, FaFileInvoice, FaClipboardCheck } from "react-icons/fa"; // Importing icons
 import "./sidebar.css";
 
 const Sidebar = forwardRef(({ uid, name, isAdmin }, ref) => {
@@ -18,28 +18,36 @@ const Sidebar = forwardRef(({ uid, name, isAdmin }, ref) => {
       <h2>Welcome, {name}!</h2>
       <ul>
         <li>
-          <Link to={`/messcut/${uid}`}>Mess Cut</Link>
+          <Link to="/profile">
+            <FaUser /> Profile
+          </Link>
         </li>
-        {!isAdmin && (
+        <li>
+          <Link to="/mealattendance">
+            <FaClipboardCheck /> Attendance Marker
+          </Link>
+        </li>
+        <li>
+          <Link to={`/messcut/${uid}`}>
+            <FaCut /> Mess Cut
+          </Link>
+        </li>
+        {isAdmin && (
           <li>
-            <Link to="/allusers">All Users</Link>
+            <Link to="/allusers">
+              <FaUser /> All Users
+            </Link>
           </li>
         )}
         <li>
-          <Link to="/profile">Profile</Link>
-        </li>
-        <li>
-          <Link to={`/bill/${uid}`}>Bill</Link>
-        </li>
-        <li>
-          <Link to="/mealattendance">Meal Attendance</Link> {/* Add this link */}
-        </li>
-        <li>
-          <button className="logout-button" onClick={handleLogout}>
-            Logout
-          </button>
+          <Link to={`/bill/${uid}`}>
+            <FaFileInvoice /> Bill
+          </Link>
         </li>
       </ul>
+      <button onClick={handleLogout} className="logout-button">
+        Logout
+      </button>
     </div>
   );
 });

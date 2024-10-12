@@ -17,13 +17,17 @@ const MealAttendance = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Get today's date in YYYY-MM-DD format
   const getCurrentDate = () => {
     const date = new Date();
+    if (isNaN(date.getTime())) {
+      console.error("Invalid date detected");
+      return null;
+    }
     return date.toISOString().split('T')[0];
   };
 
   const currentDate = getCurrentDate();
+  const currentMonth = currentDate ? currentDate.slice(0, 7) : null; // Get YYYY-MM
 
   useEffect(() => {
     if (userData) {
@@ -37,24 +41,10 @@ const MealAttendance = () => {
 
   const handleAttendanceChange = (e) => {
     const { name, checked } = e.target;
-
-    // Allow only unchecked meals to be modified before submission
-    if (!isMarked) {
-      if (checked) {
-        // If the meal is checked, uncheck all others
-        setAttendance({
-          breakfast: name === 'breakfast' ? checked : false,
-          lunch: name === 'lunch' ? checked : false,
-          dinner: name === 'dinner' ? checked : false,
-        });
-      } else {
-        // Allow unchecking the selected meal
-        setAttendance((prev) => ({
-          ...prev,
-          [name]: checked,
-        }));
-      }
-    }
+    setAttendance((prev) => ({
+      ...prev,
+      [name]: checked,
+    }));
   };
 
   const fetchUserData = async () => {
@@ -97,7 +87,7 @@ const MealAttendance = () => {
       const userDoc = await getDoc(userRef);
       if (userDoc.exists()) {
         const data = userDoc.data();
-        const mealAttendance = data.mealAttendance ? data.mealAttendance[currentDate] : null;
+        const mealAttendance = data.mealAttendance ? data.mealAttendance[0]?.dates?.[currentMonth]?.[currentDate] : null;
 
         if (mealAttendance) {
           setAttendance({
@@ -136,8 +126,16 @@ const MealAttendance = () => {
 
     try {
       await updateDoc(userRef, {
-        [`mealAttendance.${currentDate}`]: {
-          ...attendance,
+        mealAttendance: {
+          0: {
+            dates: {
+              [currentMonth]: {
+                [currentDate]: {
+                  ...attendance,
+                },
+              },
+            },
+          },
         },
       });
       alert('Attendance marked successfully!');
@@ -161,7 +159,6 @@ const MealAttendance = () => {
     setError(null);
   };
 
-  // Disable meals that are already marked as true in the database
   const isMealDisabled = (meal) => {
     return isMarked && attendance[meal];
   };
@@ -216,7 +213,7 @@ const MealAttendance = () => {
                     name="breakfast"
                     checked={attendance.breakfast}
                     onChange={handleAttendanceChange}
-                    disabled={isMealDisabled('breakfast')} // Disable if already marked
+                    disabled={isMealDisabled('breakfast')}
                   />
                   Breakfast {isMarked && (attendance.breakfast ? '✔️' : '❌')}
                 </label>
@@ -226,7 +223,7 @@ const MealAttendance = () => {
                     name="lunch"
                     checked={attendance.lunch}
                     onChange={handleAttendanceChange}
-                    disabled={isMealDisabled('lunch')} // Disable if already marked
+                    disabled={isMealDisabled('lunch')}
                   />
                   Lunch {isMarked && (attendance.lunch ? '✔️' : '❌')}
                 </label>
@@ -236,11 +233,11 @@ const MealAttendance = () => {
                     name="dinner"
                     checked={attendance.dinner}
                     onChange={handleAttendanceChange}
-                    disabled={isMealDisabled('dinner')} // Disable if already marked
+                    disabled={isMealDisabled('dinner')}
                   />
                   Dinner {isMarked && (attendance.dinner ? '✔️' : '❌')}
                 </label>
-                <button onClick={markAttendance} disabled={isMarked || loading}>
+                <button onClick={markAttendance} disabled={loading}>
                   {loading ? 'Marking...' : (isMarked ? 'Attendance Marked' : 'Mark Attendance')}
                 </button>
               </>

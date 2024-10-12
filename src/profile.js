@@ -3,7 +3,6 @@ import { auth, db } from "./firebase_config";
 import { useNavigate } from "react-router-dom";
 import { getDoc, doc } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
-import Navbar from './navbar';
 import Sidebar from './sidebar';
 import './profile.css';
 import ProfileNavbar from "./profile_nav";
@@ -13,7 +12,7 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const navigate = useNavigate();
-  const sidebarRef = useRef(null);  
+  const sidebarRef = useRef(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -44,13 +43,13 @@ const Profile = () => {
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
-        setIsSidebarOpen(false); 
+        setIsSidebarOpen(false);
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside); 
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -59,26 +58,32 @@ const Profile = () => {
     navigate("/");
   };
 
-
   if (loading) {
     return <h2 className="loading-container">Loading user data...</h2>;
   }
 
   return (
     <div>
-      <ProfileNavbar title="Profile" onToggleSidebar={toggleSidebar} />
-  
-      {isSidebarOpen && (
-        <div ref={sidebarRef}>
-          <Sidebar uid={userData.uid} name={userData.name} isAdmin={userData.isAdmin}/>
-        </div>
-      )}
-  
-      <div className="profile-content">
-        <div className="header-container">
+      <ProfileNavbar 
+        title="Profile" 
+        onToggleSidebar={toggleSidebar} 
+        isSidebarOpen={isSidebarOpen} 
+      />
+
+      <div className="header-container">
+        {isSidebarOpen && (
           <button className="sidebar-toggle" onClick={toggleSidebar}>
           </button>
+        )}
+      </div> 
+
+      {isSidebarOpen && (
+        <div ref={sidebarRef} className="sidebar-container">
+          <Sidebar uid={userData?.uid} name={userData?.name} isAdmin={userData?.isAdmin} />
         </div>
+      )}
+
+      <div className="profile-content">
         <div className="profile-details-container">
           {userData ? (
             <div>
@@ -91,13 +96,9 @@ const Profile = () => {
               <h2>Dept: {userData.department || "N/A"}</h2>
               <h2>Mess No: {userData.messNo || "N/A"}</h2>
               <h2>{userData.role || "N/A"}</h2>
-  
+
               {userData.qrCode ? (
-                <img
-                  src={userData.qrCode}
-                  alt="QR Code"
-                  className="qr-code"
-                />
+                <img src={userData.qrCode} alt="QR Code" className="qr-code" />
               ) : (
                 <p>N/A</p>
               )}
@@ -109,7 +110,6 @@ const Profile = () => {
       </div>
     </div>
   );
-  
 };
 
 export default Profile;

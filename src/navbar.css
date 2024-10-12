@@ -1,13 +1,13 @@
-/* navbar.css */
 .navbar {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(135deg, rgba(13, 250, 231, 0.5), rgba(239, 103, 6, 0.5));
+    background: linear-gradient(135deg, #757F9A, #D7DDE8);
     position: relative;
     margin: 0;
     padding: 0px;
     height: 7.5vh;
+
 }
 
 .sidebar-toggle {
@@ -15,12 +15,11 @@
     border: none;
     color: black;
     cursor: pointer;
-    font-size: 18px;
-    margin-left: 20px;
+    font-size: 15px;
+    margin-left: 10px;
 }
 
 .navbar h1 {
     margin: auto;
     text-align: center;
-    padding-right: 10px;
 }
