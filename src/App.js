@@ -10,6 +10,7 @@ import MessCut from './mess_cut';
 import Bill from './bill';
 import Register from './register';
 import RegisterPage from './register';
+import ResetPassword from './resetpassword';
 
 
 const App = () => {
@@ -22,6 +23,8 @@ const App = () => {
       <Route path="/allusers" element={<AllUsers />} />
       <Route path="/messcut/:uid" element={<MessCut />} />
       <Route path="/bill/:uid" element={<Bill />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
+      <Route path="/login" element={<Login />} />
     </Routes>
   );
 };
