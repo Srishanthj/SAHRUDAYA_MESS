@@ -19,11 +19,10 @@ const MealAttendance = () => {
 
   const getCurrentDate = () => {
     const date = new Date();
-    if (isNaN(date.getTime())) {
-      console.error("Invalid date detected");
-      return null;
-    }
-    return date.toISOString().split('T')[0];
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); 
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
   };
 
   const currentDate = getCurrentDate();
@@ -125,6 +124,9 @@ const MealAttendance = () => {
     const userRef = doc(db, 'users', userData.id);
 
     try {
+      console.log(currentDate)
+      console.log(currentMonth)
+      
       await updateDoc(userRef, {
         mealAttendance: {
           0: {
