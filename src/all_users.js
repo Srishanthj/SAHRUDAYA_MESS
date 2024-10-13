@@ -19,8 +19,8 @@ const AllUsers = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [showAdminConfirmation, setShowAdminConfirmation] = useState(false);
   const [adminActionUser, setAdminActionUser] = useState(null);
-  const [currentUser, setCurrentUser] = useState(null); // State to store current user info
-  const sidebarRef = useRef(null); // Ref for the sidebar
+  const [currentUser, setCurrentUser] = useState(null);
+  const sidebarRef = useRef(null);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, "users"), (snapshot) => {
@@ -34,13 +34,12 @@ const AllUsers = () => {
   }, []);
 
   useEffect(() => {
-    const user = auth.currentUser; // Get the current user from Firebase auth
+    const user = auth.currentUser;
     if (user) {
-      // Assuming you have a 'users' collection to fetch the user's details
       const userDocRef = doc(db, "users", user.uid);
       onSnapshot(userDocRef, (doc) => {
         if (doc.exists()) {
-          setCurrentUser(doc.data()); // Set current user data
+          setCurrentUser(doc.data());
         }
       });
     }
@@ -67,7 +66,7 @@ const AllUsers = () => {
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside); // Cleanup event listener on unmount
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -114,7 +113,6 @@ const AllUsers = () => {
 
       {isSidebarOpen && (
         <div ref={sidebarRef}>
-          {/* Pass current user's details to Sidebar */}
           <Sidebar
             uid={currentUser?.id}
             name={currentUser?.name}
@@ -161,7 +159,6 @@ const AllUsers = () => {
 
       </div>
 
-      {/* Popup for user profile */}
       {selectedUser && (
         <div className="popup-overlay">
           <div className="popup">
@@ -214,7 +211,6 @@ const AllUsers = () => {
         </div>
       )}
 
-      {/* Popup for confirming admin privileges */}
       {showAdminConfirmation && adminActionUser && (
         <div className="popup-overlay">
           <div className="popup">

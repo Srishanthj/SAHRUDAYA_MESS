@@ -11,6 +11,7 @@ import Bill from './bill';
 import Register from './register';
 import RegisterPage from './register';
 import ResetPassword from './resetpassword';
+import EditProfilePage from './edit_profile';
 
 
 const App = () => {
@@ -25,6 +26,7 @@ const App = () => {
       <Route path="/bill/:uid" element={<Bill />} />
       <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/editprofile" element={<EditProfilePage/>}></Route>
     </Routes>
   );
 };
