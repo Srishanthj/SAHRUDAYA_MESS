@@ -87,7 +87,7 @@ const MealAttendance = () => {
       const userDoc = await getDoc(userRef);
       if (userDoc.exists()) {
         const data = userDoc.data();
-        const mealAttendance = data.mealAttendance ? data.mealAttendance[0]?.dates?.[currentMonth]?.[currentDate] : null;
+        const mealAttendance = data.mealAttendance ? data.mealAttendance[currentMonth]?.[currentDate] : null;
 
         if (mealAttendance) {
           setAttendance({
@@ -126,16 +126,8 @@ const MealAttendance = () => {
 
     try {
       await updateDoc(userRef, {
-        mealAttendance: {
-          0: {
-            dates: {
-              [currentMonth]: {
-                [currentDate]: {
-                  ...attendance,
-                },
-              },
-            },
-          },
+        [`mealAttendance.${currentMonth}.${currentDate}`]: {
+          ...attendance,
         },
       });
       alert('Attendance marked successfully!');
@@ -168,32 +160,37 @@ const MealAttendance = () => {
 
   const generateExcelSheet = async () => {
     setLoading(true);
-
+  
     try {
       const usersRef = collection(db, 'users');
       const querySnapshot = await getDocs(usersRef);
-
+  
       const usersData = [];
+  
       querySnapshot.forEach((doc) => {
         const data = doc.data();
-        const mealAttendance = data.mealAttendance ? data.mealAttendance[0]?.dates?.[currentMonth]?.[currentDate] : null;
-        if (mealAttendance) {
-          usersData.push({
-            Name: data.name,
-            'Mess No': data.messNo,
-            Date: currentDate,
-            Breakfast: mealAttendance.breakfast ? '✔️' : '❌',
-            Lunch: mealAttendance.lunch ? '✔️' : '❌',
-            Dinner: mealAttendance.dinner ? '✔️' : '❌',
+        const mealAttendance = data.mealAttendance || {};
+  
+        Object.keys(mealAttendance).forEach((month) => {
+          const dates = mealAttendance[month];
+          Object.keys(dates).forEach((date) => {
+            usersData.push({
+              Name: data.name,
+              'Mess No': data.messNo,
+              Date: date,
+              Breakfast: dates[date].breakfast ? '✔️' : '❌',
+              Lunch: dates[date].lunch ? '✔️' : '❌',
+              Dinner: dates[date].dinner ? '✔️' : '❌',
+            });
           });
-        }
+        });
       });
-
+  
       const worksheet = XLSX.utils.json_to_sheet(usersData);
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, 'Attendance');
       XLSX.writeFile(workbook, `Attendance_${currentDate}.xlsx`);
-
+  
       setError(null);
       alert('Excel sheet generated successfully!');
     } catch (error) {
@@ -203,7 +200,7 @@ const MealAttendance = () => {
       setLoading(false);
     }
   };
-
+  
   return (
     <div>
       <div className="app-bar">
@@ -245,7 +242,7 @@ const MealAttendance = () => {
               </div>
             )}
           </div>
-          <div className="attendance">
+          <div className={`attendance ${!userData ? 'no-padding' : ''}`}>
             {userData && (
               <>
                 <label>
@@ -278,15 +275,18 @@ const MealAttendance = () => {
                   />
                   Dinner {isMarked && (attendance.dinner ? '✔️' : '❌')}
                 </label>
-                <button onClick={saveAttendance} disabled={loading}>
-                  OK
-                </button>
-                <button onClick={generateExcelSheet} disabled={loading}>
-                  Generate Excel
+                <button onClick={saveAttendance} disabled={loading || isMarked}>
+                  {loading ? 'Marking...' : 'Mark Attendance'}
                 </button>
               </>
             )}
           </div>
+        </div>
+        <div className="generate-excel">
+          <h2>Generate Excel Sheet</h2>
+          <button onClick={generateExcelSheet} disabled={loading}>
+            {loading ? 'Generating...' : 'Generate Excel Sheet'}
+          </button>
         </div>
       </div>
     </div>

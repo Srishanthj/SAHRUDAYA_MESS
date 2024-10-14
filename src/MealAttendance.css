@@ -34,11 +34,11 @@ body {
 
 /* Container styles */
 .meal-attendance-container {
-    display: flex;
+    display: block;
     flex-direction: column;
     align-items: center;
-    padding: 20px;
-    background-color: var(--card-background);
+    padding: 30px;
+    background-color: none ;
     border-radius: 12px;
     box-shadow: 0 4px 12px var(--card-shadow);
     margin: 20px auto;
@@ -72,23 +72,7 @@ input[type="text"] {
 input[type="text"]:focus {
     border-color: var(--primary);
 }
-.scanner-container {
-    margin-top: 20px;
-    border: 2px solid #ccc;
-    padding: 10px;
-    background-color: #f9f9f9;
-  }
-  .input-container {
-    margin: 20px 0;
-  }
-  
-  .user-info-container {
-    border: 1px solid #ccc;
-    padding: 20px;
-    margin: 10px 0;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-  }
+
   
   .error-message {
     color: red;
@@ -112,7 +96,7 @@ button {
 
 button:hover {
     background-color: var(--primary-hover);
-    transform: translateY(-2px);
+    transform: translateY(-5px);
 }
 
 button:disabled {
@@ -134,7 +118,7 @@ button:disabled {
 .back-icon {
     width: 24px;
     height: 24px;
-    fill: var(--primary);
+    
     transition: transform 0.2s;
 }
 
@@ -166,18 +150,25 @@ button:disabled {
 }
 
 /* Attendance styles */
+/* MealAttendance.css */
 .attendance {
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* Align to the left */
+    align-items: left; /* Align to the left */
     width: 100%;
-    padding: 20px; /* Added padding */
-    background-color: #f9f9f9; /* Slightly different background */
+    background-color: whitesmoke; /* Slightly different background */
     border-radius: 12px;
     box-shadow: 0 2px 4px var(--card-shadow);
     flex: 1; /* Make it flexible to fill space */
     min-height: 300px; /* Set minimum height for equal size */
+    padding: 20px; /* Default padding */
 }
+
+/* Conditional padding class */
+.attendance.no-padding {
+    padding: 0; /* No padding if no attendance marking options */
+}
+
 
 /* Error message styles */
 .error-message {
@@ -186,18 +177,23 @@ button:disabled {
     margin-top: 10px;
     text-align: center;
 }
+.attendance.no-padding {
+    padding: 0; /* No padding if no attendance marking options */
+}
 
 /* Responsive styles */
 @media (min-width: 768px) {
     .meal-attendance-container {
-        flex-direction: row; /* Changed to row for side-by-side layout */
+        flex-direction: column; /* Changed to row for side-by-side layout */
         justify-content: space-between;
         padding: 40px;
+      
     }
 
     .user-info {
-        flex-direction: row; /* Changed to row for side-by-side layout */
-        align-items: flex-start;
+        lex-direction: column; /* Changed to row for side-by-side layout */
+        justify-content: space-between;
+        padding: 40px;
     }
 
     .profile,
@@ -207,7 +203,8 @@ button:disabled {
     }
 
     .options {
-        margin-left: 20px; /* Added margin to create space between profile and options */
+        margin-left: 20px;
+        flex-direction: column; /* Added margin to create space between profile and options */
     }
 }
 
