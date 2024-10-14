@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { db } from './firebase_config';
 import { collection, query, where, getDocs, updateDoc, doc, getDoc } from 'firebase/firestore';
+import * as XLSX from 'xlsx';
 import './MealAttendance.css';
 
 const MealAttendance = () => {
@@ -115,7 +116,7 @@ const MealAttendance = () => {
     }
   };
 
-  const markAttendance = async () => {
+  const saveAttendance = async () => {
     if (!userData) {
       alert('Please fetch user data first.');
       return;
@@ -124,9 +125,6 @@ const MealAttendance = () => {
     const userRef = doc(db, 'users', userData.id);
 
     try {
-      console.log(currentDate)
-      console.log(currentMonth)
-
       await updateDoc(userRef, {
         mealAttendance: {
           0: {
@@ -143,13 +141,16 @@ const MealAttendance = () => {
       alert('Attendance marked successfully!');
       setIsMarked(true);
       setError(null);
+      
+      // Reload the page to allow the next user
+      reloadPage();
     } catch (error) {
       console.error('Error marking attendance:', error);
       setError('An error occurred while marking attendance. Please try again.');
     }
   };
 
-  const reloadForm = () => {
+  const reloadPage = () => {
     setMessNo('');
     setUserData(null);
     setAttendance({
@@ -163,6 +164,44 @@ const MealAttendance = () => {
 
   const isMealDisabled = (meal) => {
     return isMarked && attendance[meal];
+  };
+
+  const generateExcelSheet = async () => {
+    setLoading(true);
+
+    try {
+      const usersRef = collection(db, 'users');
+      const querySnapshot = await getDocs(usersRef);
+
+      const usersData = [];
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        const mealAttendance = data.mealAttendance ? data.mealAttendance[0]?.dates?.[currentMonth]?.[currentDate] : null;
+        if (mealAttendance) {
+          usersData.push({
+            Name: data.name,
+            'Mess No': data.messNo,
+            Date: currentDate,
+            Breakfast: mealAttendance.breakfast ? '✔️' : '❌',
+            Lunch: mealAttendance.lunch ? '✔️' : '❌',
+            Dinner: mealAttendance.dinner ? '✔️' : '❌',
+          });
+        }
+      });
+
+      const worksheet = XLSX.utils.json_to_sheet(usersData);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Attendance');
+      XLSX.writeFile(workbook, `Attendance_${currentDate}.xlsx`);
+
+      setError(null);
+      alert('Excel sheet generated successfully!');
+    } catch (error) {
+      console.error('Error generating Excel sheet:', error);
+      setError('An error occurred while generating the Excel sheet. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -239,15 +278,15 @@ const MealAttendance = () => {
                   />
                   Dinner {isMarked && (attendance.dinner ? '✔️' : '❌')}
                 </label>
-                <button onClick={markAttendance} disabled={loading}>
-                  {loading ? 'Marking...' : (isMarked ? 'Attendance Marked' : 'Mark Attendance')}
+                <button onClick={saveAttendance} disabled={loading}>
+                  OK
+                </button>
+                <button onClick={generateExcelSheet} disabled={loading}>
+                  Generate Excel
                 </button>
               </>
             )}
           </div>
-          <button onClick={reloadForm} className="reload-button">
-            Reload for New User
-          </button>
         </div>
       </div>
     </div>

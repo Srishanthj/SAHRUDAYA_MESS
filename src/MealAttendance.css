@@ -45,6 +45,8 @@ body {
     max-width: 90%;
     width: 100%;
     box-sizing: border-box;
+    overflow: auto; /* Enable scrolling in both directions */
+    max-height: 500px; /* Set max height to trigger scrolling */
 }
 
 /* Header styles */
@@ -70,7 +72,29 @@ input[type="text"] {
 input[type="text"]:focus {
     border-color: var(--primary);
 }
-
+.scanner-container {
+    margin-top: 20px;
+    border: 2px solid #ccc;
+    padding: 10px;
+    background-color: #f9f9f9;
+  }
+  .input-container {
+    margin: 20px 0;
+  }
+  
+  .user-info-container {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin: 10px 0;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  .error-message {
+    color: red;
+    font-weight: bold;
+  }
+  
 /* Button styles */
 button {
     padding: 12px 20px;

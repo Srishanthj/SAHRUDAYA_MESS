@@ -2,7 +2,7 @@ import React, { forwardRef } from "react";
 import { Link } from "react-router-dom";
 import { auth } from "./firebase_config";
 import { useNavigate } from "react-router-dom";
-import { FaUser, FaCut, FaFileInvoice, FaClipboardCheck } from "react-icons/fa"; // Importing icons
+import { FaUser, FaCut, FaFileInvoice, FaClipboardCheck } from "react-icons/fa";
 import "./sidebar.css";
 
 const Sidebar = forwardRef(({ uid, name, isAdmin }, ref) => {
@@ -24,7 +24,7 @@ const Sidebar = forwardRef(({ uid, name, isAdmin }, ref) => {
         </li>
         <li>
           <Link to="/mealattendance">
-            <FaClipboardCheck /> Attendance Marker
+            <FaClipboardCheck /> Mark the attendance
           </Link>
         </li>
         <li>

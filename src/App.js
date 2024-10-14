@@ -7,7 +7,8 @@ import GenerateBill from './generate_bill';
 import MessCut from './mess_cut';
 import Bill from './bill';
 import RegisterPage from './register';
-import MealAttendance from './MealAttendance'; // Import the MealAttendance component
+import ResetPassword from './resetpassword';
+import MealAttendance from './MealAttendance';  // Import the MealAttendance component
 
 const App = () => {
   return (
@@ -18,7 +19,9 @@ const App = () => {
       <Route path="/allusers" element={<AllUsers />} />
       <Route path="/messcut/:uid" element={<MessCut />} />
       <Route path="/bill/:uid" element={<Bill />} />
-      <Route path="/mealattendance" element={<MealAttendance />} /> {/* Add this route */}
+      <Route path="/reset-password" element={<ResetPassword />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/mealattendance" element={<MealAttendance />} /> {/* Add the new route */}
     </Routes>
   );
 };
