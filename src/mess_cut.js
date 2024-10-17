@@ -223,7 +223,7 @@ const Messcut = () => {
         <DatePicker
           selected={startDate}
           onChange={(date) => setStartDate(date)}
-          minDate={new Date()} // Set minimum date to today
+          minDate={addDays(new Date(), 1)} // Set minimum date to current date + 1
           dateFormat="yyyy-MM-dd"
           placeholderText="Select start date"
         />
@@ -233,7 +233,7 @@ const Messcut = () => {
         <DatePicker
           selected={endDate}
           onChange={(date) => setEndDate(date)}
-          minDate={startDate ? addDays(startDate, 1) : new Date()} // Minimum end date is the day after the selected start date
+          minDate={startDate ? addDays(startDate, 1) : addDays(new Date(), 1)} // Set minimum date to startDate + 1 or current date + 1
           dateFormat="yyyy-MM-dd"
           placeholderText="Select end date"
         />
