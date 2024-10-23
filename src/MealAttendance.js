@@ -16,6 +16,7 @@ const MealAttendance = () => {
   const [isMarked, setIsMarked] = useState(false);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [messCutMessage, setMessCutMessage] = useState('');
   const navigate = useNavigate();
 
   const getCurrentDate = () => {
@@ -78,17 +79,32 @@ const MealAttendance = () => {
     }
   };
 
-  const fetchAttendance = async (userId) => {
-    const userRef = doc(db, 'users', userId);
+  // Inside the fetchAttendance function
+const fetchAttendance = async (userId) => {
+  const userRef = doc(db, 'users', userId);
 
-    setLoading(true);
+  setLoading(true);
 
-    try {
-      const userDoc = await getDoc(userRef);
-      if (userDoc.exists()) {
-        const data = userDoc.data();
-        const mealAttendance = data.mealAttendance ? data.mealAttendance[currentMonth]?.[currentDate] : null;
+  try {
+    const userDoc = await getDoc(userRef);
+    if (userDoc.exists()) {
+      const data = userDoc.data();
+      const mealAttendance = data.mealAttendance ? data.mealAttendance[currentMonth]?.[currentDate] : null;
 
+      // Check if the user has mess cuts for the current date
+      const messCuts = data.messCuts || []; // Assuming messCuts is an array of date strings
+      const hasMessCut = messCuts.includes(currentDate);
+      if (hasMessCut) {
+        setMessCutMessage('You are having mess cut today.');
+        window.alert('You are on mess cut today. You cannot mark attendance.');
+        setAttendance({
+          breakfast: false,
+          lunch: false,
+          dinner: false,
+        });
+        setIsMarked(true);
+      } else {
+        setMessCutMessage('');
         if (mealAttendance) {
           setAttendance({
             breakfast: mealAttendance.breakfast || false,
@@ -104,17 +120,19 @@ const MealAttendance = () => {
           });
           setIsMarked(false);
         }
-        setError(null);
-      } else {
-        setError('User document does not exist.');
       }
-    } catch (error) {
-      console.error('Error fetching attendance:', error);
-      setError('An error occurred while fetching attendance. Please try again.');
-    } finally {
-      setLoading(false);
+      setError(null);
+    } else {
+      setError('User document does not exist.');
     }
-  };
+  } catch (error) {
+    console.error('Error fetching attendance:', error);
+    setError('An error occurred while fetching attendance. Please try again.');
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const saveAttendance = async () => {
     if (!userData) {
@@ -133,7 +151,7 @@ const MealAttendance = () => {
       alert('Attendance marked successfully!');
       setIsMarked(true);
       setError(null);
-      
+
       // Reload the page to allow the next user
       reloadPage();
     } catch (error) {
@@ -152,6 +170,7 @@ const MealAttendance = () => {
     });
     setIsMarked(false);
     setError(null);
+    setMessCutMessage('');
   };
 
   const isMealDisabled = (meal) => {
@@ -160,17 +179,17 @@ const MealAttendance = () => {
 
   const generateExcelSheet = async () => {
     setLoading(true);
-  
+
     try {
       const usersRef = collection(db, 'users');
       const querySnapshot = await getDocs(usersRef);
-  
+
       const usersData = [];
-  
+
       querySnapshot.forEach((doc) => {
         const data = doc.data();
         const mealAttendance = data.mealAttendance || {};
-  
+
         Object.keys(mealAttendance).forEach((month) => {
           const dates = mealAttendance[month];
           Object.keys(dates).forEach((date) => {
@@ -185,12 +204,12 @@ const MealAttendance = () => {
           });
         });
       });
-  
+
       const worksheet = XLSX.utils.json_to_sheet(usersData);
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, 'Attendance');
       XLSX.writeFile(workbook, `Attendance_${currentDate}.xlsx`);
-  
+
       setError(null);
       alert('Excel sheet generated successfully!');
     } catch (error) {
@@ -200,7 +219,7 @@ const MealAttendance = () => {
       setLoading(false);
     }
   };
-  
+
   return (
     <div>
       <div className="app-bar">
@@ -234,60 +253,56 @@ const MealAttendance = () => {
               {loading ? 'Fetching...' : 'Fetch User Data'}
             </button>
             {error && <div className="error-message">{error}</div>}
+            {messCutMessage && <div className="error-message">{messCutMessage}</div>}
             {userData && (
               <div>
                 <img src={userData.dpUrl} alt="User Profile" className="profile-image" />
                 <p><strong>Name:</strong> {userData.name}</p>
                 <p><strong>Mess No:</strong> {userData.messNo}</p>
+                <div className="attendance-form">
+                  <label>
+                    <input
+                      type="checkbox"
+                      name="breakfast"
+                      checked={attendance.breakfast}
+                      onChange={handleAttendanceChange}
+                      disabled={isMealDisabled('breakfast') || messCutMessage}
+                    />
+                    Breakfast
+                  </label>
+                  <label>
+                    <input
+                      type="checkbox"
+                      name="lunch"
+                      checked={attendance.lunch}
+                      onChange={handleAttendanceChange}
+                      disabled={isMealDisabled('lunch') || messCutMessage}
+                    />
+                    Lunch
+                  </label>
+                  <label>
+                    <input
+                      type="checkbox"
+                      name="dinner"
+                      checked={attendance.dinner}
+                      onChange={handleAttendanceChange}
+                      disabled={isMealDisabled('dinner') || messCutMessage}
+                    />
+                    Dinner
+                  </label>
+                  <button onClick={saveAttendance} disabled={isMarked || messCutMessage}>
+                    Mark Attendance
+                  </button>
+                </div>
               </div>
             )}
           </div>
-          <div className={`attendance ${!userData ? 'no-padding' : ''}`}>
-            {userData && (
-              <>
-                <label>
-                  <input
-                    type="checkbox"
-                    name="breakfast"
-                    checked={attendance.breakfast}
-                    onChange={handleAttendanceChange}
-                    disabled={isMealDisabled('breakfast')}
-                  />
-                  Breakfast {isMarked && (attendance.breakfast ? '✔️' : '❌')}
-                </label>
-                <label>
-                  <input
-                    type="checkbox"
-                    name="lunch"
-                    checked={attendance.lunch}
-                    onChange={handleAttendanceChange}
-                    disabled={isMealDisabled('lunch')}
-                  />
-                  Lunch {isMarked && (attendance.lunch ? '✔️' : '❌')}
-                </label>
-                <label>
-                  <input
-                    type="checkbox"
-                    name="dinner"
-                    checked={attendance.dinner}
-                    onChange={handleAttendanceChange}
-                    disabled={isMealDisabled('dinner')}
-                  />
-                  Dinner {isMarked && (attendance.dinner ? '✔️' : '❌')}
-                </label>
-                <button onClick={saveAttendance} disabled={loading || isMarked}>
-                  {loading ? 'Marking...' : 'Mark Attendance'}
-                </button>
-              </>
-            )}
-          </div>
         </div>
-        <div className="generate-excel">
-          <h2>Generate Excel Sheet</h2>
-          <button onClick={generateExcelSheet} disabled={loading}>
-            {loading ? 'Generating...' : 'Generate Excel Sheet'}
-          </button>
-        </div>
+      </div>
+      <div className="download-container">
+        <button onClick={generateExcelSheet} disabled={loading}>
+          {loading ? 'Generating...' : 'Download Excel Sheet'}
+        </button>
       </div>
     </div>
   );

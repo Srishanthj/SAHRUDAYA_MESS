@@ -8,7 +8,8 @@ import MessCut from './mess_cut';
 import Bill from './bill';
 import RegisterPage from './register';
 import ResetPassword from './resetpassword';
-import MealAttendance from './MealAttendance';  // Import the MealAttendance component
+import EditProfilePage from './edit_profile';
+import MealAttendance from './MealAttendance'; // Adjusted case to match file name
 
 const App = () => {
   return (
@@ -21,7 +22,8 @@ const App = () => {
       <Route path="/bill/:uid" element={<Bill />} />
       <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/mealattendance" element={<MealAttendance />} /> {/* Add the new route */}
+      <Route path="/mealattendance" element={<MealAttendance />} />
+      <Route path="/editprofile" element={<EditProfilePage />} />
     </Routes>
   );
 };

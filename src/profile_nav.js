@@ -15,7 +15,6 @@ const ProfileNavbar = ({ title, onToggleSidebar, isSidebarOpen }) => {
   
   return (
     <header className="navbar">
-      {/* Show the sidebar toggle only when the sidebar is closed */}
       {!isSidebarOpen && (
         <button className="sidebar-toggle" onClick={onToggleSidebar}>
           <FaBars />
