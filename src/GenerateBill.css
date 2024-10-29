@@ -1,0 +1,89 @@
+/* GenerateBill.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f4f8;
+    margin: 0;
+    padding: 20px;
+  }
+  
+  .container {
+    max-width: 700px;
+    margin: auto;
+    padding: 40px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .form-control {
+    margin-bottom: 15px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+    
+  }
+  
+  input[type=number], select, textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+  }
+  
+  input[type="number"]:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+  
+  button {
+    width: 100%;
+    padding: 12px; /* Increased padding for button */
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  .alert {
+    margin-top: 10px;
+    color: red;
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    .container {
+      padding: 15px; /* Adjust padding for smaller screens */
+    }
+  
+    h1 {
+      font-size: 1.5em; /* Adjust font size */
+    }
+  
+    button {
+      padding: 10px; /* Smaller button on mobile */
+    }
+  
+    input[type="number"] {
+      padding: 10px; /* Smaller input on mobile */
+    }
+  }
+  

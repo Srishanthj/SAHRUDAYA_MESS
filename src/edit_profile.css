@@ -7,7 +7,9 @@
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     font-family: 'Arial', sans-serif;
-    overflow-y: auto;
+    /* Set a max height to trigger scrolling */
+    max-height: 80vh; /* Adjust as needed */
+    overflow-y: auto; /* Enable vertical scrolling */
 }
 
 .profile-field {
@@ -15,14 +17,12 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: 10px;
-    margin-right: 0;
     padding: 10px;
     font-size: 16px;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
-
 
 .profile-field label {
     font-weight: bold;

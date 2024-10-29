@@ -1,5 +1,5 @@
-import React, { useEffect, useState , useRef} from "react";
-import { useParams } from "react-router-dom"; // Import useParams
+import React, { useEffect, useState, useRef } from "react";
+import { useParams } from "react-router-dom";
 import { auth, db } from "./firebase_config";
 import { doc, getDoc, updateDoc, onSnapshot } from "firebase/firestore";
 import { format, addDays } from "date-fns";
@@ -7,6 +7,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Navbar from "./navbar";
 import Sidebar from "./sidebar";
+import "./messcut.css"; // Import your CSS file for styling
 
 const Messcut = () => {
   const { uid } = useParams();
@@ -14,9 +15,9 @@ const Messcut = () => {
   const [messCutCount, setMessCutCount] = useState(0);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const [currentUser, setCurrentUser] = useState(null); // State to store current user info
+  const [currentUser, setCurrentUser] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const sidebarRef = useRef(null); // Sidebar state
+  const sidebarRef = useRef(null);
 
   const toggleSidebar = () => {
     setIsSidebarOpen((prev) => !prev);
@@ -31,13 +32,12 @@ const Messcut = () => {
   }, [uid]);
 
   useEffect(() => {
-    const user = auth.currentUser; // Get the current user from Firebase auth
+    const user = auth.currentUser;
     if (user) {
-      // Assuming you have a 'users' collection to fetch the user's details
       const userDocRef = doc(db, "users", user.uid);
       onSnapshot(userDocRef, (doc) => {
         if (doc.exists()) {
-          setCurrentUser(doc.data()); // Set current user data
+          setCurrentUser(doc.data());
         }
       });
     }
@@ -46,7 +46,7 @@ const Messcut = () => {
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
-        setIsSidebarOpen(false); // Close sidebar
+        setIsSidebarOpen(false);
       }
     };
 
@@ -55,7 +55,7 @@ const Messcut = () => {
     }
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside); // Cleanup event listener on unmount
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isSidebarOpen]);
 
@@ -65,16 +65,14 @@ const Messcut = () => {
       return;
     }
 
-    const daysDifference = (endDate - startDate) / (1000 * 60 * 60 * 24) + 1; // Calculate the number of days in the selected range
-    const calculatedMessCut = calculateMessCut(daysDifference); // Calculate the mess cut based on the number of days
+    const daysDifference = (endDate - startDate) / (1000 * 60 * 60 * 24) + 1;
+    const calculatedMessCut = calculateMessCut(daysDifference);
 
-    // Check if the selected dates are already marked
     if (areDatesAlreadySelected(startDate, endDate)) {
       alert("Some of the selected dates have already been marked.");
       return;
     }
 
-    // Check if the total mess cut exceeds the limit of 10
     if (messCutCount + calculatedMessCut >= 10) {
       alert("Total mess cut days should not exceed 10.");
     } else {
@@ -84,50 +82,38 @@ const Messcut = () => {
         const formattedDate = format(currentDate, "yyyy-MM-dd");
         newMessCuts.push(formattedDate);
       }
-      setMessCuts((prev) => [...prev, ...newMessCuts]); // Update state with new dates
-      setMessCutCount((prev) => prev + calculatedMessCut); // Update mess cut count
+      setMessCuts((prev) => [...prev, ...newMessCuts]);
+      setMessCutCount((prev) => prev + calculatedMessCut);
 
       console.log("Saving date ranges to Firestore:", {
         newMessCuts,
         messCutCount: messCutCount + calculatedMessCut,
       });
 
-      await saveDateRanges(newMessCuts); // Save the updated date ranges to Firestore
+      await saveDateRanges(newMessCuts);
 
-      setStartDate(null); // Reset start date
-      setEndDate(null); // Reset end date
+      setStartDate(null);
+      setEndDate(null);
     }
   };
 
   const areDatesAlreadySelected = (pickedStartDate, pickedEndDate) => {
-    const daysCount = (pickedEndDate - pickedStartDate) / (1000 * 60 * 60 * 24); // Get the number of days in the selected range
+    const daysCount = (pickedEndDate - pickedStartDate) / (1000 * 60 * 60 * 24);
     for (let i = 0; i <= daysCount; i++) {
       const currentDate = addDays(pickedStartDate, i);
       const formattedDate = format(currentDate, "yyyy-MM-dd");
       if (messCuts.includes(formattedDate)) {
-        return true; // Return true if any of the selected dates are already in the list
+        return true;
       }
     }
-    return false; // Return false if none of the selected dates are already marked
+    return false;
   };
 
   const calculateMessCut = (days) => {
-    // Calculate the mess cut based on the number of selected days
     if (days === 3) return 2;
     if (days === 4) return 3;
     if (days >= 5) return days;
     return 0;
-  };
-
-  const getDatesCount = () => {
-    if (
-      messCuts.length > 0 &&
-      messCuts[0].dates &&
-      Array.isArray(messCuts[0].dates)
-    ) {
-      return messCuts[0].dates.length; // Fetch length of dates array at index 0
-    }
-    return 0; // Return 0 if no dates exist
   };
 
   const loadDateRanges = async (uid) => {
@@ -138,29 +124,26 @@ const Messcut = () => {
       const data = docSnap.data();
       console.log("Fetched user data:", data);
       const loadedDateRanges = data.messCuts || [];
-
-      // Flattening the loaded date ranges and setting the state
       const allDates = loadedDateRanges.flatMap((range) => range.dates || []);
       setMessCuts(allDates);
-      setMessCutCount(allDates.length); // Set messCutCount to the length of allDates directly
+      setMessCutCount(allDates.length);
     } else {
-      // Create a new document with default values if it doesn't exist
       await updateDoc(docRef, { messCuts: [], messCut: 0 });
-      setMessCuts([]); // Initialize state as empty array
-      setMessCutCount(0); // Initialize mess cut count
+      setMessCuts([]);
+      setMessCutCount(0);
     }
   };
 
   const saveDateRanges = async (newMessCuts) => {
     const groupedMessCuts = {};
-    const updatedMessCuts = [...messCuts, ...newMessCuts]; // Combine existing and new mess cuts
+    const updatedMessCuts = [...messCuts, ...newMessCuts];
 
     updatedMessCuts.forEach((date) => {
       const monthYear = format(new Date(date), "yyyy-MM");
       if (!groupedMessCuts[monthYear]) {
         groupedMessCuts[monthYear] = [];
       }
-      groupedMessCuts[monthYear].push(date); // Group dates by month and year
+      groupedMessCuts[monthYear].push(date);
     });
 
     const formattedMessCuts = Object.entries(groupedMessCuts).map(
@@ -173,7 +156,7 @@ const Messcut = () => {
     console.log("Formatted mess cuts:", formattedMessCuts);
 
     try {
-      const docRef = doc(db, "users", uid); // Use the UID passed from the sidebar
+      const docRef = doc(db, "users", uid);
       await updateDoc(docRef, {
         messCuts: formattedMessCuts,
         messCut: messCutCount,
@@ -199,17 +182,17 @@ const Messcut = () => {
       .map(([month, dates]) => {
         const startDate = format(new Date(dates[0]), "d");
         const endDate = format(new Date(dates[dates.length - 1]), "d");
-        return ` ${month} ${startDate} - ${endDate}`; // Format the dates for display
+        return ` ${month} ${startDate} - ${endDate}`;
       })
       .join(", ");
   };
 
   return (
-    <div>
+    <div className="messcut-container">
       <Navbar title="Mess Cut" onToggleSidebar={toggleSidebar} />
 
-      {isSidebarOpen && ( // Use isSidebarOpen state
-        <div ref={sidebarRef}>
+      {isSidebarOpen && (
+        <div ref={sidebarRef} className="messcut-sidebar">
           <Sidebar
             uid={currentUser?.id}
             name={currentUser?.name}
@@ -217,53 +200,63 @@ const Messcut = () => {
           />
         </div>
       )}
-      <h1>Mess Cut</h1>
-      <div>
-        <label>Select Start Date:</label>
-        <DatePicker
-          selected={startDate}
-          onChange={(date) => setStartDate(date)}
-          minDate={addDays(new Date(), 1)} // Set minimum date to current date + 1
-          dateFormat="yyyy-MM-dd"
-          placeholderText="Select start date"
-        />
-      </div>
-      <div>
-        <label>Select End Date:</label>
-        <DatePicker
-          selected={endDate}
-          onChange={(date) => setEndDate(date)}
-          minDate={startDate ? addDays(startDate, 1) : addDays(new Date(), 1)} // Set minimum date to startDate + 1 or current date + 1
-          dateFormat="yyyy-MM-dd"
-          placeholderText="Select end date"
-        />
-      </div>
-      <button onClick={selectDateRange}>Select Date Range</button>
-      <p>Total Mess Cut: {messCutCount} days</p>
-      {messCuts.length > 0 && (
-        <div>
-          <h3>Selected Dates:</h3>
+
+      <div className="messcut-content">
+        {/* <h1 className="messcut-title">Mess Cut</h1> */}
+
+        <div className="messcut-date-picker">
+          <label className="messcut-label">Select Start Date:</label>
+          <DatePicker
+            selected={startDate}
+            onChange={(date) => setStartDate(date)}
+            minDate={addDays(new Date(), 1)}
+            dateFormat="yyyy-MM-dd"
+            placeholderText="Select start date"
+          />
+        </div>
+
+        <div className="messcut-date-picker">
+          <label className="messcut-label">Select End Date:</label>
+          <DatePicker
+            selected={endDate}
+            onChange={(date) => setEndDate(date)}
+            minDate={startDate ? addDays(startDate, 1) : addDays(new Date(), 1)}
+            dateFormat="yyyy-MM-dd"
+            placeholderText="Select end date"
+          />
+        </div>
+
+        <button onClick={selectDateRange} className="messcut-button">
+          Select Date Range
+        </button>
+
+        <p className="messcut-summary">Total Mess Cut: {messCutCount} days</p>
+
+        {messCuts.length > 0 && (
+          <div className="messcut-selected-dates">
+            <h3>Selected Dates:</h3>
+            <ul>
+              {messCuts.map((date) => (
+                <li key={date}>{format(new Date(date), "MMMM d, yyyy")}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <div className="messcut-rules">
+          <h3>Rules:</h3>
           <ul>
-            {messCuts.map((date) => (
-              <li key={date}>{format(new Date(date), "MMMM d, yyyy")}</li>
-            ))}
+            <li>A minimum of 3 days is required.</li>
+            <li>If 3 days are taken, the amount of 2 days is deducted.</li>
+            <li>If 4 days are taken, the amount of 3 days is deducted.</li>
+            <li>If 5 days are taken, the number of taken days will be deducted.</li>
           </ul>
         </div>
-      )}
-      <div>
-        <h3>Rules:</h3>
-        <ul>
-          <li>A minimum of 3 days is required.</li>
-          <li>If 3 days are taken, the amount of 2 days is deducted.</li>
-          <li>If 4 days are taken, the amount of 3 days is deducted.</li>
-          <li>
-            If 5 days are taken, the number of taken days will be deducted.
-          </li>
-        </ul>
-      </div>
-      <div>
-        <h3>Formatted Dates:</h3>
-        <p>{formatSelectedDates()}</p>
+
+        <div className="messcut-formatted-dates">
+          <h3>Formatted Dates:</h3>
+          <p>{formatSelectedDates()}</p>
+        </div>
       </div>
     </div>
   );

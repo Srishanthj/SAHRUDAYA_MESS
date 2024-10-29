@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
 import { db } from './firebase_config';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import './GenerateBill.css'; // Import your CSS file
 
 const GenerateBill = () => {
+  const navigate = useNavigate(); // Create a navigate function
   const [activeDays, setActiveDays] = useState('');
   const [perDayAmount, setPerDayAmount] = useState('');
   const [estbFees, setEstbFees] = useState('');
   const [specialFees, setSpecialFees] = useState('');
   const [fine, setFine] = useState('');
   const [others, setOthers] = useState('');
+  const [error, setError] = useState('');
 
   const calculateTotalBill = () => {
     const activeDaysValue = parseInt(activeDays) || 0;
@@ -23,22 +27,23 @@ const GenerateBill = () => {
 
   const handleGenerateBill = async () => {
     if (!activeDays || !perDayAmount || !estbFees || !specialFees || !fine || !others) {
-      alert('Please fill all fields');
+      setError('Please fill all fields');
       return;
     }
+    
+    setError(''); // Reset error message
 
     try {
       const totalBill = calculateTotalBill();
       console.log('Total Bill:', totalBill);
       const userId = 'R5RxDKLskJSC4LeWBiSHCXQFz7g2'; // Directly using the document ID
-      
       const userDocRef = doc(db, 'users', userId);
       const currentMonth = '2024-11'; // Hardcoded for November 2024
 
       // Fetching user data
       const userDoc = await getDoc(userDocRef);
       if (!userDoc.exists()) {
-        alert("User document doesn't exist");
+        setError("User document doesn't exist");
         return;
       }
 
@@ -103,9 +108,11 @@ const GenerateBill = () => {
   };
 
   return (
-    <div>
+    <div className="container">
       <h1>Generate Bill</h1>
-      <div>
+      {error && <div className="alert">{error}</div>}
+      <button onClick={() => navigate('/profile')} className="back-button">Back </button>
+      <div className="form-control">
         <label>
           Active Days:
           <input
@@ -116,7 +123,7 @@ const GenerateBill = () => {
           />
         </label>
       </div>
-      <div>
+      <div className="form-control">
         <label>
           Per Day Amount:
           <input
@@ -127,7 +134,7 @@ const GenerateBill = () => {
           />
         </label>
       </div>
-      <div>
+      <div className="form-control">
         <label>
           Establishment Fees:
           <input
@@ -138,7 +145,7 @@ const GenerateBill = () => {
           />
         </label>
       </div>
-      <div>
+      <div className="form-control">
         <label>
           Special Fees:
           <input
@@ -149,7 +156,7 @@ const GenerateBill = () => {
           />
         </label>
       </div>
-      <div>
+      <div className="form-control">
         <label>
           Fine:
           <input
@@ -160,7 +167,7 @@ const GenerateBill = () => {
           />
         </label>
       </div>
-      <div>
+      <div className="form-control">
         <label>
           Any Others:
           <input
