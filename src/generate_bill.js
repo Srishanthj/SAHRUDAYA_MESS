@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { db } from './firebase_config'; // Ensure firebase is properly configured
-import { collection, getDocs, doc, setDoc } from 'firebase/firestore';
+import { db } from './firebase_config';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 
 const GenerateBill = () => {
   const [activeDays, setActiveDays] = useState('');
@@ -10,7 +10,6 @@ const GenerateBill = () => {
   const [fine, setFine] = useState('');
   const [others, setOthers] = useState('');
 
-  // Function to calculate the total bill
   const calculateTotalBill = () => {
     const activeDaysValue = parseInt(activeDays) || 0;
     const perDayAmountValue = parseInt(perDayAmount) || 0;
@@ -31,71 +30,72 @@ const GenerateBill = () => {
     try {
       const totalBill = calculateTotalBill();
       console.log('Total Bill:', totalBill);
+      const userId = 'R5RxDKLskJSC4LeWBiSHCXQFz7g2'; // Directly using the document ID
+      
+      const userDocRef = doc(db, 'users', userId);
+      const currentMonth = '2024-11'; // Hardcoded for November 2024
 
-      const userSnapshots = await getDocs(collection(db, 'users'));
-      const currentMonth = new Date().toISOString().slice(0, 7);
+      // Fetching user data
+      const userDoc = await getDoc(userDocRef);
+      if (!userDoc.exists()) {
+        alert("User document doesn't exist");
+        return;
+      }
 
-      userSnapshots.forEach(async (userDoc) => {
-        const userData = userDoc.data();
-        let messCut = parseInt(userData.messCut) || 0;
+      const userData = userDoc.data();
+      let messCut = parseInt(userData.messCut) || 0;
 
-        // Calculate total fine
-        let totalFine = 0;
-        if (userData.fine && typeof userData.fine === 'object' && userData.fine[currentMonth]) {
-          const monthlyFines = userData.fine[currentMonth];
-          if (Array.isArray(monthlyFines)) {
-            monthlyFines.forEach((fineEntry) => {
-              if (fineEntry.amount) {
-                totalFine += fineEntry.amount;
-              }
-            });
-          }
+      // Calculate total fine
+      let totalFine = 0;
+      if (userData.fine && typeof userData.fine === 'object' && userData.fine[currentMonth]) {
+        const monthlyFines = userData.fine[currentMonth];
+        if (Array.isArray(monthlyFines)) {
+          monthlyFines.forEach((fineEntry) => {
+            if (fineEntry.amount) {
+              totalFine += fineEntry.amount;
+            }
+          });
         }
+      }
 
-        // Calculate total deductions
-        let totalDeductions = 0;
-        if (userData.deduction && typeof userData.deduction === 'object' && userData.deduction[currentMonth]) {
-          const monthlyDeductions = userData.deduction[currentMonth];
-          if (Array.isArray(monthlyDeductions)) {
-            monthlyDeductions.forEach((deductionEntry) => {
-              if (deductionEntry.amount) {
-                totalDeductions += deductionEntry.amount;
-              }
-            });
-          }
+      // Calculate total deductions
+      let totalDeductions = 0;
+      if (userData.deduction && typeof userData.deduction === 'object' && userData.deduction[currentMonth]) {
+        const monthlyDeductions = userData.deduction[currentMonth];
+        if (Array.isArray(monthlyDeductions)) {
+          monthlyDeductions.forEach((deductionEntry) => {
+            if (deductionEntry.amount) {
+              totalDeductions += deductionEntry.amount;
+            }
+          });
         }
+      }
 
-        const perDayAmountValue = parseInt(perDayAmount) || 0;
-        const finalAmount = totalBill - (messCut * perDayAmountValue) - totalDeductions;
+      const perDayAmountValue = parseInt(perDayAmount) || 0;
+      const finalAmount = totalBill - (messCut * perDayAmountValue) - totalDeductions;
 
-        console.log(`Final Amount for user ${userDoc.id}: ${finalAmount}`);
+      // Preparing bill data
+      const billData = {
+        activeDays: parseInt(activeDays) || 0,
+        fine: totalFine + (parseInt(fine) || 0),
+        specialFees: parseInt(specialFees) || 0,
+        perDayAmount: perDayAmountValue,
+        establishment: parseInt(estbFees) || 0,
+        others: parseInt(others) || 0,
+        amount: totalBill,
+        deductions: totalDeductions,
+        finalAmount: finalAmount,
+        date: new Date().toISOString(),
+      };
 
-        if (!userData.billAmount) {
-          userData.billAmount = {};
-        }
+      // Update the billAmount for the hardcoded month of November
+      await setDoc(
+        userDocRef,
+        { billAmount: { [currentMonth]: billData } },
+        { merge: true }
+      );
 
-        if (!userData.billAmount[currentMonth]) {
-          userData.billAmount[currentMonth] = {};
-        }
-
-        userData.billAmount[currentMonth] = {
-          activeDays: parseInt(activeDays) || 0,
-          fine: totalFine + (parseInt(fine) || 0),
-          specialFees: parseInt(specialFees) || 0,
-          perDayAmount: parseInt(perDayAmount) || 0,
-          establishment: parseInt(estbFees) || 0,
-          others: parseInt(others) || 0,
-          amount: totalBill,
-          deductions: totalDeductions,
-          finalAmount: finalAmount,
-          date: new Date().toISOString(),
-        };
-
-        console.log(`Writing to Firestore for user: ${userDoc.id}`);
-        await setDoc(doc(db, 'users', userDoc.id), userData, { merge: true });
-      });
-
-      alert('Bill generated successfully!');
+      alert('Bill generated successfully for November!');
     } catch (error) {
       console.error('Error generating bill:', error);
       alert('Error generating bill');

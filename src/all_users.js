@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useParams } from "react-router-dom";
 import {
   onSnapshot,
   collection,
@@ -12,6 +13,7 @@ import { auth, db } from "./firebase_config";
 import "./AllUsers.css";
 
 const AllUsers = () => {
+  const { uid } = useParams();
   const [users, setUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [departmentQuery, setDepartmentQuery] = useState("");
@@ -32,7 +34,7 @@ const AllUsers = () => {
     });
     return () => unsubscribe();
   }, []);
-
+ 
   useEffect(() => {
     const user = auth.currentUser;
     if (user) {
@@ -80,6 +82,21 @@ const AllUsers = () => {
       [`fine.${month}`]: arrayUnion(fineEntry),
     });
   };
+  useEffect(() => {
+    const unsubscribe = onSnapshot(collection(db, "users"), (snapshot) => {
+      const allUsers = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setUsers(allUsers);
+  
+      // Log the number of users in the console
+      console.log(`Number of users: ${allUsers.length}`);
+    });
+    return () => unsubscribe();
+  }, []);
+ 
+  
 
   const handleAddDeduction = async (userId, deductionAmount) => {
     const month = new Date().toISOString().slice(0, 7);

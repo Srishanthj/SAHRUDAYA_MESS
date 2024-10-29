@@ -75,50 +75,50 @@ const Bill = () => {
 
   if (billKeys.length === 0) {
     return (
-        <div className="loading-container">
-            <ErrorScreen message="No bills available." />
-        </div>
-    );  }
+      <div className="loading-container">
+        <ErrorScreen message="No bills available." />
+      </div>
+    );
+  }
 
+  // Fetching the first month's data
   const firstMonthKey = billKeys[0];
   const firstMonthData = billData[firstMonthKey] || {};
 
-  const activeDays = firstMonthData.activeDays || 0;
-  const perDayAmount = firstMonthData.perDayAmount || 0.0;
-  const deductions = firstMonthData.deductions || 0;
-  const establishment = firstMonthData.establishment || 0.0;
-  const specialFees = firstMonthData.specialFees || 0.0;
-  const fine = firstMonthData.fine || 0.0;
-  const others = firstMonthData.others || 0.0;
-
-  const messCutAmount = messCutCount * perDayAmount;
-  let finalAmount = (firstMonthData.finalAmount || 0.0) - messCutAmount;
+  const {
+    activeDays = 0,
+    fine = 0,
+    specialFees = 0,
+    perDayAmount = 0,
+    establishment = 0,
+    others = 0,
+    amount = 0,
+    deductions = 0,
+    finalAmount = 0.0,
+  } = firstMonthData;
 
   return (
     <div className="bill-container">
       <header className="bill-header">
-        <h1>Bill</h1>
-        <button onClick={() => navigate("/profile")}>Back</button>
+        <h1 className="bill-title">Bill</h1>
+        <button className="back-button" onClick={() => navigate("/profile")}>Back</button>
       </header>
       <div className="bill-details">
-        <DetailCard title="Active Days" value={activeDays} />
-        <DetailCard
-          title="Per Day Amount"
-          value={`₹${perDayAmount.toFixed(2)}`}
-        />
-        <DetailCard title="Mess Cut Count" value={messCutCount} />
-        <DetailCard
-          title="Mess Cut Amount"
-          value={`₹${messCutAmount.toFixed(2)}`}
-        />
-        <DetailCard
-          title="Establishment"
-          value={`₹${establishment.toFixed(2)}`}
-        />
-        <DetailCard title="Special Fees" value={`₹${specialFees.toFixed(2)}`} />
-        <DetailCard title="Fine" value={`₹${fine.toFixed(2)}`} />
-        <DetailCard title="Others" value={`₹${others.toFixed(2)}`} />
         <TotalCard finalAmount={finalAmount} />
+        <div className="bill-summary">
+          <h2 className="summary-title">Bill Summary</h2>
+          <ul className="summary-list">
+            <li className="summary-item">Active Days: {activeDays}</li>
+            <li className="summary-item">Amount (Per Day): ₹{perDayAmount}</li>
+            <li className="summary-item">Establishment Fees: ₹{establishment}</li>
+            <li className="summary-item">Special Fees: ₹{specialFees}</li>
+            <li className="summary-item">Fine: ₹{fine}</li>
+            <li className="summary-item">Others: ₹{others}</li>
+            <li className="summary-item">Amount: ₹{amount}</li>
+            <li className="summary-item">Deductions: ₹{deductions}</li>
+            <li className="summary-item total-amount">Total Amount to be Paid: ₹{finalAmount.toFixed(2)}</li>
+          </ul>
+        </div>
         <PayNowButton />
       </div>
     </div>
@@ -127,27 +127,20 @@ const Bill = () => {
 
 const LoadingScreen = () => (
   <div className="loading-screen">
-    <h2>Loading...</h2>
+    <h2 className="loading-text">Loading...</h2>
   </div>
 );
 
 const ErrorScreen = ({ message }) => (
   <div className="error-screen">
-    <h2>{message}</h2>
-  </div>
-);
-
-const DetailCard = ({ title, value }) => (
-  <div className="detail-card">
-    <span>{title}</span>
-    <span>{value}</span>
+    <h2 className="error-text">{message}</h2>
   </div>
 );
 
 const TotalCard = ({ finalAmount }) => (
   <div className="total-card">
-    <h2>Total Amount to be Paid</h2>
-    <span>₹{finalAmount.toFixed(2)}</span>
+    <h2 className="total-card-title">Total Amount to be Paid</h2>
+    <span className="total-amount-value">₹{finalAmount.toFixed(2)}</span>
   </div>
 );
 
@@ -160,11 +153,7 @@ const PayNowButton = () => {
   };
 
   return (
-    <div>
-      <header className="bill-header">
-        <h1>Bill</h1>
-        <button onClick={() => navigate("/profile")}>Back</button>
-      </header>
+    <div className="pay-now-container">
       <button className="pay-now-button" onClick={handlePayNow}>
         Pay Now
       </button>

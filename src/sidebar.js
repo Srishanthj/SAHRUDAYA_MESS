@@ -1,7 +1,6 @@
 import React, { forwardRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { auth } from "./firebase_config";
-import { useNavigate } from "react-router-dom";
 import { FaUser, FaCut, FaFileInvoice, FaEdit, FaClipboardCheck } from "react-icons/fa";
 import "./sidebar.css";
 
@@ -22,22 +21,31 @@ const Sidebar = forwardRef(({ uid, name, isAdmin }, ref) => {
             <FaUser /> Profile
           </Link>
         </li>
-        <li>
-          <Link to="/mealattendance">
-            <FaClipboardCheck /> Mark the attendance
-          </Link>
-        </li>
+        {(isAdmin || uid === 'R5RxDKLskJSC4LeWBiSHCXQFz7g2') && (
+          <li>
+            <Link to="/mealattendance">
+              <FaClipboardCheck /> Mark Attendance
+            </Link>
+          </li>
+        )}
         <li>
           <Link to={`/messcut/${uid}`}>
             <FaCut /> Mess Cut
           </Link>
         </li>
-        {isAdmin && (
-          <li>
-            <Link to="/allusers">
-              <FaUser /> All Users
-            </Link>
-          </li>
+        {uid === 'R5RxDKLskJSC4LeWBiSHCXQFz7g2' && (
+          <>
+            <li>
+              <Link to={`/allusers/${uid}`}>
+                <FaUser /> All Users
+              </Link>
+            </li>
+            <li>
+              <Link to={`/generatebill/${uid}`}>
+                <FaEdit /> Generate Bill
+              </Link>
+            </li>
+          </>
         )}
         <li>
           <Link to={`/bill/${uid}`}>
@@ -46,7 +54,7 @@ const Sidebar = forwardRef(({ uid, name, isAdmin }, ref) => {
         </li>
         <li>
           <Link to="/editprofile">
-            <FaEdit/> Edit Profile
+            <FaEdit /> Edit Profile
           </Link>
         </li>
       </ul>
