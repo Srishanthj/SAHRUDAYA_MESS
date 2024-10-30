@@ -2,8 +2,8 @@
 :root {
     --background: #f4f4f4;
     --foreground: #333;
-    --primary: #007bff;
-    --primary-hover: #0056b3;
+    --primary: #599a59;
+    --primary-hover: #cae7c6;
     --card-background: #ffffff;
     --card-shadow: rgba(0, 0, 0, 0.1);
     --error-color: red;
