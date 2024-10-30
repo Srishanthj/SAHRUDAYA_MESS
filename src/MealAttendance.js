@@ -13,7 +13,11 @@ const MealAttendance = () => {
     lunch: false,
     dinner: false,
   });
-  const [isMarked, setIsMarked] = useState(false);
+  const [isMarked, setIsMarked] = useState({
+    breakfast: false,
+    lunch: false,
+    dinner: false,
+  });
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [messCutMessage, setMessCutMessage] = useState('');
@@ -28,7 +32,7 @@ const MealAttendance = () => {
   };
 
   const currentDate = getCurrentDate();
-  const currentMonth = currentDate ? currentDate.slice(0, 7) : null; // Get YYYY-MM
+  const currentMonth = currentDate ? currentDate.slice(0, 7) : null;
 
   useEffect(() => {
     if (userData) {
@@ -38,14 +42,6 @@ const MealAttendance = () => {
 
   const handleInputChange = (e) => {
     setMessNo(e.target.value);
-  };
-
-  const handleAttendanceChange = (e) => {
-    const { name, checked } = e.target;
-    setAttendance((prev) => ({
-      ...prev,
-      [name]: checked,
-    }));
   };
 
   const fetchUserData = async () => {
@@ -67,6 +63,11 @@ const MealAttendance = () => {
           setUserData(user);
         });
         setError(null);
+        setIsMarked({
+          breakfast: false,
+          lunch: false,
+          dinner: false,
+        });
       } else {
         setError('No user found with this mess number.');
         setUserData(null);
@@ -79,62 +80,71 @@ const MealAttendance = () => {
     }
   };
 
-  // Inside the fetchAttendance function
-const fetchAttendance = async (userId) => {
-  const userRef = doc(db, 'users', userId);
+  const fetchAttendance = async (userId) => {
+    const userRef = doc(db, 'users', userId);
 
-  setLoading(true);
+    setLoading(true);
 
-  try {
-    const userDoc = await getDoc(userRef);
-    if (userDoc.exists()) {
-      const data = userDoc.data();
-      const mealAttendance = data.mealAttendance ? data.mealAttendance[currentMonth]?.[currentDate] : null;
+    try {
+      const userDoc = await getDoc(userRef);
+      if (userDoc.exists()) {
+        const data = userDoc.data();
+        const mealAttendance = data.mealAttendance ? data.mealAttendance[currentMonth]?.[currentDate] : null;
 
-      // Check if the user has mess cuts for the current date
-      const messCuts = data.messCuts || []; // Assuming messCuts is an array of date strings
-      const hasMessCut = messCuts.includes(currentDate);
-      if (hasMessCut) {
-        setMessCutMessage('You are having mess cut today.');
-        window.alert('You are on mess cut today. You cannot mark attendance.');
-        setAttendance({
-          breakfast: false,
-          lunch: false,
-          dinner: false,
-        });
-        setIsMarked(true);
-      } else {
-        setMessCutMessage('');
-        if (mealAttendance) {
-          setAttendance({
-            breakfast: mealAttendance.breakfast || false,
-            lunch: mealAttendance.lunch || false,
-            dinner: mealAttendance.dinner || false,
-          });
-          setIsMarked(true);
-        } else {
+        const messCuts = data.messCuts || [];
+        const hasMessCut = messCuts.includes(currentDate);
+        if (hasMessCut) {
+          setMessCutMessage('You are having mess cut today.');
+          window.alert('You are on mess cut today. You cannot mark attendance.');
           setAttendance({
             breakfast: false,
             lunch: false,
             dinner: false,
           });
-          setIsMarked(false);
+          setIsMarked({
+            breakfast: true,
+            lunch: true,
+            dinner: true,
+          });
+        } else {
+          setMessCutMessage('');
+          if (mealAttendance) {
+            setAttendance({
+              breakfast: mealAttendance.breakfast || false,
+              lunch: mealAttendance.lunch || false,
+              dinner: mealAttendance.dinner || false,
+            });
+            setIsMarked({
+              breakfast: mealAttendance.breakfast || false,
+              lunch: mealAttendance.lunch || false,
+              dinner: mealAttendance.dinner || false,
+            });
+          } else {
+            setAttendance({
+              breakfast: false,
+              lunch: false,
+              dinner: false,
+            });
+            setIsMarked({
+              breakfast: false,
+              lunch: false,
+              dinner: false,
+            });
+          }
         }
+        setError(null);
+      } else {
+        setError('User document does not exist.');
       }
-      setError(null);
-    } else {
-      setError('User document does not exist.');
+    } catch (error) {
+      console.error('Error fetching attendance:', error);
+      setError('An error occurred while fetching attendance. Please try again.');
+    } finally {
+      setLoading(false);
     }
-  } catch (error) {
-    console.error('Error fetching attendance:', error);
-    setError('An error occurred while fetching attendance. Please try again.');
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
-
-  const saveAttendance = async () => {
+  const saveAttendance = async (meal) => {
     if (!userData) {
       alert('Please fetch user data first.');
       return;
@@ -146,13 +156,15 @@ const fetchAttendance = async (userId) => {
       await updateDoc(userRef, {
         [`mealAttendance.${currentMonth}.${currentDate}`]: {
           ...attendance,
+          [meal]: true, // Mark this specific meal as attended
         },
       });
-      alert('Attendance marked successfully!');
-      setIsMarked(true);
+      alert(`${meal.charAt(0).toUpperCase() + meal.slice(1)} Attendance marked successfully!`);
+      setIsMarked((prev) => ({
+        ...prev,
+        [meal]: true,
+      }));
       setError(null);
-
-      // Reload the page to allow the next user
       reloadPage();
     } catch (error) {
       console.error('Error marking attendance:', error);
@@ -168,13 +180,13 @@ const fetchAttendance = async (userId) => {
       lunch: false,
       dinner: false,
     });
-    setIsMarked(false);
+    setIsMarked({
+      breakfast: false,
+      lunch: false,
+      dinner: false,
+    });
     setError(null);
     setMessCutMessage('');
-  };
-
-  const isMealDisabled = (meal) => {
-    return isMarked && attendance[meal];
   };
 
   const generateExcelSheet = async () => {
@@ -250,58 +262,42 @@ const fetchAttendance = async (userId) => {
               onChange={handleInputChange}
             />
             <button onClick={fetchUserData} disabled={loading}>
-              {loading ? 'Fetching...' : 'Fetch User Data'}
+              {loading ? 'Loading...' : 'Fetch User Data'}
             </button>
-            {error && <div className="error-message">{error}</div>}
-            {messCutMessage && <div className="error-message">{messCutMessage}</div>}
-            {userData && (
-              <div>
-                <img src={userData.dpUrl} alt="User Profile" className="profile-image" />
-                <p><strong>Name:</strong> {userData.name}</p>
-                <p><strong>Mess No:</strong> {userData.messNo}</p>
-                <div className="attendance-form">
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="breakfast"
-                      checked={attendance.breakfast}
-                      onChange={handleAttendanceChange}
-                      disabled={isMealDisabled('breakfast') || messCutMessage}
-                    />
-                    Breakfast
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="lunch"
-                      checked={attendance.lunch}
-                      onChange={handleAttendanceChange}
-                      disabled={isMealDisabled('lunch') || messCutMessage}
-                    />
-                    Lunch
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="dinner"
-                      checked={attendance.dinner}
-                      onChange={handleAttendanceChange}
-                      disabled={isMealDisabled('dinner') || messCutMessage}
-                    />
-                    Dinner
-                  </label>
-                  <button onClick={saveAttendance} disabled={isMarked || messCutMessage}>
-                    Mark Attendance
-                  </button>
-                </div>
-              </div>
-            )}
+            {error && <p className="error-message">{error}</p>}
           </div>
+          {userData && (
+            <div className="user-details">
+              {userData.dpUrl && (
+                <img
+                  src={userData.dpUrl}
+                  alt={`${userData.name}'s Profile`}
+                  className="profile-image"
+                />
+              )}
+              <p>Name: {userData.name}</p>
+              <p>Mess Number: {userData.messNo}</p>
+            </div>
+          )}
+          {messCutMessage && <p className="mess-cut-message">{messCutMessage}</p>}
         </div>
-      </div>
-      <div className="download-container">
-        <button onClick={generateExcelSheet} disabled={loading}>
-          {loading ? 'Generating...' : 'Download Excel Sheet'}
+
+        {userData && !messCutMessage && (
+          <div className="meal-checklist">
+            <h2>Mark Attendance</h2>
+            <button onClick={() => saveAttendance('breakfast')} disabled={isMarked.breakfast}>
+              Mark Breakfast
+            </button>
+            <button onClick={() => saveAttendance('lunch')} disabled={isMarked.lunch}>
+              Mark Lunch
+            </button>
+            <button onClick={() => saveAttendance('dinner')} disabled={isMarked.dinner}>
+              Mark Dinner
+            </button>
+          </div>
+        )}
+        <button onClick={generateExcelSheet} className="generate-excel-button">
+          Generate Excel Sheet
         </button>
       </div>
     </div>

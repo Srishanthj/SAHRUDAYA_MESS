@@ -1,18 +1,30 @@
 /* Base styles */
 :root {
-    --background: #f4f4f4;
+    --background: #f9f9f9;
     --foreground: #333;
     --primary: #007bff;
     --primary-hover: #0056b3;
     --card-background: #ffffff;
     --card-shadow: rgba(0, 0, 0, 0.1);
     --error-color: red;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --border-radius: 12px;
+    --transition-duration: 0.3s;
 }
 
 body {
     margin: 0;
     font-family: 'Arial', sans-serif;
     background-color: var(--background);
+    color: var(--foreground);
+    animation: fadeIn 1s ease-in-out;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 /* App bar styles */
@@ -25,6 +37,11 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: background-color var(--transition-duration);
+}
+
+.app-bar:hover {
+    background-color: var(--primary-hover);
 }
 
 .app-bar-title {
@@ -34,27 +51,37 @@ body {
 
 /* Container styles */
 .meal-attendance-container {
-    display: block;
+    display: flex;
     flex-direction: column;
     align-items: center;
     padding: 30px;
-    background-color: none ;
-    border-radius: 12px;
+    background-color: var(--card-background);
+    border-radius: var(--border-radius);
     box-shadow: 0 4px 12px var(--card-shadow);
     margin: 20px auto;
     max-width: 90%;
     width: 100%;
     box-sizing: border-box;
-    overflow: auto; /* Enable scrolling in both directions */
-    max-height: 500px; /* Set max height to trigger scrolling */
+    overflow: auto;
+    max-height: 500px;
+    transition: transform var(--transition-duration);
+}
+
+.meal-attendance-container:hover {
+    transform: scale(1.02);
 }
 
 /* Header styles */
 h1 {
-    font-size: 28px; /* Increased font size for prominence */
+    font-size: 28px;
     margin-bottom: 20px;
     color: var(--foreground);
     text-align: center;
+    transition: color var(--transition-duration);
+}
+
+h1:hover {
+    color: var(--primary);
 }
 
 /* Input styles */
@@ -64,39 +91,43 @@ input[type="text"] {
     font-size: 16px;
     margin-bottom: 20px;
     border: 1px solid #ddd;
-    border-radius: 8px;
+    border-radius: var(--border-radius);
     box-shadow: inset 0 2px 4px var(--card-shadow);
-    transition: border-color 0.3s;
+    transition: border-color var(--transition-duration), box-shadow var(--transition-duration);
 }
 
 input[type="text"]:focus {
     border-color: var(--primary);
+    box-shadow: 0 0 5px var(--primary);
 }
 
-  
-  .error-message {
-    color: red;
+/* Error message styles */
+.error-message {
+    color: var(--error-color);
     font-weight: bold;
-  }
-  
+    font-size: 16px;
+    margin-top: 10px;
+    text-align: center;
+}
+
 /* Button styles */
 button {
     padding: 12px 20px;
     font-size: 16px;
     margin: 10px 0;
     border: none;
-    border-radius: 8px;
+    border-radius: var(--border-radius);
     background-color: var(--primary);
     color: white;
     cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
+    transition: background-color var(--transition-duration), transform var(--transition-duration);
     width: 100%;
-    max-width: 220px; /* Adjusted width */
+    max-width: 220px;
 }
 
 button:hover {
     background-color: var(--primary-hover);
-    transform: translateY(-5px);
+    transform: translateY(-3px);
 }
 
 button:disabled {
@@ -118,8 +149,7 @@ button:disabled {
 .back-icon {
     width: 24px;
     height: 24px;
-    
-    transition: transform 0.2s;
+    transition: transform var(--transition-duration);
 }
 
 .back-icon:hover {
@@ -140,71 +170,62 @@ button:disabled {
     align-items: center;
     text-align: center;
     margin-bottom: 20px;
-    background-color: #f0f8ff; /* Light background for profile */
+    background-color: #f0f8ff;
     border: 1px solid #ddd;
     padding: 20px;
-    border-radius: 12px;
+    border-radius: var(--border-radius);
     box-shadow: 0 2px 4px var(--card-shadow);
-    flex: 1; /* Make it flexible to fill space */
-    min-height: 300px; /* Set minimum height for equal size */
+    flex: 1;
+    min-height: 300px;
+    transition: transform var(--transition-duration);
+}
+
+.profile:hover {
+    transform: scale(1.02);
 }
 
 /* Attendance styles */
-/* MealAttendance.css */
 .attendance {
     display: flex;
     flex-direction: column;
-    align-items: left; /* Align to the left */
+    align-items: flex-start;
     width: 100%;
-    background-color: whitesmoke; /* Slightly different background */
-    border-radius: 12px;
+    background-color: whitesmoke;
+    border-radius: var(--border-radius);
     box-shadow: 0 2px 4px var(--card-shadow);
-    flex: 1; /* Make it flexible to fill space */
-    min-height: 300px; /* Set minimum height for equal size */
-    padding: 20px; /* Default padding */
+    flex: 1;
+    min-height: 300px;
+    padding: 20px;
 }
 
 /* Conditional padding class */
 .attendance.no-padding {
-    padding: 0; /* No padding if no attendance marking options */
-}
-
-
-/* Error message styles */
-.error-message {
-    color: var(--error-color);
-    font-size: 16px;
-    margin-top: 10px;
-    text-align: center;
-}
-.attendance.no-padding {
-    padding: 0; /* No padding if no attendance marking options */
+    padding: 0;
 }
 
 /* Responsive styles */
 @media (min-width: 768px) {
     .meal-attendance-container {
-        flex-direction: column; /* Changed to row for side-by-side layout */
+        flex-direction: row;
         justify-content: space-between;
         padding: 40px;
-      
     }
 
     .user-info {
-        lex-direction: column; /* Changed to row for side-by-side layout */
+        flex-direction: row;
         justify-content: space-between;
         padding: 40px;
     }
 
     .profile,
     .attendance {
-        width: 45%; /* Adjusted width to fit side by side */
-        margin: 10px; /* Added margin for spacing */
+        width: 45%;
+        margin: 10px;
     }
 
     .options {
         margin-left: 20px;
-        flex-direction: column; /* Added margin to create space between profile and options */
+        flex-direction: column;
     }
 }
 
@@ -217,6 +238,51 @@ button:disabled {
         max-width: 200px;
     }
 
+    .meal-checklist {
+        margin-bottom: 20px;
+    }
+
+    .mess-cut-message {
+        color: #ff0000;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+
+    .meal-checklist h2 {
+        font-size: 20px;
+        margin-bottom: 10px;
+        color: #007bff;
+    }
+
+    .meal-checklist label {
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    .meal-checklist input[type="checkbox"] {
+        margin-right: 10px;
+    }
+
+    .meal-checklist button {
+        padding: 8px 12px;
+        background-color: #28a745;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 10px;
+        transition: background-color var(--transition-duration);
+    }
+
+    .meal-checklist button:disabled {
+        background-color: #aaa;
+        cursor: not-allowed;
+    }
+
+    .meal-checklist button:hover:not(:disabled) {
+        background-color: #218838;
+    }
+
     h1 {
         font-size: 32px;
     }
@@ -224,7 +290,7 @@ button:disabled {
 
 /* Add hover effects for labels */
 .attendance label:hover {
-    color: var(--primary); /* Change text color on hover */
+    color: var(--primary);
 }
 
 /* Button styles for export and reset */
@@ -234,24 +300,24 @@ button:disabled {
     padding: 12px 20px;
     font-size: 16px;
     border: none;
-    border-radius: 8px;
+    border-radius: var(--border-radius);
     color: white;
     cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
+    transition: background-color var(--transition-duration), transform var(--transition-duration);
     width: 100%;
 }
 
 .export-button {
-    background-color: #28a745; /* Green color for export */
+    background-color: var(--success-color);
 }
 
 .reset-button {
-    background-color: #dc3545; /* Red color for reset */
+    background-color: var(--danger-color);
 }
 
 /* Hover effects for export and reset buttons */
 .export-button:hover,
 .reset-button:hover {
-    opacity: 0.9; /* Slight opacity change on hover */
-    transform: translateY(-2px); /* Small upward movement */
+    opacity: 0.9;
+    transform: translateY(-3px);
 }
