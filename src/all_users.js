@@ -14,6 +14,7 @@ import "./AllUsers.css";
 
 const AllUsers = () => {
   const { uid } = useParams();
+  const [userData, setUserData] = useState(null);
   const [users, setUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [departmentQuery, setDepartmentQuery] = useState("");
@@ -128,15 +129,13 @@ const AllUsers = () => {
     <div>
       <Navbar title="All Users" onToggleSidebar={toggleSidebar} />
 
+      
       {isSidebarOpen && (
-        <div ref={sidebarRef}>
-          <Sidebar
-            uid={currentUser?.id}
-            name={currentUser?.name}
-            isAdmin={currentUser?.isAdmin}
-          />
+        <div ref={sidebarRef} className="sidebar-container">
+          <Sidebar uid={userData?.uid} name={userData?.name} isAdmin={userData?.isAdmin} />
         </div>
       )}
+
 
       <div className="input-container">
         <input
