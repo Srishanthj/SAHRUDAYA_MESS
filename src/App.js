@@ -3,13 +3,13 @@ import { Routes, Route } from 'react-router-dom';
 import Login from './login';
 import Profile from './profile';
 import AllUsers from './all_users';
-import GenerateBill from './generate_bill'; // Ensure this file exists and is correctly named
+import GenerateBill from './generate_bill'; 
 import MessCut from './mess_cut';
 import Bill from './bill';
 import RegisterPage from './register';
 import ResetPassword from './resetpassword';
 import EditProfilePage from './edit_profile';
-import MealAttendance from './MealAttendance'; // Adjusted case to match file name
+import MealAttendance from './MealAttendance'; 
 
 const App = () => {
   return (

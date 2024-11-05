@@ -11,9 +11,11 @@ import Navbar from "./navbar";
 import Sidebar from "./sidebar";
 import { auth, db } from "./firebase_config";
 import "./AllUsers.css";
+import ProfileNavbar from "./profile_nav";
 
 const AllUsers = () => {
   const { uid } = useParams();
+  const [userData, setUserData] = useState(null);
   const [users, setUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [departmentQuery, setDepartmentQuery] = useState("");
@@ -21,7 +23,6 @@ const AllUsers = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [showAdminConfirmation, setShowAdminConfirmation] = useState(false);
   const [adminActionUser, setAdminActionUser] = useState(null);
-  const [currentUser, setCurrentUser] = useState(null);
   const sidebarRef = useRef(null);
 
   useEffect(() => {
@@ -34,18 +35,17 @@ const AllUsers = () => {
     });
     return () => unsubscribe();
   }, []);
- 
+
   useEffect(() => {
-    const user = auth.currentUser;
-    if (user) {
-      const userDocRef = doc(db, "users", user.uid);
+    if (uid) {
+      const userDocRef = doc(db, "users", uid);
       onSnapshot(userDocRef, (doc) => {
         if (doc.exists()) {
-          setCurrentUser(doc.data());
+          setUserData(doc.data());
         }
       });
     }
-  }, []);
+  }, [uid]);
 
   const filteredUsers = users.filter(
     (user) =>
@@ -82,21 +82,6 @@ const AllUsers = () => {
       [`fine.${month}`]: arrayUnion(fineEntry),
     });
   };
-  useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, "users"), (snapshot) => {
-      const allUsers = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setUsers(allUsers);
-  
-      // Log the number of users in the console
-      console.log(`Number of users: ${allUsers.length}`);
-    });
-    return () => unsubscribe();
-  }, []);
- 
-  
 
   const handleAddDeduction = async (userId, deductionAmount) => {
     const month = new Date().toISOString().slice(0, 7);
@@ -126,15 +111,22 @@ const AllUsers = () => {
 
   return (
     <div>
-      <Navbar title="All Users" onToggleSidebar={toggleSidebar} />
+      <Navbar 
+        title="All Users" 
+        onToggleSidebar={toggleSidebar} 
+        isSidebarOpen={isSidebarOpen} 
+      />
+
+      <div className="header-container">
+        {isSidebarOpen && (
+          <button className="sidebar-toggle" onClick={toggleSidebar}>
+          </button>
+        )}
+      </div> 
 
       {isSidebarOpen && (
-        <div ref={sidebarRef}>
-          <Sidebar
-            uid={currentUser?.id}
-            name={currentUser?.name}
-            isAdmin={currentUser?.isAdmin}
-          />
+        <div ref={sidebarRef} className="sidebar-container">
+          <Sidebar uid={userData?.uid} name={userData?.name} isAdmin={userData?.isAdmin} />
         </div>
       )}
 
@@ -153,27 +145,26 @@ const AllUsers = () => {
         />
       </div>
       <div className="user-list-container">
-      <div className="user-list">
-  {filteredUsers.map((user) => (
-    <div key={user.id} className="user-item">
-      <div className="user-info">
-        <img
-          src={user.dpUrl || "default-profile.png"}
-          alt="Profile"
-          className="user-dp"
-        />
-        <h2>{user.name || "Unknown User"}</h2>
-      </div>
-      <button
-        className="view-profile-button"
-        onClick={() => handleProfileView(user)}
-      >
-        View Profile
-      </button>
-    </div>
-  ))}
-</div>
-
+        <div className="user-list">
+          {filteredUsers.map((user) => (
+            <div key={user.id} className="user-item">
+              <div className="user-info">
+                <img
+                  src={user.dpUrl || "default-profile.png"}
+                  alt="Profile"
+                  className="user-dp"
+                />
+                <h2>{user.name || "Unknown User"}</h2>
+              </div>
+              <button
+                className="view-profile-button"
+                onClick={() => handleProfileView(user)}
+              >
+                View Profile
+              </button>
+            </div>
+          ))}
+        </div>
       </div>
 
       {selectedUser && (
@@ -224,7 +215,7 @@ const AllUsers = () => {
               </button>
             </div>
             <button className="wonderful-close-button" onClick={closePopup}>✕ Close</button>
-            </div>
+          </div>
         </div>
       )}
 

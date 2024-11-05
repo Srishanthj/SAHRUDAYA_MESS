@@ -36,7 +36,7 @@ const GenerateBill = () => {
     try {
       const totalBill = calculateTotalBill();
       console.log('Total Bill:', totalBill);
-      const userId = 'R5RxDKLskJSC4LeWBiSHCXQFz7g2'; // Directly using the document ID
+      const userId = 'ya4M7YvmfZUi3yQPA3W4kO7wYdu2'; // Directly using the document ID
       const userDocRef = doc(db, 'users', userId);
       const currentMonth = '2024-11'; // Hardcoded for November 2024
 
@@ -50,7 +50,6 @@ const GenerateBill = () => {
       const userData = userDoc.data();
       let messCut = parseInt(userData.messCut) || 0;
 
-      // Calculate total fine
       let totalFine = 0;
       if (userData.fine && typeof userData.fine === 'object' && userData.fine[currentMonth]) {
         const monthlyFines = userData.fine[currentMonth];
@@ -79,7 +78,6 @@ const GenerateBill = () => {
       const perDayAmountValue = parseInt(perDayAmount) || 0;
       const finalAmount = totalBill - (messCut * perDayAmountValue) - totalDeductions;
 
-      // Preparing bill data
       const billData = {
         activeDays: parseInt(activeDays) || 0,
         fine: totalFine + (parseInt(fine) || 0),

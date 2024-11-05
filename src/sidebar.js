@@ -21,7 +21,7 @@ const Sidebar = forwardRef(({ uid, name, isAdmin }, ref) => {
             <FaUser /> Profile
           </Link>
         </li>
-        {(isAdmin || uid === 'R5RxDKLskJSC4LeWBiSHCXQFz7g2') && (
+        {(isAdmin || uid === 'ya4M7YvmfZUi3yQPA3W4kO7wYdu2') && (
           <li>
             <Link to="/mealattendance">
               <FaClipboardCheck /> Mark Attendance
@@ -33,7 +33,7 @@ const Sidebar = forwardRef(({ uid, name, isAdmin }, ref) => {
             <FaCut /> Mess Cut
           </Link>
         </li>
-        {uid === 'R5RxDKLskJSC4LeWBiSHCXQFz7g2' && (
+        {uid === 'ya4M7YvmfZUi3yQPA3W4kO7wYdu2' && (
           <>
             <li>
               <Link to={`/allusers/${uid}`}>

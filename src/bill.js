@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { db } from "./firebase_config";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { useNavigate, useParams } from "react-router-dom";
 import './bill.css';
+import Navbar from "./navbar";
+import Sidebar from "./sidebar";
 
 const Bill = () => {
   const { uid } = useParams();
@@ -10,8 +12,10 @@ const Bill = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [messCuts, setMessCuts] = useState([]);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [messCutCount, setMessCutCount] = useState(0);
   const navigate = useNavigate();
+  const sidebarRef = useRef(null);
 
   const loadDateRanges = async (uid) => {
     const docRef = doc(db, "users", uid);
@@ -30,6 +34,10 @@ const Bill = () => {
       setMessCuts([]);
       setMessCutCount(0);
     }
+  };
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen((prev) => !prev);
   };
 
   useEffect(() => {
@@ -58,6 +66,19 @@ const Bill = () => {
     fetchUserData();
   }, [uid]);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        setIsSidebarOpen(false); // Close sidebar
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   if (loading) {
     return <LoadingScreen />;
   }
@@ -66,60 +87,87 @@ const Bill = () => {
     return <ErrorScreen message={error} />;
   }
 
-  if (!userData) {
-    return <ErrorScreen message="No user data available." />;
-  }
+  const calculateTotalFine = () => {
+    const fineData = userData.fine || {};
+    const fineEntries = Object.values(fineData).flat();
+    return fineEntries.reduce((total, fine) => total + (fine.amount || 0), 0);
+  };
 
-  const billData = userData.billAmount || {};
-  const billKeys = Object.keys(billData);
+  const renderContent = () => {
+    if (!userData) {
+      return <ErrorScreen message="No user data available." />;
+    }
 
-  if (billKeys.length === 0) {
+    const billData = userData.billAmount || {};
+    const billKeys = Object.keys(billData);
+
+    if (billKeys.length === 0) {
+      return <ErrorScreen message="No bills available." />;
+    }
+
+    // Fetching the first month's data
+    const firstMonthKey = billKeys[0];
+    const firstMonthData = billData[firstMonthKey] || {};
+
+    const {
+      activeDays = 0,
+      specialFees = 0,
+      perDayAmount = 0,
+      establishment = 0,
+      others = 0,
+      amount = 0,
+      deductions = 0,
+      finalAmount = 0.0,
+    } = firstMonthData;
+
+    const totalFine = calculateTotalFine();
+
     return (
-      <div className="loading-container">
-        <ErrorScreen message="No bills available." />
+      <div className="bill-container">
+        <header className="bill-header">
+          <h1 className="bill-title">Bill</h1>
+          {/* <button className="back-button" onClick={() => navigate("/profile")}>Back</button> */}
+        </header>
+        <div className="bill-details">
+          <TotalCard finalAmount={finalAmount + totalFine} />
+          <div className="bill-summary">
+            <h2 className="summary-title">Bill Summary</h2>
+            <ul className="summary-list">
+              <li className="summary-item">Active Days: {activeDays}</li>
+              <li className="summary-item">Amount (Per Day): ₹{perDayAmount}</li>
+              <li className="summary-item">Establishment Fees: ₹{establishment}</li>
+              <li className="summary-item">Special Fees: ₹{specialFees}</li>
+              <li className="summary-item">Fine: ₹{totalFine}</li>
+              <li className="summary-item">Others: ₹{others}</li>
+              <li className="summary-item">Amount: ₹{amount}</li>
+              <li className="summary-item">Deductions: ₹{deductions}</li>
+              <li className="summary-item total-amount">Total Amount to be Paid: ₹{(finalAmount + totalFine).toFixed(2)}</li>
+            </ul>
+          </div>
+          <PayNowButton />
+        </div>
       </div>
     );
-  }
-
-  // Fetching the first month's data
-  const firstMonthKey = billKeys[0];
-  const firstMonthData = billData[firstMonthKey] || {};
-
-  const {
-    activeDays = 0,
-    fine = 0,
-    specialFees = 0,
-    perDayAmount = 0,
-    establishment = 0,
-    others = 0,
-    amount = 0,
-    deductions = 0,
-    finalAmount = 0.0,
-  } = firstMonthData;
+  };
 
   return (
-    <div className="bill-container">
-      <header className="bill-header">
-        <h1 className="bill-title">Bill</h1>
-        <button className="back-button" onClick={() => navigate("/profile")}>Back</button>
-      </header>
-      <div className="bill-details">
-        <TotalCard finalAmount={finalAmount} />
-        <div className="bill-summary">
-          <h2 className="summary-title">Bill Summary</h2>
-          <ul className="summary-list">
-            <li className="summary-item">Active Days: {activeDays}</li>
-            <li className="summary-item">Amount (Per Day): ₹{perDayAmount}</li>
-            <li className="summary-item">Establishment Fees: ₹{establishment}</li>
-            <li className="summary-item">Special Fees: ₹{specialFees}</li>
-            <li className="summary-item">Fine: ₹{fine}</li>
-            <li className="summary-item">Others: ₹{others}</li>
-            <li className="summary-item">Amount: ₹{amount}</li>
-            <li className="summary-item">Deductions: ₹{deductions}</li>
-            <li className="summary-item total-amount">Total Amount to be Paid: ₹{finalAmount.toFixed(2)}</li>
-          </ul>
+    <div>
+      <Navbar
+        title="Bill"
+        onToggleSidebar={toggleSidebar}
+        isSidebarOpen={isSidebarOpen}
+      />
+
+      <div className="app-container">
+        {isSidebarOpen && (
+          <div ref={sidebarRef} className="sidebar-container">
+            <Sidebar uid={userData?.uid} name={userData?.name} isAdmin={userData?.isAdmin} />
+          </div>
+        )}
+
+        <div className={`content-container ${isSidebarOpen ? 'sidebar-open' : ''}`}>
+          {renderContent()}
         </div>
-        <PayNowButton />
       </div>
     </div>
   );
