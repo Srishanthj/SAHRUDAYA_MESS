@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { auth, db } from "./firebase_config";
 import { doc, getDoc, updateDoc, onSnapshot } from "firebase/firestore";
 import { format, addDays } from "date-fns";
+import { useNavigate } from 'react-router-dom';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Navbar from "./navbar";
@@ -11,6 +12,7 @@ import "./messcut.css"; // Import your CSS file for styling
 
 const Messcut = () => {
   const { uid } = useParams();
+  const [userData, setUserData] = useState(null);
   const [messCuts, setMessCuts] = useState([]);
   const [messCutCount, setMessCutCount] = useState(0);
   const [startDate, setStartDate] = useState(null);
@@ -18,6 +20,7 @@ const Messcut = () => {
   const [currentUser, setCurrentUser] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const sidebarRef = useRef(null);
+  const navigate = useNavigate();
 
   const toggleSidebar = () => {
     setIsSidebarOpen((prev) => !prev);
@@ -188,74 +191,75 @@ const Messcut = () => {
   };
 
   return (
-    <div className="messcut-container">
-      <Navbar title="Mess Cut" onToggleSidebar={toggleSidebar} />
 
-      {isSidebarOpen && (
-        <div ref={sidebarRef} className="messcut-sidebar">
-          <Sidebar
-            uid={currentUser?.id}
-            name={currentUser?.name}
-            isAdmin={currentUser?.isAdmin}
-          />
-        </div>
-      )}
+    <div>
 
-      <div className="messcut-content">
-        {/* <h1 className="messcut-title">Mess Cut</h1> */}
-
-        <div className="messcut-date-picker">
-          <label className="messcut-label">Select Start Date:</label>
-          <DatePicker
-            selected={startDate}
-            onChange={(date) => setStartDate(date)}
-            minDate={addDays(new Date(), 1)}
-            dateFormat="yyyy-MM-dd"
-            placeholderText="Select start date"
-          />
-        </div>
-
-        <div className="messcut-date-picker">
-          <label className="messcut-label">Select End Date:</label>
-          <DatePicker
-            selected={endDate}
-            onChange={(date) => setEndDate(date)}
-            minDate={startDate ? addDays(startDate, 1) : addDays(new Date(), 1)}
-            dateFormat="yyyy-MM-dd"
-            placeholderText="Select end date"
-          />
-        </div>
-
-        <button onClick={selectDateRange} className="messcut-button">
-          Select Date Range
+      <div className="app-bar">
+        <button onClick={() => navigate('/profile')} className="back-button">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="back-icon">
+            <path fillRule="evenodd" d="M15.78 4.22a.75.75 0 01.07 1.06L9.31 12l6.54 6.72a.75.75 0 11-1.1 1.02l-7-7.2a.75.75 0 010-1.02l7-7.2a.75.75 0 011.06-.1z" clipRule="evenodd" />
+          </svg>
         </button>
+        <div className="app-bar-title">Mess Cut</div>
+      </div>
+      
+      <div className="messcut-container">
+        <div className="messcut-content">
+          {/* <h1 className="messcut-title">Mess Cut</h1> */}
 
-        <p className="messcut-summary">Total Mess Cut: {messCutCount} days</p>
+          <div className="messcut-date-picker">
+            <label className="messcut-label">Select Start Date:</label>
+            <DatePicker
+              selected={startDate}
+              onChange={(date) => setStartDate(date)}
+              minDate={addDays(new Date(), 1)}
+              dateFormat="yyyy-MM-dd"
+              placeholderText="Select start date"
+            />
+          </div>
 
-        {messCuts.length > 0 && (
-          <div className="messcut-selected-dates">
-            <h3>Selected Dates:</h3>
+          <div className="messcut-date-picker">
+            <label className="messcut-label">Select End Date:</label>
+            <DatePicker
+              selected={endDate}
+              onChange={(date) => setEndDate(date)}
+              minDate={startDate ? addDays(startDate, 1) : addDays(new Date(), 1)}
+              dateFormat="yyyy-MM-dd"
+              placeholderText="Select end date"
+            />
+          </div>
+
+          <button onClick={selectDateRange} className="messcut-button">
+            Select Date Range
+          </button>
+
+          <p className="messcut-summary">Total Mess Cut: {messCutCount} days</p>
+
+          {messCuts.length > 0 && (
+            <div className="messcut-selected-dates">
+              <h3>Selected Dates:</h3>
+              <ul>
+                {messCuts.map((date) => (
+                  <li key={date}>{format(new Date(date), "MMMM d, yyyy")}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          <div className="messcut-rules">
+            <h3>Rules:</h3>
             <ul>
-              {messCuts.map((date) => (
-                <li key={date}>{format(new Date(date), "MMMM d, yyyy")}</li>
-              ))}
+              <li>A minimum of 3 days is required.</li>
+              <li>If 3 days are taken, the amount of 2 days is deducted.</li>
+              <li>If 4 days are taken, the amount of 3 days is deducted.</li>
+              <li>If 5 days are taken, the number of taken days will be deducted.</li>
             </ul>
           </div>
-        )}
 
-        <div className="messcut-rules">
-          <h3>Rules:</h3>
-          <ul>
-            <li>A minimum of 3 days is required.</li>
-            <li>If 3 days are taken, the amount of 2 days is deducted.</li>
-            <li>If 4 days are taken, the amount of 3 days is deducted.</li>
-            <li>If 5 days are taken, the number of taken days will be deducted.</li>
-          </ul>
-        </div>
-
-        <div className="messcut-formatted-dates">
-          <h3>Formatted Dates:</h3>
-          <p>{formatSelectedDates()}</p>
+          <div className="messcut-formatted-dates">
+            <h3>Formatted Dates:</h3>
+            <p>{formatSelectedDates()}</p>
+          </div>
         </div>
       </div>
     </div>

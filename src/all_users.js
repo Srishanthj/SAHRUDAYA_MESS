@@ -1,17 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
-import {
-  onSnapshot,
-  collection,
-  doc,
-  updateDoc,
-  arrayUnion,
-} from "firebase/firestore";
+import { onSnapshot, collection, doc, updateDoc, arrayUnion } from "firebase/firestore";
 import Navbar from "./navbar";
 import Sidebar from "./sidebar";
 import { auth, db } from "./firebase_config";
 import "./AllUsers.css";
 import ProfileNavbar from "./profile_nav";
+import { FaUserShield } from "react-icons/fa"; // Import an icon for admin badge
 
 const AllUsers = () => {
   const { uid } = useParams();
@@ -111,18 +106,14 @@ const AllUsers = () => {
 
   return (
     <div>
-      <Navbar 
-        title="All Users" 
-        onToggleSidebar={toggleSidebar} 
-        isSidebarOpen={isSidebarOpen} 
-      />
+      <Navbar title="All Users" onToggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
 
       <div className="header-container">
         {isSidebarOpen && (
           <button className="sidebar-toggle" onClick={toggleSidebar}>
           </button>
         )}
-      </div> 
+      </div>
 
       {isSidebarOpen && (
         <div ref={sidebarRef} className="sidebar-container">
@@ -144,6 +135,7 @@ const AllUsers = () => {
           onChange={(e) => setDepartmentQuery(e.target.value)}
         />
       </div>
+
       <div className="user-list-container">
         <div className="user-list">
           {filteredUsers.map((user) => (
@@ -154,7 +146,10 @@ const AllUsers = () => {
                   alt="Profile"
                   className="user-dp"
                 />
-                <h2>{user.name || "Unknown User"}</h2>
+                <h2>
+                  {user.name || "Unknown User"}{" "}
+                  {user.isAdmin && <FaUserShield className="admin-icon" />} {/* Show icon if admin */}
+                </h2>
               </div>
               <button
                 className="view-profile-button"
@@ -175,7 +170,7 @@ const AllUsers = () => {
               alt="Profile"
               className="popup-dp"
             />
-            <h2>{selectedUser.name}</h2>
+            <h2>{selectedUser.name} {selectedUser.isAdmin && <FaUserShield className="admin-icon" />}</h2> {/* Show icon in popup if admin */}
             <p>{selectedUser.department || "Department: Not Specified"}</p>
             <p>Role: {selectedUser.role || "Role: Not Specified"}</p>
             {selectedUser.isAdmin && <span>Admin</span>}
@@ -199,22 +194,13 @@ const AllUsers = () => {
               <button
                 onClick={() => {
                   const deductionAmount = prompt("Enter Deduction Amount:");
-                  if (deductionAmount)
-                    handleAddDeduction(selectedUser.id, deductionAmount);
+                  if (deductionAmount) handleAddDeduction(selectedUser.id, deductionAmount);
                 }}
               >
                 Add Deduction
               </button>
-              <button
-                onClick={() => {
-                  const fineAmount = prompt("Enter Fine Amount:");
-                  if (fineAmount) handleAddFine(selectedUser.id, fineAmount);
-                }}
-              >
-                Mark as Paid
-              </button>
+              <button className="wonderful-close-button" onClick={closePopup}>✕ Close</button>
             </div>
-            <button className="wonderful-close-button" onClick={closePopup}>✕ Close</button>
           </div>
         </div>
       )}

@@ -106,10 +106,17 @@ const GenerateBill = () => {
   };
 
   return (
-    <div className="container">
-      <h1>Generate Bill</h1>
+    <div>
+      <div className="app-bar">
+        <button onClick={() => navigate('/profile')} className="back-button">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="back-icon">
+            <path fillRule="evenodd" d="M15.78 4.22a.75.75 0 01.07 1.06L9.31 12l6.54 6.72a.75.75 0 11-1.1 1.02l-7-7.2a.75.75 0 010-1.02l7-7.2a.75.75 0 011.06-.1z" clipRule="evenodd" />
+          </svg>
+        </button>
+        <div className="app-bar-title">Generate Bill</div>
+      </div>
+      <div className="container">
       {error && <div className="alert">{error}</div>}
-      <button onClick={() => navigate('/profile')} className="back-button">Back </button>
       <div className="form-control">
         <label>
           Active Days:
@@ -178,6 +185,8 @@ const GenerateBill = () => {
       </div>
       <button onClick={handleGenerateBill}>Generate Bill</button>
     </div>
+    </div>
+    
   );
 };
 

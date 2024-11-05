@@ -2,12 +2,12 @@
 :root {
     --background: #f9f9f9;
     --foreground: #333;
-    --primary: #599a59;
+    --primary: #3794bf;
     --primary-hover: #cae7c6;
     --card-background: #ffffff;
     --card-shadow: rgba(0, 0, 0, 0.1);
     --error-color: red;
-    --success-color: #28a745;
+    --success-color: #bc18dc;
     --danger-color: #dc3545;
     --border-radius: 12px;
     --transition-duration: 0.3s;
@@ -138,7 +138,7 @@ button:disabled {
 /* Back button styles */
 .back-button {
     position: absolute;
-    top: 20px;
+    top: 5px;
     left: 20px;
     background-color: transparent;
     border: none;
@@ -288,10 +288,7 @@ button:disabled {
     }
 }
 
-/* Add hover effects for labels */
-.attendance label:hover {
-    color: var(--primary);
-}
+
 
 /* Button styles for export and reset */
 .export-button,
@@ -309,6 +306,9 @@ button:disabled {
 
 .export-button {
     background-color: var(--success-color);
+    align-items: center;
+    justify-content: center;
+    position: absolute;
 }
 
 .reset-button {

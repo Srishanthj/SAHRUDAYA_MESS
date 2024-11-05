@@ -13,6 +13,7 @@ const MealAttendance = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [messCutMessage, setMessCutMessage] = useState('');
+  const [isMessCutToday, setIsMessCutToday] = useState(false);
   const navigate = useNavigate();
 
   const getCurrentDate = () => {
@@ -35,7 +36,7 @@ const MealAttendance = () => {
 
   const fetchUserData = async () => {
     if (messNo.trim() === '') {
-        setError('Please enter a mess number.'); // Use state to show error
+        setError('Please enter a mess number.');
         return;
     }
 
@@ -54,90 +55,71 @@ const MealAttendance = () => {
             setError(null);
             setIsMarked({ breakfast: false, lunch: false, dinner: false });
         } else {
-            setError('No user found with this mess number.'); // Use state to show error
+            setError('No user found with this mess number.');
             setUserData(null);
         }
     } catch (error) {
         console.error('Error fetching user data:', error);
-        setError('An error occurred while fetching user data. Please try again.'); // Use state to show error
+        setError('An error occurred while fetching user data. Please try again.');
     } finally {
         setLoading(false);
     }
-};
+  };
 
-const fetchAttendance = async (userId) => {
-  const userRef = doc(db, 'users', userId);
-  setLoading(true);
+  const fetchAttendance = async (userId) => {
+    const userRef = doc(db, 'users', userId);
+    setLoading(true);
 
-  try {
-      const userDoc = await getDoc(userRef);
-      if (userDoc.exists()) {
-          const data = userDoc.data();
-          const mealAttendance = data.mealAttendance ? data.mealAttendance[currentMonth]?.[currentDate] : null;
+    try {
+        const userDoc = await getDoc(userRef);
+        if (userDoc.exists()) {
+            const data = userDoc.data();
+            const mealAttendance = data.mealAttendance ? data.mealAttendance[currentMonth]?.[currentDate] : null;
 
-          const messCuts = data.messCuts || [];
-          const isMessCut = messCuts.includes(currentDate);
+            const messCuts = data.messCuts || [];
+            const isMessCut = messCuts.some((cut) => cut.dates.includes(currentDate));
 
-          if (isMessCut) {
-              setMessCutMessage('You are having a mess cut today. Attendance can still be marked.'); // Set message state
-              // Marking attendance is allowed even on mess cut days
-              // You can proceed with setting attendance state
-              setAttendance({
-                  breakfast: mealAttendance?.breakfast || false,
-                  lunch: mealAttendance?.lunch || false,
-                  dinner: mealAttendance?.dinner || false,
-              });
-              setIsMarked({
-                  breakfast: mealAttendance?.breakfast || false,
-                  lunch: mealAttendance?.lunch || false,
-                  dinner: mealAttendance?.dinner || false,
-              });
-          } else {
-              // Handle regular attendance logic
-              if (mealAttendance) {
-                  setAttendance({
-                      breakfast: mealAttendance.breakfast || false,
-                      lunch: mealAttendance.lunch || false,
-                      dinner: mealAttendance.dinner || false,
-                  });
-                  setIsMarked({
-                      breakfast: mealAttendance.breakfast || false,
-                      lunch: mealAttendance.lunch || false,
-                      dinner: mealAttendance.dinner || false,
-                  });
-              }
-              setMessCutMessage(''); // Clear message if not on mess cut
-          }
-          setError(null);
-      } else {
-          setError('User document does not exist.');
-      }
-  } catch (error) {
-      console.error('Error fetching attendance:', error);
-      setError('An error occurred while fetching attendance. Please try again.');
-  } finally {
-      setLoading(false);
-  }
-};
+            setIsMessCutToday(isMessCut);
+            setMessCutMessage(isMessCut ? '' : '');
 
+            setAttendance({
+                breakfast: mealAttendance?.breakfast || false,
+                lunch: mealAttendance?.lunch || false,
+                dinner: mealAttendance?.dinner || false,
+            });
+            setIsMarked({
+                breakfast: mealAttendance?.breakfast || false,
+                lunch: mealAttendance?.lunch || false,
+                dinner: mealAttendance?.dinner || false,
+            });
+            setError(null);
+        } else {
+            setError('User document does not exist.');
+        }
+    } catch (error) {
+        console.error('Error fetching attendance:', error);
+        setError('An error occurred while fetching attendance. Please try again.');
+    } finally {
+        setLoading(false);
+    }
+  };
 
   const saveAttendance = async (meal) => {
     if (!userData) {
       alert('Please fetch user data first.');
       return;
     }
-  
-    // Check if the user is on mess cut
+
     const userRef = doc(db, 'users', userData.id);
     const userDoc = await getDoc(userRef);
     const data = userDoc.data();
     const messCuts = data.messCuts || [];
-    
-    if (messCuts.includes(currentDate)) {
+
+    if (messCuts.some((cut) => cut.dates.includes(currentDate))) {
       alert('You are on mess cut today. You cannot mark attendance.');
-      return; // Prevent attendance marking
+      return;
     }
-  
+
     try {
       await updateDoc(userRef, {
         [`mealAttendance.${currentMonth}.${currentDate}`]: {
@@ -154,7 +136,6 @@ const fetchAttendance = async (userId) => {
       setError('An error occurred while marking attendance. Please try again.');
     }
   };
-  
 
   const reloadPage = () => {
     setMessNo('');
@@ -163,6 +144,7 @@ const fetchAttendance = async (userId) => {
     setIsMarked({ breakfast: false, lunch: false, dinner: false });
     setError(null);
     setMessCutMessage('');
+    setIsMessCutToday(false);
   };
 
   const generateExcelSheet = async () => {
@@ -230,16 +212,18 @@ const fetchAttendance = async (userId) => {
           )}
           {messCutMessage && <p className="mess-cut-message">{messCutMessage}</p>}
         </div>
-        {userData && !messCutMessage && (
-          <div className="meal-checklist">
-            <h2>Mark Attendance</h2>
-            <button onClick={() => saveAttendance('breakfast')} disabled={isMarked.breakfast}>Mark Breakfast</button>
-            <button onClick={() => saveAttendance('lunch')} disabled={isMarked.lunch}>Mark Lunch</button>
-            <button onClick={() => saveAttendance('dinner')} disabled={isMarked.dinner}>Mark Dinner</button>
-          </div>
+        {userData && (
+          <>
+            {isMessCutToday && <p className="mess-cut-warning">You are in mess cut today.</p>}
+            <div className="attendance-buttons">
+              <button onClick={() => saveAttendance('breakfast')} disabled={isMarked.breakfast}>Mark Breakfast</button>
+              <button onClick={() => saveAttendance('lunch')} disabled={isMarked.lunch}>Mark Lunch</button>
+              <button onClick={() => saveAttendance('dinner')} disabled={isMarked.dinner}>Mark Dinner</button>
+            </div>
+          </>
         )}
-        <button onClick={generateExcelSheet} className="generate-excel-button">Generate Excel Sheet</button>
       </div>
+      <button onClick={generateExcelSheet} className="export-button">Export Attendance</button>
     </div>
   );
 };
