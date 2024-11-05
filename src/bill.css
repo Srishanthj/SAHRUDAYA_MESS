@@ -30,9 +30,7 @@
     transition: background-color 0.3s;
   }
   
-  .back-button:hover {
-    background-color: #0056b3;
-  }
+  
   
   .bill-details {
     margin-top: 20px;

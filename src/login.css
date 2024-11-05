@@ -49,21 +49,22 @@ input {
 
 .password-container {
     position: relative;
-    width: 94%;
+    width: 90%;
+    
 }
 
 .toggle-password {
     position: absolute;
-    font-family: Arial, sans-serif;
-    top: 70%;
-    transform: translateY(-50%);
-    background: none;
+
+    transform: translateY(-20%);
+   
     border: none;
-    color: #007BFF;
+    color: #777e85;
     cursor: pointer;
     font-size: 1rem;
-    right: 0px;
+    right: 100px; /* Adjust as needed for better alignment */
 }
+
 
 .submit-button {
     background-color: #4CAF50;
@@ -71,13 +72,17 @@ input {
     padding: 10px;
     border: none;
     border-radius: 5px;
-    align-items: center;
     font-size: 1rem;
     cursor: pointer;
     transition: background-color 0.3s;
     width: 100%;
-    margin-bottom: 20px; /* Adds space between login and reset password buttons */
+    margin-bottom: 20px;
+    display: block; /* Center-align in its container */
+    margin-left: auto; /* Aligns center within parent */
+    margin-right: auto; /* Aligns center within parent */
+    text-align: center;
 }
+
 
 .submit-button:hover {
     background-color: #45a049;
@@ -169,7 +174,7 @@ input {
 }
 
 .error-modal::before {
-    content: "⚠️";
+    content: "⚠";
     display: block;
     font-size: 2rem;
     margin-bottom: 10px;

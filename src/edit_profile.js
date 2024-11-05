@@ -230,7 +230,7 @@ const EditProfilePage = () => {
           </>
         ) : (
           <button onClick={() => setEditingField("dpUrl")}>
-            <FaEdit /> Edit
+            <FaEdit /> 
           </button>
         )}
       </div>
@@ -255,7 +255,7 @@ const EditProfilePage = () => {
           <>
             <span>{userDetails.name}</span>
             <button onClick={() => setEditingField("name")}>
-              <FaEdit /> Edit
+              <FaEdit />
             </button>
           </>
         )}
@@ -281,7 +281,7 @@ const EditProfilePage = () => {
           <>
             <span>{userDetails.messNo}</span>
             <button onClick={() => setEditingField("messNo")}>
-              <FaEdit /> Edit
+              <FaEdit /> 
             </button>
           </>
         )}
@@ -307,7 +307,7 @@ const EditProfilePage = () => {
           <>
             <span>{userDetails.department}</span>
             <button onClick={() => setEditingField("department")}>
-              <FaEdit /> Edit
+              <FaEdit /> 
             </button>
           </>
         )}
@@ -335,7 +335,7 @@ const EditProfilePage = () => {
           <>
             <span>{userDetails.phone}</span>
             <button onClick={() => setEditingField("phone")}>
-              <FaEdit /> Edit
+              <FaEdit /> 
             </button>
           </>
         )}

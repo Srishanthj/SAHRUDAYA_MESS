@@ -1,5 +1,5 @@
 .edit-profile-page {
-    margin: 30px;
+    margin: 10px;
     width: 100%;
     max-width: 82%;
     padding: 20px;
@@ -22,6 +22,7 @@
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    width: auto;
 }
 
 .profile-field label {
@@ -46,6 +47,7 @@ input.input-field {
     border: 1px solid #ccc;
     border-radius: 6px;
     transition: border-color 0.3s;
+    max-width: max-content;
 }
 
 input.input-field:focus {
@@ -69,14 +71,15 @@ button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    margin-left: 10px;
+    margin-left: 1px;
     display: inline-flex;
     align-items: center;
+    width: auto; /* Adjusts width to fit content */
+    min-width: 60px; /* Minimum width to ensure consistent look */
 }
 
-button:hover {
-    background-color: #0056b3;
-}
+
+
 
 button svg {
     margin-right: 5px;

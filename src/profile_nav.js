@@ -21,9 +21,7 @@ const ProfileNavbar = ({ title, onToggleSidebar, isSidebarOpen }) => {
         </button>
       )}
       <h1 className="header-title">{title}</h1>
-      <button className="logout-button" onClick={handleLogout}>
-        Logout
-      </button>
+     
     </header>
   );
 };
