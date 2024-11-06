@@ -125,7 +125,7 @@ const Bill = () => {
     return (
       <div className="bill-container">
         <header className="bill-header">
-          <h1 className="bill-title">Bill</h1>
+          {/* <h1 className="bill-title">Bill</h1> */}
           {/* <button className="back-button" onClick={() => navigate("/profile")}>Back</button> */}
         </header>
         <div className="bill-details">

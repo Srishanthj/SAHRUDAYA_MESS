@@ -122,7 +122,7 @@ button {
     cursor: pointer;
     transition: background-color var(--transition-duration), transform var(--transition-duration);
     width: 100%;
-    max-width: 220px;
+    max-width: 100px;
 }
 
 button:hover {
