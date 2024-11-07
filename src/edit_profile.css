@@ -47,7 +47,7 @@ input.input-field {
     border: 1px solid #ccc;
     border-radius: 6px;
     transition: border-color 0.3s;
-    max-width: max-content;
+    /* max-width: max-content; */
 }
 
 input.input-field:focus {

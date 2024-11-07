@@ -212,13 +212,7 @@ const RegisterPage = () => {
             placeholder="Password"
             className="input-field"
           />
-          <button
-            type="button"
-            className="toggle-password"
-            onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-          >
-            
-          </button>
+          
           {errors.password && (
             <span className="error">{errors.password.message}</span>
           )}
@@ -234,13 +228,7 @@ const RegisterPage = () => {
             placeholder="Re-enter Password"
             className="input-field"
           />
-          <button
-            type="button"
-            className="toggle-password"
-            onClick={() => setIsReEnterPasswordVisible(!isReEnterPasswordVisible)}
-          >
-           
-          </button>
+         
           {errors.rePassword && (
             <span className="error">{errors.rePassword.message}</span>
           )}
