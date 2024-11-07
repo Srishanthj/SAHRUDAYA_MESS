@@ -21,7 +21,7 @@ const Sidebar = forwardRef(({ uid, name, isAdmin }, ref) => {
             <FaUser /> Profile
           </Link>
         </li>
-        {(isAdmin || uid === 'ya4M7YvmfZUi3yQPA3W4kO7wYdu2') && (
+        {(isAdmin || uid ===  '5GyeJfaXn5MHvCu11RMNXCWDBnB3' ) && (
           <li>
             <Link to="/mealattendance">
               <FaClipboardCheck /> Mark Attendance
@@ -33,7 +33,7 @@ const Sidebar = forwardRef(({ uid, name, isAdmin }, ref) => {
             <FaCut /> Mess Cut
           </Link>
         </li>
-        {uid === 'ya4M7YvmfZUi3yQPA3W4kO7wYdu2' && (
+        {uid === '5GyeJfaXn5MHvCu11RMNXCWDBnB3' && (
           <>
             <li>
               <Link to={`/allusers/${uid}`}>
@@ -52,11 +52,11 @@ const Sidebar = forwardRef(({ uid, name, isAdmin }, ref) => {
             <FaFileInvoice /> Bill
           </Link>
         </li>
-        <li>
+        {/* <li>
           <Link to="/editprofile">
             <FaEdit /> Edit Profile
           </Link>
-        </li>
+        </li> */}
       </ul>
       <button onClick={handleLogout} className="logout-button">
         Logout

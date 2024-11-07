@@ -20,9 +20,8 @@
 
 .navbar h1 {
     padding-top: 9px;
-    margin: auto;
     align-items: center;
-    padding-left: 60px;
+    padding-left: 0px;
 }
 
 
@@ -44,3 +43,4 @@
     border-radius: 5px; /* Rounded corners */
     cursor: pointer; /* Pointer cursor on hover */
 }
+
