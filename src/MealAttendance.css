@@ -39,10 +39,10 @@ body {
     justify-content: center;
     transition: background-color var(--transition-duration);
 }
-
+/* 
 .app-bar:hover {
     background-color: var(--primary-hover);
-}
+} */
 
 .app-bar-title {
     font-size: 24px;
@@ -149,7 +149,6 @@ button:disabled {
 .back-icon {
     width: 24px;
     height: 24px;
-    transition: transform var(--transition-duration);
 }
 
 .back-icon:hover {

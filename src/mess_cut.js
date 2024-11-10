@@ -67,15 +67,21 @@ const Messcut = () => {
       alert("Please select both start and end dates.");
       return;
     }
-
+  
     const daysDifference = (endDate - startDate) / (1000 * 60 * 60 * 24) + 1;
+  
+    if (daysDifference < 3) {
+      alert("Mess cut requires a minimum of 3 days.");
+      return;
+    }
+  
     const calculatedMessCut = calculateMessCut(daysDifference);
-
+  
     if (areDatesAlreadySelected(startDate, endDate)) {
       alert("Some of the selected dates have already been marked.");
       return;
     }
-
+  
     if (messCutCount + calculatedMessCut >= 10) {
       alert("Total mess cut days should not exceed 10.");
     } else {
@@ -87,18 +93,19 @@ const Messcut = () => {
       }
       setMessCuts((prev) => [...prev, ...newMessCuts]);
       setMessCutCount((prev) => prev + calculatedMessCut);
-
+  
       console.log("Saving date ranges to Firestore:", {
         newMessCuts,
         messCutCount: messCutCount + calculatedMessCut,
       });
-
+  
       await saveDateRanges(newMessCuts);
-
+  
       setStartDate(null);
       setEndDate(null);
     }
   };
+  
 
   const areDatesAlreadySelected = (pickedStartDate, pickedEndDate) => {
     const daysCount = (pickedEndDate - pickedStartDate) / (1000 * 60 * 60 * 24);
@@ -256,10 +263,10 @@ const Messcut = () => {
             </ul>
           </div>
 
-          <div className="messcut-formatted-dates">
+          {/* <div className="messcut-formatted-dates">
             <h3>Formatted Dates:</h3>
             <p>{formatSelectedDates()}</p>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
