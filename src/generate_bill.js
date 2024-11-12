@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { db } from './firebase_config';
-import { doc, setDoc, getDoc } from 'firebase/firestore';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import './GenerateBill.css'; // Import your CSS file
+import { collection, doc, setDoc, getDocs, query, where } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
+import './GenerateBill.css';
+import { useParams } from "react-router-dom";
 
 const GenerateBill = () => {
-  const navigate = useNavigate(); // Create a navigate function
+  const navigate = useNavigate();
   const [activeDays, setActiveDays] = useState('');
   const [perDayAmount, setPerDayAmount] = useState('');
   const [estbFees, setEstbFees] = useState('');
@@ -13,6 +14,14 @@ const GenerateBill = () => {
   const [fine, setFine] = useState('');
   const [others, setOthers] = useState('');
   const [error, setError] = useState('');
+  const [currentMonth, setCurrentMonth] = useState('');
+
+  useEffect(() => {
+    const today = new Date();
+    const month = today.toLocaleString('default', { month: '2-digit' });
+    const year = today.getFullYear();
+    setCurrentMonth(`${year}-${month}`);
+  }, []);
 
   const calculateTotalBill = () => {
     const activeDaysValue = parseInt(activeDays) || 0;
@@ -26,82 +35,76 @@ const GenerateBill = () => {
   };
 
   const handleGenerateBill = async () => {
-    if (!activeDays || !perDayAmount || !estbFees || !specialFees || !fine || !others) {
+    if (!activeDays || !perDayAmount || !estbFees || !specialFees || !others) {
       setError('Please fill all fields');
       return;
     }
     
-    setError(''); // Reset error message
+    setError('');
 
     try {
       const totalBill = calculateTotalBill();
       console.log('Total Bill:', totalBill);
-      const userId = 'ya4M7YvmfZUi3yQPA3W4kO7wYdu2'; // Directly using the document ID
-      const userDocRef = doc(db, 'users', userId);
-      const currentMonth = '2024-11'; // Hardcoded for November 2024
 
-      // Fetching user data
-      const userDoc = await getDoc(userDocRef);
-      if (!userDoc.exists()) {
-        setError("User document doesn't exist");
-        return;
-      }
+      const usersCollectionRef = collection(db, 'users');
+      const querySnapshot = await getDocs(usersCollectionRef);
 
-      const userData = userDoc.data();
-      let messCut = parseInt(userData.messCut) || 0;
+      querySnapshot.forEach(async (userDoc) => {
+        const userData = userDoc.data();
+        let totalFine = 0;
+        let totalDeductions = 0;
 
-      let totalFine = 0;
-      if (userData.fine && typeof userData.fine === 'object' && userData.fine[currentMonth]) {
-        const monthlyFines = userData.fine[currentMonth];
-        if (Array.isArray(monthlyFines)) {
-          monthlyFines.forEach((fineEntry) => {
-            if (fineEntry.amount) {
-              totalFine += fineEntry.amount;
-            }
-          });
+        if (userData.fine && typeof userData.fine === 'object' && userData.fine[currentMonth]) {
+          const monthlyFines = userData.fine[currentMonth];
+          if (Array.isArray(monthlyFines)) {
+            monthlyFines.forEach((fineEntry) => {
+              if (fineEntry.amount) {
+                totalFine += fineEntry.amount;
+              }
+            });
+          }
         }
-      }
 
-      // Calculate total deductions
-      let totalDeductions = 0;
-      if (userData.deduction && typeof userData.deduction === 'object' && userData.deduction[currentMonth]) {
-        const monthlyDeductions = userData.deduction[currentMonth];
-        if (Array.isArray(monthlyDeductions)) {
-          monthlyDeductions.forEach((deductionEntry) => {
-            if (deductionEntry.amount) {
-              totalDeductions += deductionEntry.amount;
-            }
-          });
+        if (userData.deduction && typeof userData.deduction === 'object' && userData.deduction[currentMonth]) {
+          const monthlyDeductions = userData.deduction[currentMonth];
+          if (Array.isArray(monthlyDeductions)) {
+            monthlyDeductions.forEach((deductionEntry) => {
+              if (deductionEntry.amount) {
+                totalDeductions += deductionEntry.amount;
+              }
+            });
+          }
         }
-      }
 
-      const perDayAmountValue = parseInt(perDayAmount) || 0;
-      const finalAmount = totalBill - (messCut * perDayAmountValue) - totalDeductions;
+        const perDayAmountValue = parseInt(perDayAmount) || 0;
+        const finalAmount = totalBill - totalDeductions; // Adjusted calculation
 
-      const billData = {
-        activeDays: parseInt(activeDays) || 0,
-        fine: totalFine + (parseInt(fine) || 0),
-        specialFees: parseInt(specialFees) || 0,
-        perDayAmount: perDayAmountValue,
-        establishment: parseInt(estbFees) || 0,
-        others: parseInt(others) || 0,
-        amount: totalBill,
-        deductions: totalDeductions,
-        finalAmount: finalAmount,
-        date: new Date().toISOString(),
-      };
+        const billData = {
+          activeDays: parseInt(activeDays) || 0,
+          fine: totalFine + (parseInt(fine) || 0),
+          specialFees: parseInt(specialFees) || 0,
+          perDayAmount: perDayAmountValue,
+          establishment: parseInt(estbFees) || 0,
+          others: parseInt(others) || 0,
+          amount: totalBill,
+          deductions: totalDeductions,
+          finalAmount: finalAmount,
+          date: new Date().toISOString(),
+        };
 
-      // Update the billAmount for the hardcoded month of November
-      await setDoc(
-        userDocRef,
-        { billAmount: { [currentMonth]: billData } },
-        { merge: true }
-      );
+        await setDoc(
+          userDoc.ref,
+          { billAmount: { [currentMonth]: billData } },
+          { merge: true }
+        );
 
-      alert('Bill generated successfully for November!');
+        console.log(`Bill generated successfully for user ${userDoc.id} for ${currentMonth}!`);
+      });
+
+      alert('Bills generated successfully for all users for the current month!');
     } catch (error) {
-      console.error('Error generating bill:', error);
-      alert('Error generating bill');
+      console.error('Error generating bills:', error);
+      alert('Error generating bills');
     }
   };
 
@@ -158,17 +161,6 @@ const GenerateBill = () => {
             value={specialFees}
             onChange={(e) => setSpecialFees(e.target.value)}
             placeholder="Enter any special fees"
-          />
-        </label>
-      </div>
-      <div className="form-control">
-        <label>
-          Fine:
-          <input
-            type="number"
-            value={fine}
-            onChange={(e) => setFine(e.target.value)}
-            placeholder="Enter any fines"
           />
         </label>
       </div>

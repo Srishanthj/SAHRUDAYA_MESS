@@ -139,7 +139,7 @@ const Bill = () => {
               <li className="summary-item">Special Fees: ₹{specialFees}</li>
               <li className="summary-item">Fine: ₹{totalFine}</li>
               <li className="summary-item">Others: ₹{others}</li>
-              <li className="summary-item">Amount: ₹{amount}</li>
+              {/* <li className="summary-item">Amount: ₹{finalAmount}</li> */}
               <li className="summary-item">Deductions: ₹{deductions}</li>
               <li className="summary-item total-amount">Total Amount to be Paid: ₹{(finalAmount + totalFine).toFixed(2)}</li>
             </ul>

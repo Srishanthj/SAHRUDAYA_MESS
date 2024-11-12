@@ -81,29 +81,30 @@ const Messcut = () => {
       alert("Some of the selected dates have already been marked.");
       return;
     }
-  
-    if (messCutCount + calculatedMessCut >= 10) {
+
+    if (messCutCount + calculatedMessCut > 10) {
       alert("Total mess cut days should not exceed 10.");
-    } else {
-      const newMessCuts = [];
-      for (let i = 0; i < daysDifference; i++) {
-        const currentDate = addDays(startDate, i);
-        const formattedDate = format(currentDate, "yyyy-MM-dd");
-        newMessCuts.push(formattedDate);
-      }
-      setMessCuts((prev) => [...prev, ...newMessCuts]);
-      setMessCutCount((prev) => prev + calculatedMessCut);
-  
-      console.log("Saving date ranges to Firestore:", {
-        newMessCuts,
-        messCutCount: messCutCount + calculatedMessCut,
-      });
-  
-      await saveDateRanges(newMessCuts);
-  
-      setStartDate(null);
-      setEndDate(null);
+      return;
     }
+
+    const newMessCuts = [];
+    for (let i = 0; i < daysDifference; i++) {
+      const currentDate = addDays(startDate, i);
+      const formattedDate = format(currentDate, "yyyy-MM-dd");
+      newMessCuts.push(formattedDate);
+    }
+    setMessCuts((prev) => [...prev, ...newMessCuts]);
+    setMessCutCount((prev) => prev + calculatedMessCut);
+
+    console.log("Saving date ranges to Firestore:", {
+      newMessCuts,
+      messCutCount: messCutCount + calculatedMessCut,
+    });
+
+    await saveDateRanges(newMessCuts);
+
+    setStartDate(null);
+    setEndDate(null);
   };
   
 
