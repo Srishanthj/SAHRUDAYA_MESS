@@ -42,16 +42,17 @@ const MealAttendance = () => {
 
     setLoading(true);
 
+  
     try {
-        const usersRef = collection(db, 'users');
-        const q = query(usersRef, where('messNo', '==', messNo));
-        const querySnapshot = await getDocs(q);
+      const usersRef = collection(db, 'users');
+      const q = query(usersRef, where('messNo', '==', messNo.toUpperCase())); // Convert to uppercase
+      const querySnapshot = await getDocs(q);
 
-        if (!querySnapshot.empty) {
-            querySnapshot.forEach((doc) => {
-                const user = { ...doc.data(), id: doc.id };
-                setUserData(user);
-            });
+      if (!querySnapshot.empty) {
+          querySnapshot.forEach((doc) => {
+              const user = { ...doc.data(), id: doc.id };
+              setUserData(user);
+          });
             setError(null);
             setIsMarked({ breakfast: false, lunch: false, dinner: false });
         } else {
@@ -153,25 +154,24 @@ const MealAttendance = () => {
       const usersRef = collection(db, 'users');
       const querySnapshot = await getDocs(usersRef);
       const usersData = [];
-
+  
       querySnapshot.forEach((doc) => {
         const data = doc.data();
         const mealAttendance = data.mealAttendance || {};
-        Object.keys(mealAttendance).forEach((month) => {
-          const dates = mealAttendance[month];
-          Object.keys(dates).forEach((date) => {
-            usersData.push({
-              Name: data.name,
-              'Mess No': data.messNo,
-              Date: date,
-              Breakfast: dates[date].breakfast ? '✔️' : '❌',
-              Lunch: dates[date].lunch ? '✔️' : '❌',
-              Dinner: dates[date].dinner ? '✔️' : '❌',
-            });
+        const currentDayAttendance = mealAttendance[currentMonth]?.[currentDate];
+        
+        if (currentDayAttendance) {
+          usersData.push({
+            Name: data.name,
+            'Mess No': data.messNo,
+            Date: currentDate,
+            Breakfast: currentDayAttendance.breakfast ? '✔️' : '❌',
+            Lunch: currentDayAttendance.lunch ? '✔️' : '❌',
+            Dinner: currentDayAttendance.dinner ? '✔️' : '❌',
           });
-        });
+        }
       });
-
+  
       const worksheet = XLSX.utils.json_to_sheet(usersData);
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, 'Attendance');
@@ -184,6 +184,7 @@ const MealAttendance = () => {
       setLoading(false);
     }
   };
+  
 
   return (
     <div>
