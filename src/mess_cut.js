@@ -160,7 +160,7 @@ const Messcut = () => {
       const docRef = doc(db, "users", uid);
       await updateDoc(docRef, {
         messCuts: formattedMessCuts,
-        messCut: messCutCount,
+        // messCut: messCutCount,
       });
       console.log("Date ranges and mess cut updated successfully!");
     } catch (error) {
