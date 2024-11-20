@@ -96,8 +96,6 @@ const RegisterPage = () => {
       //showToast(Registration Successful! Name: ${data.name}, Mess No: ${data.messNo}, Department: ${data.department}, Role: ${selectedRole}, 'success');
 
       reset();
-
-      // Navigate to the profile page
       navigate('/profile');
 
     } catch (error) {
