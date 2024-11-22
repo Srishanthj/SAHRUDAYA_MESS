@@ -26,6 +26,21 @@
   left: 0px;
   z-index: 1100;
 }
+.admin-action-button {
+
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 10px 0;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+
 
 
 .sidebar h2 {

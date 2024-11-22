@@ -121,9 +121,8 @@ const Messcut = () => {
   };
 
   const calculateMessCut = (days) => {
-    if (days === 3) return 2;
-    if (days === 4) return 3;
-    if (days >= 5) return days;
+
+    if (days >= 3) return days;
     return 0;
   };
 
@@ -255,12 +254,12 @@ const Messcut = () => {
           )}
 
           <div className="messcut-rules">
-            <h3>Rules:</h3>
+            <h3> Messcut Rules:</h3>
             <ul>
               <li>A minimum of 3 days is required.</li>
-              <li>If 3 days are taken, the amount of 2 days is deducted.</li>
-              <li>If 4 days are taken, the amount of 3 days is deducted.</li>
-              <li>If 5 days are taken, the number of taken days will be deducted.</li>
+              <li>A maximum of 10 days is possible</li>
+              <li>The final messcut amount will be 66.66 % that is 2/3 rd the total amount for the messcut days</li>
+              <li>Example:If 10 days are taken, then messcut amount is calculated as (10 * perday amount) * 2/3</li>
             </ul>
           </div>
 
