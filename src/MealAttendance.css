@@ -308,6 +308,7 @@ button:disabled {
     align-items: center;
     justify-content: center;
     position: absolute;
+    padding: auto;
 }
 
 .reset-button {

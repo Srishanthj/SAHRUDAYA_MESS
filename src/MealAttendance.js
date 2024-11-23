@@ -217,7 +217,7 @@ const MealAttendance = () => {
     <>
       {isMessCutToday ? (
         <div className="mess-cut-warning">
-          <p style={{ color: 'red', fontWeight: 'bold' }}>This person is on a mess cut today. Attendance cannot be marked.</p>
+          <p style={{ color: 'red', fontWeight: 'bold' }}>{userData.name} is on a mess cut today. Attendance cannot be marked.</p>
           <button className="ok-button" onClick={reloadPage}>
           Okay
         </button>
