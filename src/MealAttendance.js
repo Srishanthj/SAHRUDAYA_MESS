@@ -197,33 +197,42 @@ const MealAttendance = () => {
         <div className="app-bar-title">Attendance Marker</div>
       </div>
       <div className="meal-attendance-container">
-        <div className="user-info">
-          <div className="profile">
-            <h1>Meal Attendance</h1>
-            <input type="text" placeholder="Enter Mess Number" value={messNo} onChange={handleInputChange} />
-            <button onClick={fetchUserData} disabled={loading}>{loading ? 'Loading...' : 'Fetch User Data'}</button>
-            {error && <p className="error-message">{error}</p>}
-          </div>
-          {userData && (
-            <div className="user-details">
-              {userData.dpUrl && <img src={userData.dpUrl} alt={`${userData.name}'s Profile`} className="profile-image" />}
-              <p>Name: {userData.name}</p>
-              <p>Mess Number: {userData.messNo}</p>
-            </div>
-          )}
-          {messCutMessage && <p className="mess-cut-message">{messCutMessage}</p>}
-        </div>
-        {userData && (
-          <>
-            {isMessCutToday && <p className="mess-cut-warning">You are in mess cut today.</p>}
-            <div className="attendance-buttons">
-              <button onClick={() => saveAttendance('breakfast')} disabled={isMarked.breakfast}>Mark Breakfast</button>
-              <button onClick={() => saveAttendance('lunch')} disabled={isMarked.lunch}>Mark Lunch</button>
-              <button onClick={() => saveAttendance('dinner')} disabled={isMarked.dinner}>Mark Dinner</button>
-            </div>
-          </>
-        )}
+  <div className="user-info">
+    <div className="profile">
+      <h1>Meal Attendance</h1>
+      <input type="text" placeholder="Enter Mess Number" value={messNo} onChange={handleInputChange} />
+      <button onClick={fetchUserData} disabled={loading}>{loading ? 'Loading...' : 'Fetch User Data'}</button>
+      {error && <p className="error-message">{error}</p>}
+    </div>
+    {userData && (
+      <div className="user-details">
+        {userData.dpUrl && <img src={userData.dpUrl} alt={`${userData.name}'s Profile`} className="profile-image" />}
+        <p>Name: {userData.name}</p>
+        <p>Mess Number: {userData.messNo}</p>
       </div>
+    )}
+    {messCutMessage && <p className="mess-cut-message">{messCutMessage}</p>}
+  </div>
+  {userData && (
+    <>
+      {isMessCutToday ? (
+        <div className="mess-cut-warning">
+          <p style={{ color: 'red', fontWeight: 'bold' }}>This person is on a mess cut today. Attendance cannot be marked.</p>
+          <button className="ok-button" onClick={reloadPage}>
+          Okay
+        </button>
+        </div>
+      ) : (
+        <div className="attendance-buttons">
+          <button onClick={() => saveAttendance('breakfast')} disabled={isMarked.breakfast}>Mark Breakfast</button>
+          <button onClick={() => saveAttendance('lunch')} disabled={isMarked.lunch}>Mark Lunch</button>
+          <button onClick={() => saveAttendance('dinner')} disabled={isMarked.dinner}>Mark Dinner</button>
+        </div>
+      )}
+    </>
+  )}
+</div>
+
       <button onClick={generateExcelSheet} className="export-button">Export Attendance</button>
     </div>
   );
