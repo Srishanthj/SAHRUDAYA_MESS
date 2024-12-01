@@ -80,7 +80,7 @@ const Login = () => {
     <div className="login-container">
       <form className="login-form" onSubmit={handleLogin}>
         <img src={logo} alt="Mess Logo" className="logo" />
-        <h1>Welcome to Sanathana Mess</h1>
+        <h1>Welcome to Sahrduaya Mess </h1>
         <div className="password-container">
           <input
             type="email"
