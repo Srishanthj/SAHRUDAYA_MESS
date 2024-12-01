@@ -18,7 +18,7 @@ const Profile = () => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         try {
-          const userDoc = await getDoc(doc(db, "users", user.uid));
+          const userDoc = await getDoc(doc(db, "sahrudaya_mess", user.uid));
           if (userDoc.exists()) {
             setUserData(userDoc.data());
           }

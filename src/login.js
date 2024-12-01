@@ -49,7 +49,7 @@ const Login = () => {
     }
 
     // Check if the email exists in Firestore users collection
-    const usersRef = collection(db, "users");
+    const usersRef = collection(db, "sahrudaya_mess");
     const q = query(usersRef, where("email", "==", email));
     const querySnapshot = await getDocs(q);
 

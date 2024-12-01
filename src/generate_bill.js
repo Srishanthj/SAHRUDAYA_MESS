@@ -46,7 +46,7 @@ const GenerateBill = () => {
       const totalBill = calculateTotalBill();
       console.log('Total Bill:', totalBill);
 
-      const usersCollectionRef = collection(db, 'users');
+      const usersCollectionRef = collection(db, 'sahrudaya_mess');
       const querySnapshot = await getDocs(usersCollectionRef);
 
       querySnapshot.forEach(async (userDoc) => {

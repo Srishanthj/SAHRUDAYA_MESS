@@ -19,12 +19,12 @@ const Sidebar = forwardRef(({ uid, name, isAdmin }, ref) => {
   // Function to delete `billAmount` map for all users
   const deleteBillAmountForAllUsers = async () => {
     try {
-      const usersCollection = collection(firestore, "users");
+      const usersCollection = collection(firestore, "sahrudaya_mess");
       const querySnapshot = await getDocs(usersCollection);
 
       // Iterate through each user and delete the `billAmount` field
       const deletePromises = querySnapshot.docs.map((userDoc) =>
-        updateDoc(doc(firestore, "users", userDoc.id), {
+        updateDoc(doc(firestore, "sahrudaya_mess", userDoc.id), {
           billAmount: deleteField(),
         })
       );

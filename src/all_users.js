@@ -6,7 +6,7 @@ import Sidebar from "./sidebar";
 import { auth, db } from "./firebase_config";
 import "./AllUsers.css";
 import ProfileNavbar from "./profile_nav";
-import { FaUserShield } from "react-icons/fa"; // Import an icon for admin badge
+import { FaUserShield } from "react-icons/fa"; 
 
 const AllUsers = () => {
   const { uid } = useParams();
@@ -21,7 +21,7 @@ const AllUsers = () => {
   const sidebarRef = useRef(null);
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, "users"), (snapshot) => {
+    const unsubscribe = onSnapshot(collection(db, "sahrudaya_mess"), (snapshot) => {
       const allUsers = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
@@ -33,7 +33,7 @@ const AllUsers = () => {
 
   useEffect(() => {
     if (uid) {
-      const userDocRef = doc(db, "users", uid);
+      const userDocRef = doc(db, "sahrudaya_mess", uid);
       onSnapshot(userDocRef, (doc) => {
         if (doc.exists()) {
           setUserData(doc.data());
@@ -73,7 +73,7 @@ const AllUsers = () => {
       amount: parseFloat(fineAmount),
       date: new Date().toISOString(),
     };
-    await updateDoc(doc(db, "users", userId), {
+    await updateDoc(doc(db, "sahrudaya_mess", userId), {
       [`fine.${month}`]: arrayUnion(fineEntry),
     });
   };
@@ -84,13 +84,13 @@ const AllUsers = () => {
       amount: parseFloat(deductionAmount),
       date: new Date().toISOString(),
     };
-    await updateDoc(doc(db, "users", userId), {
+    await updateDoc(doc(db, "sahrudaya_mess", userId), {
       [`deduction.${month}`]: arrayUnion(deductionEntry),
     });
   };
 
   const toggleAdminPrivileges = async (userId, isAdmin) => {
-    await updateDoc(doc(db, "users", userId), {
+    await updateDoc(doc(db, "sahrudaya_mess", userId), {
       isAdmin: !isAdmin,
     });
     alert(`Admin privileges ${isAdmin ? "revoked" : "granted"} successfully.`);

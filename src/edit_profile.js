@@ -45,7 +45,7 @@ const EditProfilePage = () => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         try {
-          const userDoc = await getDoc(doc(db, "users", user.uid));
+          const userDoc = await getDoc(doc(db, "sahrudaya_mess", user.uid));
           if (userDoc.exists()) {
             setUserData(userDoc.data());
           }
@@ -68,7 +68,7 @@ const EditProfilePage = () => {
     const fetchUserData = async () => {
       try {
         const userId = auth.currentUser.uid;
-        const userDoc = await getDoc(doc(db, "users", userId));
+        const userDoc = await getDoc(doc(db, "sahrudaya_mess", userId));
         if (userDoc.exists()) {
           setUserDetails(userDoc.data());
           setValue("name", userDoc.data().name);
@@ -114,7 +114,7 @@ const EditProfilePage = () => {
         updatedData.department = data.department;
       }
 
-      await updateDoc(doc(db, "users", userId), updatedData);
+      await updateDoc(doc(db, "sahrudaya_mess", userId), updatedData);
 
       showToast("Profile updated successfully!", "success");
       reset();

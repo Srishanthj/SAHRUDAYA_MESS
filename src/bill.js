@@ -18,7 +18,7 @@ const Bill = () => {
   const sidebarRef = useRef(null);
 
   const loadDateRanges = async (uid) => {
-    const docRef = doc(db, "users", uid);
+    const docRef = doc(db, "sahrudaya_mess", uid);
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
@@ -47,7 +47,7 @@ const Bill = () => {
           throw new Error("User ID is not provided.");
         }
 
-        const docRef = doc(db, "users", uid);
+        const docRef = doc(db, "sahrudaya_mess", uid);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {

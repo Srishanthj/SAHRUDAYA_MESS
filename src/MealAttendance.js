@@ -44,7 +44,7 @@ const MealAttendance = () => {
 
   
     try {
-      const usersRef = collection(db, 'users');
+      const usersRef = collection(db, 'sahrudaya_mess');
       const q = query(usersRef, where('messNo', '==', messNo.toUpperCase())); // Convert to uppercase
       const querySnapshot = await getDocs(q);
 
@@ -111,7 +111,7 @@ const MealAttendance = () => {
       return;
     }
 
-    const userRef = doc(db, 'users', userData.id);
+    const userRef = doc(db, 'sahrudaya_mess', userData.id);
     const userDoc = await getDoc(userRef);
     const data = userDoc.data();
     const messCuts = data.messCuts || [];
@@ -151,7 +151,7 @@ const MealAttendance = () => {
   const generateExcelSheet = async () => {
     setLoading(true);
     try {
-      const usersRef = collection(db, 'users');
+      const usersRef = collection(db, 'sahrudaya_mess');
       const querySnapshot = await getDocs(usersRef);
       const usersData = [];
   

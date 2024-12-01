@@ -76,11 +76,11 @@ const RegisterPage = () => {
       const dpUrl = await uploadDP(data.name, selectedDp);
       const qrCodeDataUrl = qrCodeRef.current.toDataURL();
 
-      const qrCodeStorageRef = ref(storage, `qrCodes/${user.uid}.png`);
+      const qrCodeStorageRef = ref(storage, `sahrudaya_qrCodes/${user.uid}.png`);
       await uploadString(qrCodeStorageRef, qrCodeDataUrl, 'data_url');
       const downloadURL = await getDownloadURL(qrCodeStorageRef);
 
-      await setDoc(doc(db, 'users', user.uid), {
+      await setDoc(doc(db, 'sahrudaya_mess', user.uid), {
         uid: user.uid,
         name: data.name,
         email: data.email,
